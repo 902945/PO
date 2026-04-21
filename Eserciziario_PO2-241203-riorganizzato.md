@@ -370,18 +370,17 @@ avente tipo `Function<Solid, Double>`, e' equivalente a quale dei seguenti costr
 
 **Testo dell'esercizio**
 
-[Esame10/09/2024– 04/09/2018]
-1.Si scriva in linguaggio Java 8+ la ﬁrma e l’implementazione di un metodo statico e generico compareMany()che
-confronta due collection. Dati due argomenti c1ec2aventi tipoCollection<A>eCollection<B>(doveAeB
-sono i duetype parameterdel metodo), esso confronta ogni elemento di tipoAdella prima collection con l’elemento
-di tipoBalla stessa posizione della seconda. Il confronto degli elementi deve avvenire chiamando il metodo co->
-mpareTo()opportunamente: questo implica che ci sono dei vincoli sui generics Ae/oB. Il risultato del metodo
-compareMany()èd it i p ointed e v er i s p e t t a r el as e m a n t i c ad e lc o n f r o n t oc o s i d d e t t oat r ev i e.S i i m p l e m e n t i l a
-semantica del confronto nel seguente modo:
-•c1ec2sono uguali se e solo se le lunghezze sono uguali e tutti gli elementi sono uguali;
-•c1èm i n o r ed ic2se la lunghezza dic1èm i n o r eou g u a l eaq u e l l ad ic2es et u t t ig l ie l e m e n t id ic1sono
-minori o uguali ai corrispettivi elementi dic2;
-•altrimentic1èm a g g i o r ed ic2.
+[Esame 10/09/2024 – 04/09/2018]
+
+1. Si scriva in linguaggio Java 8+ la firma e l’implementazione di un metodo statico e generico `compareMany()` che confronta due collection.
+   Dati due argomenti `c1` e `c2` aventi tipo `Collection<A>` e `Collection<B>` (dove `A` e `B` sono i due type parameter del metodo), esso confronta ogni elemento di tipo `A` della prima collection con l’elemento di tipo `B` alla stessa posizione della seconda.
+   Il confronto degli elementi deve avvenire chiamando il metodo `compareTo()` opportunamente: questo implica che ci sono dei vincoli sui generics `A` e/o `B`.
+   Il risultato del metodo `compareMany()` è di tipo `int` e deve rispettare la semantica del confronto cosiddetto a tre vie.
+   Si implementi la semantica del confronto nel seguente modo:
+
+   - `c1` e `c2` sono uguali se e solo se le lunghezze sono uguali e tutti gli elementi sono uguali;
+   - `c1` è minore di `c2` se la lunghezza di `c1` è minore o uguale a quella di `c2` e se tutti gli elementi di `c1` sono minori o uguali ai corrispettivi elementi di `c2`;
+   - altrimenti `c1` è maggiore di `c2`.
 
 **Soluzione** *(spostata dalla sezione 4 del PDF originale)*
 
@@ -844,7 +843,7 @@ La gerarchia `Point -> Line -> Polygon -> Triangle/Rectangle` separa correttamen
 
 ---
 
-#### 2.1.4 F unzioni di ordine superiore
+#### 2.1.4 Funzioni di ordine superiore
 
 **Testo dell'esercizio**
 
@@ -1013,7 +1012,7 @@ Le funzioni di ordine superiore (`Function<A,B>`) consentono di iniettare compor
 
 ---
 
-#### 2.1.5 F attoriale con thread
+#### 2.1.5 Fattoriale con thread
 
 **Testo dell'esercizio**
 
@@ -1248,7 +1247,7 @@ Gli iteratori asincroni separano la produzione (thread interno) dal consumo (thr
 
 ---
 
-#### 2.1.7 F unzioni
+#### 2.1.7 Funzioni
 
 **Testo dell'esercizio**
 
@@ -4138,7 +4137,7 @@ La `map` template usa `operator[]` per accesso chiave-valore. La gestione dell'a
 
 ---
 
-#### 2.2.5 F unzioni
+#### 2.2.5 Funzioni
 
 **Testo dell'esercizio**
 
