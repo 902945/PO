@@ -1158,12 +1158,7 @@ publicbooleanhasNext(){/* da implemetare */ }
 
 privateclassFutureimplementsSupplier<B>{
 publicFuture(Supplier<B>f){/* da implementare */ }
-
-```
-
-9 /* da completare/implementare */
-
-```java
+/* da completare/implementare */
 }
 
 @Override
@@ -1279,12 +1274,7 @@ this.b=b;
 this.f=f;
 this.inc=inc;
 }
-
-```
-
-15 /* da finire di implementare */
-
-```java
+/* da finire di implementare */
 }
 ```
 
@@ -1949,12 +1939,7 @@ di trasformazione sull’insiemeω.
 riusabili. Sia data la funzione di ordine superiore foldimplementata tramite un metodo statico pubblico:
 
 ```java
-publicstatic<T,State>Statefold(Iterable<T>i,finalStatest0,BiFunction<State,T,
-```
-
-State>f){
-
-```java
+publicstatic<T,State>Statefold(Iterable<T>i,finalStatest0,BiFunction<State,T,State>f){
 Statest=st0;
 for(finalTe:i)
 st=f.apply(st,e);
@@ -3374,7 +3359,7 @@ superiore sinistro all’angolo inferiore destro come se fosse piatta.
 L’implementazione può utilizzare STL liberamente, se lo si desidera.
 Si prenda a riferimento il seguente snippet per la speciﬁca dei requisiti del tipo matrix:
 
-```java
+```cpp
 matrix<double>m1; // non inizializzata
 matrix<double>m2(10,20);// 10*20 inizializzata col default constructor di double
 matrix<double>m3(m2); // costruita per copia
@@ -3389,7 +3374,7 @@ matrix<string>ms(5,4,"ciao");// 5*4 inizializzata col la stringa passata come te
 
 argomento
 
-```java
+```cpp
 for(typenamematrix<string>::const_iteratorit=ms.begin();it!=ms.end();++it)
 cout<<*it;// de-reference const
 ```
@@ -3413,7 +3398,7 @@ una sequenza di output con tutti i risultati delle applicazioni.
 non ha tipo di ritorno. L’output consiste in un iteratore passato come argomento: lì la funzione dovrà scrivere
 ir i s u l t a t i .
 
-```java
+```cpp
 template<classInputIterator,classOutputIterator>
 voidmap(InputIteratorfrom,InputIteratorto,OutputIteratorout,
 function<typenameOutputIterator::value_type(typenameInputIterator::value_type)>f)
@@ -3422,7 +3407,7 @@ function<typenameOutputIterator::value_type(typenameInputIterator::value_type)>f
 (b)Si implementi la seguente versione dellamap()che opera su vector di STL. In questo caso l’output è un vero
 ep r o p r i ot i p od ir i t o r n o . L ’ i m p l e m e n t a z i o n ed e v ei n v o c a r el amap()di cui al punto precedente.
 
-```java
+```cpp
 template<classA,classB>
 vector<B>map(constvector<A>&v,function<B(A)>f)
 ```
@@ -3452,7 +3437,7 @@ Si scriva anche uno snippet analogo a quello del punto c(Es.2.1.7Java).
 1.Si prenda in considerazione la seguente classe C++14 che rappresenta curve deﬁnite tramite funzioni unarieR↗R
 in un certo intervallo di dominio[a, b]⇐R.
 
-```java
+```cpp
 #include<functional>
 #include<iostream>
 #include<utility>
@@ -3519,7 +3504,7 @@ curva sul piano cartesiano;
 •gli operatori di pre e post incremento incrementano l’ascissa corrente xdella quantitàdx.
 Il seguente snippet di test può servire da riferimento per capire il comportamento dell’iteratore:
 
-```java
+```cpp
 curvec(-10.,10.,[](constreal&x){returnx*x-2*x+1;});
 for(curve::iteratorit=c.begin();it!=c.end();++it)
 {
