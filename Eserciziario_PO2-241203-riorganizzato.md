@@ -396,154 +396,151 @@ Il confronto usa `compareTo()` per rispettare la semantica three-way. I vincoli 
 
 **Testo dell'esercizio**
 
-[Esame 10/09/2024 –13/01/2023– 22/01/2019]S ip r e n d ai nc o n s i d e r a z i o n el as e g u e n t ei n t e r f a c c i aJ a v a :
+[Esame 10/09/2024 – 13/01/2023 – 22/01/2019]
+
+Si prenda in considerazione la seguente interfaccia Java:
 
 ```java
-publicinterfacePool<T,R>{
-voidadd(Tx); // popola la pool con un nuovo elemento
-Racquire()throwsInterruptedException;// acquisisce una risorsa
-voidrelease(Rx); // rilascia una risorsa e la rimette nella pool
+public interface Pool<T, R> {
+    void add(T x); // popola la pool con un nuovo elemento
+    R acquire() throws InterruptedException; // acquisisce una risorsa
+    void release(R x); // rilascia una risorsa e la rimette nella pool
 }
 ```
 
 Una pool è un container di oggetti che si comporta come una coda bloccante: è possibile ottenere una risorsa con
-acquire()per poi restituirla alla pool tramite il metodo release().
-Il genericTastrae il tipo degli oggetti contenuti internamente nella pool, mentre Rèi lt i p od e l l ar i s o r s ar e s t i t u i t a
-dallaacquire():i l m o t i v o p e r c u i s o n o d u e g e n e r i c d i ! e r e n t i è p e r c o n s e n t i r e a l l e c l a s s i c h e i m p l e m e n t a n o q u e s t a
+`acquire()` per poi restituirla alla pool tramite il metodo `release()`.
+Il generic `T` astrae il tipo degli oggetti contenuti internamente nella pool, mentre `R` è il tipo della risorsa restituita
+dalla `acquire()`: il motivo per cui sono due generic differenti è per consentire alle classi che implementano questa
 interfaccia di rappresentare in modo diverso, se necessario, gli elementi conservati all’interno e le risorse restituite dalla
-acquire().
-Quando la coda è vuota e nessun oggetto è disponibile, il metodo acquire()deve essere bloccante: al ﬁne di
-sempliﬁcare l’implementazione, si utilizzi un oggetto di tipo LinkedBlockingQueuecome campo interno. Riportiamo
-un estratto della classeLinkedBlockingQueuedeﬁnita dal JDK con i metodi pubblici più signiﬁcativi:
+`acquire()`.
+Quando la coda è vuota e nessun oggetto è disponibile, il metodo `acquire()` deve essere bloccante: al fine di
+semplificare l’implementazione, si utilizzi un oggetto di tipo `LinkedBlockingQueue` come campo interno. Riportiamo
+un estratto della classe `LinkedBlockingQueue` definita dal JDK con i metodi pubblici più significativi:
 
 ```java
-classLinkedBlockingQueue<E>implementsBlockingQueue<E>{
-LinkedBlockingQueue(); // costruttore
-voidadd(Ex); // aggiunge un elemento
-Etake()throwsInterruptedException; // estrae la testa (bloccante)
-Epeek(); // ritorna la testa senza rimuoverla,
-// oppure null se vuota
+class LinkedBlockingQueue<E> implements BlockingQueue<E> {
+    LinkedBlockingQueue(); // costruttore
+    void add(E x); // aggiunge un elemento
+    E take() throws InterruptedException; // estrae la testa (bloccante)
+    E peek(); // ritorna la testa senza rimuoverla,
+              // oppure null se vuota
 
-intsize(); // numero di elementi
-// etc...
+    int size(); // numero di elementi
+    // etc...
 }
 ```
 
-1.Si deﬁnisca una interfacciaBasicPoolche estende l’interfacciaPoolec h eh au ns o l og e n e r i cp e rr a p p r e s e n t a r es i a
-il tipo degli elementi interni sia il tipo delle risorse restituite dalla acquire().
-2.Si implementi una classeSimplePoolche implementa l’interfacciaBasicPooler e a l i z z au n as e m p l i c ec o d ab l o c -
-cante.
-
-3.Si implementi una classeAutoPoolche implementa l’interfacciaPoolrealizzando un meccanismo diauto-release
-delle risorse. Sepèu n ap o o l ,l ’ o b i e t t i v oèf a r ei nm o d oc h eu n ar i s o r s axacquisita tramite la chiamatap.acqui->
-re()non debba essere esplicitamente riconsegnata alla pool chiamandop.release(x),m as i ap o s s i b i l er i l a s c i a r l a
-invocandox.release().
-Suggerimento:s i d e ﬁ n i s c a u n n u o v o t i p o p a r a m e t r i c oResourceche si comporta come unproxyper l’oggetto
-contenuto al suo interno e che implementa la logica di auto-releaserilasciandothis.
-4.Si automatizzi il meccanismo di cui sopra facendo in modo che un oggetto di tipoResourcesi rilasciautonomamente
-quando non esistono più riferimenti ad esso.
-Suggerimento:l a s u p e r c l a s s eObjectdeﬁnisce un metodofinalize()che viene invocato nel momento in cui
-l’oggetto viene cancellato dal garbage collector.
+1. Si definisca una interfaccia `BasicPool` che estende l’interfaccia `Pool` e che ha un solo generic per rappresentare sia
+   il tipo degli elementi interni sia il tipo delle risorse restituite dalla `acquire()`.
+2. Si implementi una classe `SimplePool` che implementa l’interfaccia `BasicPool` e realizza una semplice coda bloccante.
+3. Si implementi una classe `AutoPool` che implementa l’interfaccia `Pool` realizzando un meccanismo di auto-release
+   delle risorse. Se `p` è una pool, l’obiettivo è fare in modo che una risorsa `x` acquisita tramite la chiamata `p.acquire()`
+   non debba essere esplicitamente riconsegnata alla pool chiamando `p.release(x)`, ma sia possibile rilasciarla
+   invocando `x.release()`.
+   Suggerimento: si definisca un nuovo tipo parametrico `Resource` che si comporta come un proxy per l’oggetto
+   contenuto al suo interno e che implementa la logica di auto-release rilasciando `this`.
+4. Si automatizzi il meccanismo di cui sopra facendo in modo che un oggetto di tipo `Resource` si rilasci autonomamente
+   quando non esistono più riferimenti ad esso.
+   Suggerimento: la superclasse `Object` definisce un metodo `finalize()` che viene invocato nel momento in cui
+   l’oggetto viene cancellato dal garbage collector.
 
 **Soluzione** *(spostata dalla sezione 4 del PDF originale)*
 
 ```java
 
-importjava.util.Random;
-importjava.util.concurrent.BlockingQueue;
-importjava.util.concurrent.LinkedBlockingQueue;
+import java.util.Random;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
-publicclassEs1{
+public class Es1 {
 
-publicinterfacePool<R>{
-Racquire()throwsInterruptedException;
-voidrelease(Rx);
-}
+    public interface Pool<R> {
+        R acquire() throws InterruptedException;
+        void release(R x);
+    }
 
-// 2.b
-publicstaticclassSimplePool<T>implementsPool<T>{
+    // 2.b
+    public static class SimplePool<T> implements Pool<T> {
 
-privatefinalBlockingQueue<T>q=newLinkedBlockingQueue<>();
+        private final BlockingQueue<T> q = new LinkedBlockingQueue<>();
 
-@Override
-publicTacquire()throwsInterruptedException{
-returnq.take();
-}
+        @Override
+        public T acquire() throws InterruptedException {
+            return q.take();
+        }
 
-@Override
-publicvoidrelease(Tx){
-q.add(x);
-}
-}
+        @Override
+        public void release(T x) {
+            q.add(x);
+        }
+    }
 
-// 2.c + 2.d
+    // 2.c + 2.d
 
-publicinterfaceResource<T>{
-Tget();
-voidautorelease();
-}
+    public interface Resource<T> {
+        T get();
+        void autorelease();
+    }
 
-publicstaticclassAutoPool<T>implementsPool<Resource<T>>{
+    public static class AutoPool<T> implements Pool<Resource<T>> {
 
-privatefinalBlockingQueue<T>q=newLinkedBlockingQueue<>();
+        private final BlockingQueue<T> q = new LinkedBlockingQueue<>();
 
-// questo metodo non è richiesto dall 'interfaccia AutoPool, però è utile perché serve a
-popolare la pool, come accade nel main
-publicvoidadd(Tx){
-q.add(x);
-}
+        // questo metodo non è richiesto dall'interfaccia AutoPool, però è utile perché
+        // serve a popolare la pool, come accade nel main
+        public void add(T x) {
+            q.add(x);
+        }
 
-publicResource<T>acquire()throwsInterruptedException{
-Tr=q.take();
-returnnewResource<>(){
+        public Resource<T> acquire() throws InterruptedException {
+            T r = q.take();
+            return new Resource<>() {
 
-@Override
-publicTget(){
-System.out.printf("acquired: %s%n",r);
-returnr;
-}
+                @Override
+                public T get() {
+                    System.out.printf("acquired: %s%n", r);
+                    return r;
+                }
 
+                @Override
+                public void autorelease() {
+                    System.out.printf("released: %s%n", r);
+                    add(r);
+                }
 
-@Override
-publicvoidautorelease(){
-System.out.printf("released: %s%n",r);
-add(r);
-}
+                @SuppressWarnings("deprecation")
+                @Override
+                protected void finalize() {
+                    autorelease();
+                }
+            };
+        }
 
-@SuppressWarnings("deprecation")
-@Override
-protectedvoidfinalize(){
-autorelease();
-}
-};
-}
+        @Override
+        public void release(Resource<T> x) {
+            x.autorelease();
+        }
+    }
 
-@Override
-publicvoidrelease(Resource<T>x){
-x.autorelease();
-}
-}
+    public static void main(String[] args) {
+        AutoPool<Integer> pool = new AutoPool<>();
+        Random rnd = new Random();
+        for (int i = 0; i < 5; ++i) {
+            pool.add(i); // popolo la pool con alcuni oggetti
+        }
 
-publicstaticvoidmain(String[]args){
-AutoPool<Integer>pool=newAutoPool<>();
-Randomrnd=newRandom();
-for(inti=0;i<5;++i){
-pool.add(i); // popolo la pool con alcuni oggetti
-}
+        try {
+            while (true) {
+                Resource<Integer> r = pool.acquire();
+                System.out.println("using " + r.get());
+                Thread.sleep(Math.abs(rnd.nextInt() % 1000));
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
-try{
-while(true){
-Resource<Integer>r=pool.acquire();
-System.out.println("using "+r.get());
-Thread.sleep(Math.abs(rnd.nextInt()%1000));
-}
-}catch(InterruptedExceptione){
-e.printStackTrace();
-}
-
-}
-
-
+    }
 }
 
 ```
