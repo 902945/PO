@@ -4702,11 +4702,11 @@ L'albero binario value-oriented gestisce copia profonda, move e RAII tramite cos
 **Testo dell'esercizio**
 
 [Esame 01/07/2022]
-1. Si definisca in linguaggio C++ una classe smart_ptrtemplatizzata su un tipoTche implementi la logica di uno
-smart pointer.Siimplementinotuttiicostruttori , idistruttorieglioperatorichesiritengononecessariedutili
+1. Si definisca in linguaggio C++ una classe **smart_ptr** templatizzata su un tipo **T** che implementi la logica di uno
+**smart pointer**. Si implementino tutti i costruttori, i distruttori e gli operatori che si ritengono necessari ed utili
 affinché uno smart pointer si comporti in maniera compatibile con un pointer C. In altre parole, uno smart pointer
-deve implementare non solo ilreference countingma deve anche comportarsi come un puntatore classico, inclusi
-gli operatori di incremento/decremento, l’aritmetica dei puntatori ed ovviamente il de-reference.
+deve implementare non solo il **reference counting** ma deve anche comportarsi come un puntatore classico, inclusi
+gli operatori di incremento/decremento, l’**aritmetica dei puntatori** ed ovviamente il **de-reference**.
 
 **Soluzione** *(spostata dalla sezione 4 del PDF originale)*
 
