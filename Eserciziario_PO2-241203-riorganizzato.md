@@ -373,14 +373,14 @@ avente tipo `Function<Solid, Double>`, e' equivalente a quale dei seguenti costr
 [Esame 10/09/2024 – 04/09/2018]
 
 1. Si scriva in linguaggio Java 8+ la firma e l’implementazione di un metodo statico e generico `compareMany()` che confronta due collection.
-   Dati due argomenti `c1` e `c2` aventi tipo `Collection<A>` e `Collection<B>` (dove `A` e `B` sono i due type parameter del metodo), esso confronta ogni elemento di tipo `A` della prima collection con l’elemento di tipo `B` alla stessa posizione della seconda.
-   Il confronto degli elementi deve avvenire chiamando il metodo `compareTo()` opportunamente: questo implica che ci sono dei vincoli sui generics `A` e/o `B`.
-   Il risultato del metodo `compareMany()` è di tipo `int` e deve rispettare la semantica del confronto cosiddetto a tre vie.
-   Si implementi la semantica del confronto nel seguente modo:
+ Dati due argomenti `c1` e `c2` aventi tipo `Collection<A>` e `Collection<B>` (dove `A` e `B` sono i due type parameter del metodo), esso confronta ogni elemento di tipo `A` della prima collection con l’elemento di tipo `B` alla stessa posizione della seconda.
+ Il confronto degli elementi deve avvenire chiamando il metodo `compareTo()` opportunamente: questo implica che ci sono dei vincoli sui generics `A` e/o `B`.
+ Il risultato del metodo `compareMany()` è di tipo `int` e deve rispettare la semantica del confronto cosiddetto a tre vie.
+ Si implementi la semantica del confronto nel seguente modo:
 
-   - `c1` e `c2` sono uguali se e solo se le lunghezze sono uguali e tutti gli elementi sono uguali;
-   - `c1` è minore di `c2` se la lunghezza di `c1` è minore o uguale a quella di `c2` e se tutti gli elementi di `c1` sono minori o uguali ai corrispettivi elementi di `c2`;
-   - altrimenti `c1` è maggiore di `c2`.
+ - `c1` e `c2` sono uguali se e solo se le lunghezze sono uguali e tutti gli elementi sono uguali;
+ - `c1` è minore di `c2` se la lunghezza di `c1` è minore o uguale a quella di `c2` e se tutti gli elementi di `c1` sono minori o uguali ai corrispettivi elementi di `c2`;
+ - altrimenti `c1` è maggiore di `c2`.
 
 **Soluzione** *(spostata dalla sezione 4 del PDF originale)*
 
@@ -432,18 +432,18 @@ class LinkedBlockingQueue<E> implements BlockingQueue<E> {
 ```
 
 1. Si definisca una interfaccia `BasicPool` che estende l’interfaccia `Pool` e che ha un solo generic per rappresentare sia
-   il tipo degli elementi interni sia il tipo delle risorse restituite dalla `acquire()`.
+ il tipo degli elementi interni sia il tipo delle risorse restituite dalla `acquire()`.
 2. Si implementi una classe `SimplePool` che implementa l’interfaccia `BasicPool` e realizza una semplice coda bloccante.
 3. Si implementi una classe `AutoPool` che implementa l’interfaccia `Pool` realizzando un meccanismo di auto-release
-   delle risorse. Se `p` è una pool, l’obiettivo è fare in modo che una risorsa `x` acquisita tramite la chiamata `p.acquire()`
-   non debba essere esplicitamente riconsegnata alla pool chiamando `p.release(x)`, ma sia possibile rilasciarla
-   invocando `x.release()`.
-   Suggerimento: si definisca un nuovo tipo parametrico `Resource` che si comporta come un proxy per l’oggetto
-   contenuto al suo interno e che implementa la logica di auto-release rilasciando `this`.
+ delle risorse. Se `p` è una pool, l’obiettivo è fare in modo che una risorsa `x` acquisita tramite la chiamata `p.acquire()`
+ non debba essere esplicitamente riconsegnata alla pool chiamando `p.release(x)`, ma sia possibile rilasciarla
+ invocando `x.release()`.
+ Suggerimento: si definisca un nuovo tipo parametrico `Resource` che si comporta come un proxy per l’oggetto
+ contenuto al suo interno e che implementa la logica di auto-release rilasciando `this`.
 4. Si automatizzi il meccanismo di cui sopra facendo in modo che un oggetto di tipo `Resource` si rilasci autonomamente
-   quando non esistono più riferimenti ad esso.
-   Suggerimento: la superclasse `Object` definisce un metodo `finalize()` che viene invocato nel momento in cui
-   l’oggetto viene cancellato dal garbage collector.
+ quando non esistono più riferimenti ad esso.
+ Suggerimento: la superclasse `Object` definisce un metodo `finalize()` che viene invocato nel momento in cui
+ l’oggetto viene cancellato dal garbage collector.
 
 **Soluzione** *(spostata dalla sezione 4 del PDF originale)*
 
@@ -556,20 +556,19 @@ La `BlockingQueue` interna sincronizza produttori e consumatori senza lock espli
 **Testo dell'esercizio**
 
 [Esame 25/06/2024 –06/09/2019]
-1.Si implementi in Java 8+ un sistema di classi che rappresentano punti, linee e poligoni regolari nel piano cartesiano
+1. Si implementi in Java 8+ un sistema di classi che rappresentano punti, linee e poligoni regolari nel piano cartesiano
 R↔R.
-(a)Si implementi una classe di nomePointche rappresenta punti bidimensionali immutabili, in cui le coordinate
+(a) Si implementi una classe di nomePointche rappresenta punti bidimensionali immutabili, in cui le coordinate
 xedysono di tipodouble.
-(b)Si implementi una classe di nomeSegmentche rappresenta segmenti bidimensionali immutabili, il cui costrut-
-tore prende due argomenti di tipoPoint.E s s a d e v e f o r n i r e u n m e t o d olength()che restituisce la lunghezza
+(b) Si implementi una classe di nomeSegmentche rappresenta segmenti bidimensionali immutabili, il cui costruttore prende due argomenti di tipoPoint.Essadevefornireunmetod olength()che restituisce la lunghezza
 del segmento calcolando la distanza euclidea tra i due punti.
 Si implementi un tipo che rappresenta segmenti bidimensionali immutabili, ovvero una classe Lineil cui
-costruttore prende due argomenti di tipo Point.E s s a d e v e f o r n i r e u n m e t o d olength()che ne calcola la
+costruttore prende due argomenti di tipo Point.Essadevefornireunmetod olength()che ne calcola la
 lunghezza tramite la distanza euclidea tra i due punti.
-(c)Si prenda in considerazione la seguente classe astratta Polygonche rappresenta poligoni regolari come liste
-di punti (minimo 3, veriﬁcato a runtime). I punti nella lista determinano l’ordine di costruzione dei segmenti
+(c) Si prenda in considerazione la seguente classe astratta Polygonche rappresenta poligoni regolari come liste
+di punti (minimo 3, verificato a runtime). I punti nella lista determinano l’ordine di costruzione dei segmenti
 di cui è composto il poligono. Ad esempio, una lista contenente i seguenti 3 punti A=( 0,0),B=( 3,3)e
-C=( 3,0)rappresenta un triangolo rettangolo in cui il primo lato è AB,i ls e c o n d oèBCed il terzo èCA.
+C=( 3,0)rappresenta un triangolo rettangolo in cui il primo lato è AB,i ls econd oèBCed il terzo èCA.
 
 ```java
 publicabstractclassPolygon{
@@ -584,19 +583,19 @@ publicabstractdoublearea();
 }
 ```
 
-i.Per quale motivo è necessario vincolare a runtime la dimensione minima della lista di punti tramite un
-assertanziché sfruttare in qualche modo il type system per fare un controllo statico? Si articoli una
+i. Per quale motivo è necessario vincolare a runtime la dimensione minima della lista di punti tramite un
+assert, anziché sfruttare in qualche modo il type system per fare un controllo statico? Si articoli una
 breve risposta.
-ii.Si implementi il metodolineIterator()che costruisce un iteratore su oggetti di tipoLinees ic o m p o r t a
-come unwrapperdell’iteratore estratto dal campo points.G l i o g g e t t i p r o d o t t i d a l l ’ i t e r a t o r e d iL->
-inedevono essere costruitidinamicamenteleggendo coppie di punti adiacenti dall’iteratore di Poin->
-t.S i i m p l e m e n t i u n a l o g i c a d icachingdell’ultimo punto letto per permettere la costruzione di un
-nuovo segmento adiacente all’ultimo ad ogni invocazione del metodo next().S i b a d i i n o l t r e a r i u s a r e
-opportunamente il primo punto come secondo estremo dell’ultimo segmento costruito.
-iii.Si implementi il metodo perimeter()in funzione del metodo lineIterator(),o v v e r oc a l c o l a n d oi l
+ii. Si implementi il metodo lineIterator() che costruisce un iteratore su oggetti di tipo Line e si comporta
+come un wrapper dell’iteratore estratto dal campo points. Gli oggetti prodotti dall’iteratore di Line devono
+essere costruiti dinamicamente leggendo coppie di punti adiacenti dall’iteratore di Point. Si implementi una
+logica di caching dell’ultimo punto letto per permettere la costruzione di un nuovo segmento adiacente
+all’ultimo ad ogni invocazione del metodo next(). Si badi inoltre a riusare opportunamente il primo punto
+come secondo estremo dell’ultimo segmento costruito.
+iii. Si implementi il metodo perimeter() in funzione del metodo lineIterator(), ovvero calcolando il
 perimetro del poligono iterando sui segmenti che lo compongono.
-2.Estendiamo ora la gerarchia di classi introducendo tipi specializzati per i poligoni classici.
-(a)Si implementi una sottoclasse diPolygondi nomeTriangleche rappresenta triangoli qualunque.
+2. Estendiamo ora la gerarchia di classi introducendo tipi specializzati per i poligoni classici.
+(a) Si implementi una sottoclasse diPolygondi nomeTriangleche rappresenta triangoli qualunque.
 
 ```java
 publicclassTriangleextendsPolygon{
@@ -606,14 +605,14 @@ publicdoublearea(){/* da implementare */ }
 }
 ```
 
-Il costruttore prende 3 argomenti di tipo Pointed e v ec h i a m a r ei ls u p e r - c o s t r u t t o r eo p p o r t u n a m e n t e . S i
+Il costruttore prende 3 argomenti di tipo Pointed e v ec hiamar ei ls uper - costruttor eo pportunamente . S i
 implementi il metodoarea()in modo che calcoli l’area del triangolo senza fare assunzioni sulla sua forma.
-(b)Si implementi un tipo che rappresenta triangoli rettangoli tramite una sottoclasse di Triangle.S i b a d i i n
-particolar modo a deﬁnire un costruttore che sintetizzi al massimo le informazioni passate come argomenti.
+(b) Si implementi un tipo che rappresenta triangoli rettangoli tramite una sottoclasse di Triangle.Sibadiin
+particolar modo a definire un costruttore che sintetizzi al massimo le informazioni passate come argomenti.
 Si prediligano i controlli statici a quelli dinamici, se possibile, e si tenti di minimizzare i casi di ambiguità
-og l is t a t id ii n v a l i d i t àd e l l ’ o g g e t t o ;n e lc a s oi nc u is ir i t e n g an e c e s s a r i of a r ed e ic o n t r o l l iar u n t i m e ,s iu s ii l
+og l is tat id ii nvalidit àd ell’oggetto ;n e lc a s oi nc u is ir iteng an ecessari of a r ed e ic ontroll iar untime ,s iu s ii l
 costruttoassert.
-(c)Si implementi una sottoclasse diPolygondi nomeRectangleche rappresenta rettangoli.
+(c) Si implementi una sottoclasse diPolygondi nomeRectangleche rappresenta rettangoli.
 
 ```java
 publicclassRectangleextendsPolygon{
@@ -627,7 +626,7 @@ Il costruttore prende i 2 punti della diagonale e deve passare al super-costrutt
 il rettangolo calcolandone le coordinate per proiezione ortogonale. Si badi all’ordine in cui i punti compaiono
 nella lista, affinché siano adiacenti e permettano di comporre i lati correttamente. Si implementi il metodo
 area()in modo che calcoli l’area del rettangolo.
-(d)Si implementi una sottoclasse diRectangledi nomeSquareche rappresenta quadrati.
+(d) Si implementi una sottoclasse diRectangledi nomeSquareche rappresenta quadrati.
 
 ```java
 publicstaticclassSquareextendsRectangle{
@@ -637,7 +636,7 @@ publicSquare(Pointp1,doubleside){/* da implementare */ }
 
 Il costruttore prende il punto in basso a sinistra e la dimensione del lato e deve chiamare il super-costruttore
 opportunamente.
-3.Si prenda in considerazione il seguente codice, in cui compare l’invocazione di un metodo statico maxda deﬁnire:
+3. Si prenda in considerazione il seguente codice, in cui compare l’invocazione di un metodo statico maxda definire:
 
 ```java
 Squaresq1=newSquare(newPoint(10.,-4.),0.1),
@@ -651,14 +650,14 @@ return(int)(a.area()-b.area());
 });
 ```
 
-(a)Si scriva la ﬁrma e l’implementazione del metodo statico max()invocato nell’ultimo statement affinché il
+(a) Si scriva la firma e l’implementazione del metodo statico max()invocato nell’ultimo statement affinché il
 codice di cui sopra compili correttamente. Si renda tale metodo più generico possibile e non monomorfo
 rispetto ai tipi che compaiono in questa invocazione, prestando particolare attenzione ai vincoli sui generics.
-La semantica dimaxèf a c i l m e n t ei n t u i b i l e : t r o v al ’ e l e m e n t om a g g i o r eu s a n d oi lc o m p a r a t o r ep e rc o n f r o n t a r e
+La semantica dimaxèf acilment ei ntuibile : trov al’element om aggior eu sand oi lc omparator ep e rc onfrontare
 gli elementi della collection di input.
-(b)Assumendo il comportamento corretto del metodomax(),q u a l ed e l l es e g u e n t ie s p r e s s i o n ib o o l e a n eèv e r a ?
+(b) Assumendo il comportamento corretto del metodomax(),qual ed ell es eguent ie spression ib oolean eèv era ?
 ->sq1==r ->sq2==r ->r==null ->nessuna delle precedenti
-(c)Quale dei seguenti numeri razionali rappresenta il valore di tipodoublecomputato dall’espressioner.area()?
+(c) Quale dei seguenti numeri razionali rappresenta il valore di tipodoublecomputato dall’espressioner.area()?
 ->10->1 ->10->2 ->10->4 ->non è un quadrato ma un rettangolo
 
 **Soluzione** *(spostata dalla sezione 4 del PDF originale)*
@@ -845,26 +844,25 @@ La gerarchia `Point -> Line -> Polygon -> Triangle/Rectangle` separa correttamen
 **Testo dell'esercizio**
 
 [Esame 14/06/2024]
-1.Si implementino le seguenti funzioni di ordine superiore in Java 8+.
+1. Si implementino le seguenti funzioni di ordine superiore in Java 8+.
 
-(a)La prima è una variante della classica funzione map()1che opera su iteratori anziché su collection. L’itera-
-tore restituito in output deve applicare la funzione fac i a s c u ne l e m e n t od it i p oAfornito dall’iteratoreit,
+(a) La prima è una variante della classica funzione map()1che opera su iteratori anziché su collection. L’iteratore restituito in output deve applicare la funzione fac iascu ne lement od it i p oAfornito dall’iteratoreit,
 producendo oggetti di tipoB.
 
 ```java
 static<A,B>Iterator<B>mapIterator(Iterator<A>it,Function<A,B>f)
 ```
 
-(b)La seconda funzione di ordine superiore è semanticamente equivalente al costrutto for-each: ad ogni oggetto
+(b) La seconda funzione di ordine superiore è semanticamente equivalente al costrutto for-each: ad ogni oggetto
 di tipoTnell’iterable in input viene applicato il consumerf.
 
 ```java
 static<T>voidforEach(Iterable<T>it,Consumer<T>f)
 ```
 
-(c)Si implementi un tipoPairparametrico su due tipiAeB.S is c e l g al i b e r a m e n t es ef o r n i r eu n ai m p l e m e n t a z i o n e
+(c) Si implementi un tipoPairparametrico su due tipiAeB.S is celg al iberament es ef ornir eu n ai mplementazione
 mutabile o immutabile.
-(d)Si prenda ora in considerazione la seguente ﬁrma di funzione:
+(d) Si prenda ora in considerazione la seguente firma di funzione:
 
 ```java
 static<A,B>Iterator<B>applyFuns(Iterable<Pair<Function<A,B>,A>>l)
@@ -873,7 +871,7 @@ static<A,B>Iterator<B>applyFuns(Iterable<Pair<Function<A,B>,A>>l)
 Per ogni coppia dell’iterable in input, essa deve applicare la funzione che si trova nella prima componente
 della coppia all’oggetto di tipoAche si trova nella seconda componente. Si implementi la suddetta funzione
 tramiteuna singola invocazionedellamapIterator()di cui al punto (a).
-(e)Si prenda ora in considerazione la seguente ﬁrma di funzione:
+(e) Si prenda ora in considerazione la seguente firma di funzione:
 
 ```java
 static<T>voidacceptFuns(Iterable<Pair<Consumer<T>,T>>l)
@@ -882,7 +880,7 @@ static<T>voidacceptFuns(Iterable<Pair<Consumer<T>,T>>l)
 Per ogni coppia dell’iterable in input, essa deve applicare la funzione consumer che si trova nella prima
 componente della coppia all’oggetto di tipo Tche si trova nella seconda componente. Si implementi la
 suddetta funzionetramite una singola invocazionedellaforEach()di cui al punto (b).
-(f)Con riferimento al punto (a)s ic o n s i d e r il as e g u e n t eﬁ r m ad if u n z i o n e :
+(f) Con riferimento al punto (a) s ic onsider il as eguent efi r m ad if unzione :
 
 ```java
 static<A,B>Iterator<Supplier<B>>asyncMapIterator(Iterator<A>it,Function<A,B>f)
@@ -892,22 +890,22 @@ Essa consiste in una variante asincrona della mapIterator()in cui l’applicazio
 elemento di tipoAprodotto dall’iteratore in input deve avere luogo ogni volta in un thread nuovo. In
 altre parole, ogni computazione della funzione fdeve avvenire concorrentemente. Il risultato di ciascuna
 computazione, naturalmente, non può essere ritornato subito dallanext()dall’iteratore in output, altrimenti
-sarebbe necessario attendere la ﬁne di ciascun thread, vaniﬁcando ogni forma di concorrenza. Per questo
-motivo l’iteratore in output produce Supplier<B>anziché oggetti di tipoB.S o n oiSupplier2che devono
-attendere la ﬁne dell’esecuzione dei thread.
+sarebbe necessario attendere la fine di ciascun thread, vanificando ogni forma di concorrenza. Per questo
+motivo l’iteratore in output produce Supplier<B>anziché oggetti di tipoB.Son oiSupplier2che devono
+attendere la fine dell’esecuzione dei thread.
 Suggerimento:l’implementazione è piuttosto contenuta, non servono datatype di appoggio né metodi ausil
 iari. Si sfrutti al massimo lo scoping, in particolare le chiusure delle lambda (o delle anonymous class, se si
 preferisce).
-(g)Con riferimento al punto (b)s ic o n s i d e r il as e g u e n t eﬁ r m ad if u n z i o n e :
+(g) Con riferimento al punto (b) s ic onsider il as eguent efi r m ad if unzione :
 
 ```java
 static<T>voidasyncForEach(Iterable<T>it,Consumer<T>f)
 ```
 
-Questa è una variante asincrona della forEach():l ’ a p p l i c a z i o n e d e l l a f u n z i o n efad ogni elemento di tipo
+Questa è una variante asincrona della forEach():l’applicazionedellafunzion efad ogni elemento di tipo
 Tcontenuto nell’iterable in input deve avere luogo ogni volta in un thread nuovo. In altre parole, ogni
 computazione della funzionefdeve avvenire concorrentemente.
-Suggerimento:poiché iConsumernon hanno risultato, non si pone il problema di attendere la ﬁne delle
+Suggerimento:poiché iConsumernon hanno risultato, non si pone il problema di attendere la fine delle
 computazioni dei thread.
 
 **Soluzione** *(spostata dalla sezione 4 del PDF originale)*
@@ -1014,40 +1012,40 @@ Le funzioni di ordine superiore (`Function<A,B>`) consentono di iniettare compor
 **Testo dell'esercizio**
 
 [Esame10/01/2024– 30/05/2019]
-1.Si consideri un metodo statico in Java 8+ di nome parallelFactorial()che data unaCollection<Integer>
-produce unaCollection<FactorialThread>.P e r o g n i i n t e r o d e l l a c o l l e c t i o n d i i n p u t v i e n e e ! e t t u a t o l ospawning
+1. Si consideri un metodo statico in Java 8+ di nome parallelFactorial()che data unaCollection<Integer>
+produce unaCollection<FactorialThread>.Perogniinterodellacollectiondiinputvienee ! ettuatol ospawning
 di un nuovo thread che ne computa il fattoriale e ne conserva il risultato in qualche modo. Tutti i thread creati
 vengono ritornati nella collection di output, che naturalmente ha la stessa lunghezza della collection di input.
-(a)Si implementi la classe FactorialThreadin modo che estenda java.lang.Threadef o r n i s c au nm e t o d o
-getter per l’accesso al risultato della computazione del fattoriale. Si presti attenzione all’attesa della ﬁne della
+(a) Si implementi la classe FactorialThreadin modo che estenda java.lang.Threadef ornisc au nm etodo
+getter per l’accesso al risultato della computazione del fattoriale. Si presti attenzione all’attesa della fine della
 computazione, gestendo opportunamente la cosa.
 1Conosciuta anche con il nome ditransform()in certe librerie.
 2Si rammenti che unSupplier<T>non è altro che unafunctional interfacecon un solo metodoget()che non ha parametri e ritorna un
 oggetto di tipoT.
 
-(b)Si implementi il metodo staticoparallelFactorial()avente la seguente ﬁrma:
+(b) Si implementi il metodo staticoparallelFactorial()avente la seguente firma:
 
 ```java
 staticCollection<FactorialThread>parallelFactorial(Collection<Integer>c)
 ```
 
 Ogni thread deve lavorare concorrentemente agli altri, ciascuno calcolando il fattoriale di un intero proveniente
-dalla collection di input. La funzione parallelFactorial()non deve attendere la ﬁne delle computazioni,
+dalla collection di input. La funzione parallelFactorial()non deve attendere la fine delle computazioni,
 ma deve ritornare subito la collection di output.
-(c)Si ra"ni la ﬁrma del metodo statico parallelFactorial()di cui al punto precedente in modo che il tipo
+(c) Si ra"ni la firma del metodo statico parallelFactorial()di cui al punto precedente in modo che il tipo
 di input ed il tipo di output siano, rispettivamente, più generale e più specializzato possibile, senza tuttavia
 rivelare dettagli sull’implementazione.
-(d)Si scriva uno snippet di codice che testi il metodo statico parallelFactorial()stampando i risultati di
+(d) Si scriva uno snippet di codice che testi il metodo statico parallelFactorial()stampando i risultati di
 ciascuna computazione.
-(e)Si dia una seconda implementazione del metodo statico parallelFactorial()usando la funzione di ordine
+(e) Si dia una seconda implementazione del metodo statico parallelFactorial()usando la funzione di ordine
 superiore map()3. In particolare si proceda nel seguente modo:
-i.Si implementi un metodo staticomap()avente la seguente ﬁrma:
+i.Si implementi un metodo staticomap()avente la seguente firma:
 
 ```java
 static<A,B>List<B>map(Iterable<A>i,Function<A,B>f)
 ```
 
-Esso deve applicare la funzione fad ogni elemento di iep r o d u r r ei no u t p u tt u t t iir i s u l t a t id e l l e
+Esso deve applicare la funzione fad ogni elemento di iep rodurr ei no utpu tt utt iir isultat id elle
 applicazioni.
 ii.Si reimplementiparallelFactorial()tramite una singola invocazione dellamap().
 
@@ -1141,10 +1139,10 @@ La suddivisione del calcolo su thread separati riduce i tempi. Il thread princip
 **Testo dell'esercizio**
 
 [Esame 05/09/2023]
-1.Si implementi un metodo statico generico in Java 8+ che, dato un iteratore ed una funzione, produce un nuovo
-iteratore che in maniera asincrona applica la funzione ad ogni elemento dell’iteratore originale. Ciò signiﬁca che
+1. Si implementi un metodo statico generico in Java 8+ che, dato un iteratore ed una funzione, produce un nuovo
+iteratore che in maniera asincrona applica la funzione ad ogni elemento dell’iteratore originale. Ciò significa che
 un thread diverso deve processare ciascun elemento.
-(a)Si implementi tutto ciò che è necessario dello snippet seguente.
+(a) Si implementi tutto ciò che è necessario dello snippet seguente.
 
 ```java
 static<A,B>Iterator<Supplier<B>>asyncIterator(Iterator<A>it,Function<A,B>f){
@@ -1163,12 +1161,12 @@ publicSupplier<B>next(){/* da implementare */ }
 }
 ```
 
-Si badi che la classe innestata Futureha lo scopo di sempliﬁcare l’implementazione della next().E s s a
-rappresenta una computazione in corso che non è ancora terminata. Essendo di fatto un Supplier,s a r à
-possibile conoscere il risultato invocando il metodo get().N a t u r a l m e n t e q u e s t o r i s u l t a t o s a r à p o s s i b i l e
-ottenerlo solamente dopo aver atteso che il relativo thread abbia ﬁnito di computare il Supplierpassato in
+Si badi che la classe innestata Futureha lo scopo di semplificare l’implementazione della next().Essa
+rappresenta una computazione in corso che non è ancora terminata. Essendo di fatto un Supplier,sarà
+possibile conoscere il risultato invocando il metodo get().Naturalmentequestorisultatosaràpossibile
+ottenerlo solamente dopo aver atteso che il relativo thread abbia finito di computare il Supplierpassato in
 costruzione.
-(b)Si implementi il seguente metodo statico in modo che utilizzi il metodo statico asyncIterator()di cui
+(b) Si implementi il seguente metodo statico in modo che utilizzi il metodo statico asyncIterator()di cui
 all’esercizio precedente per scorrere l’argomento iterabile e ordinare in maniera asincrona i suoi elementi 4.
 
 **Soluzione** *(spostata dalla sezione 4 del PDF originale)*
@@ -1252,7 +1250,7 @@ Gli iteratori asincroni separano la produzione (thread interno) dal consumo (thr
 3La funzionemap()qui richiesta è equivalente a quella che JDK e STL chiamano transform().
 4Si ricordi che il JDK fornisce un metodo Collections.sort()per ordinare liste di oggetti confrontabili.
 
-1.Si prenda in considerazione la seguente classe Java 8+, parametrica su due generics XeY,l ec u ii s t a n z er a p p r e -
+1. Si prenda in considerazione la seguente classe Java 8+, parametrica su due generics XeY,l ec u ii stanz er appre -
 sentano sequenzeiterabilidi coppie di coordinate cartesianeX↔Yche rappresentano i punti individuati da una
 funzioneX↗Yin un determinato intervallo del dominioX.
 
@@ -1274,21 +1272,21 @@ this.inc=inc;
 }
 ```
 
-Al costruttore vengono passati l’intervallo di dominio[a, b),l af u n z i o n efel af u n z i o n eincper incrementare l’ascissa.
-La funzionefèl af u n z i o n ep r i n c i p a l e : p e ro g n ia s c i s s axdi tipoXcompresa nell’intervallo[a, b),l ’ a p p l i c a z i o n e
-f(x)ha tipoY.L as e q u e n z ai t e r a b i l ec o n s i s t ei nc o p p i e(x, f(x))di tipoPair<X,Y>che rappresentano l’ascissa
-el ’ o r d i n a t ad io g n ip u n t o . E s s e n d oi m p o s s i b i l er a p p r e s e n t a r ef u n z i o n ic o n t i n u e ,l ea s c i s s ep r o c e d o n oi nm a n i e r a
-discreta secondo un valore di incremento: la funzione incèn e c e s s a r i ap r o p r i op e rc a l c o l a r el ap r o s s i m aa s c i s s a
+Al costruttore vengono passati l’intervallo di dominio[a, b),l af unzion efel af unzion eincper incrementare l’ascissa.
+La funzionefèl af unzion ep rincipale : p e ro g n ia sciss axdi tipoXcompresa nell’intervallo[a, b),l’applicazione
+f(x) ha tipoY.L as equenz ai terabil ec onsist ei nc oppie(x, f(x))di tipoPair<X,Y>che rappresentano l’ascissa
+el’ordinat ad io g n ip unto . Essend oi mpossibil er appresentar ef unzion ic ontinue ,l ea sciss ep rocedon oi nm aniera
+discreta secondo un valore di incremento: la funzione incèn ecessari ap ropri op e rc alcolar el ap rossim aa scissa
 nella sequenza.
-(a)Si deﬁnisca una classePairparametrica su 2 genericsAeBche rappresenta coppieimmutabili.
-(b)Si ﬁnisca di implementare la classeFunSeqopportunamente. Per realizzare il confronto delle ascisse, si noti
-che il type parameterXèv i n c o l a t on o ns o l oa de s s e r eu nNumberma anche a implementareComparable<X>.
-(c)Si implementi uno snippet di codice che utilizzi la classe FunSeqper rappresentare la parabolax2+2x↘1
-nel pianoR↔Rnell’intervallo di dominio[↘2,2)con incremento di ascissa0.1. Ciò signiﬁca che le ascisse
-partono da↘2ep r o c e d o n oas t e pd i0.1ﬁno a2(escluso), producendo((2↘0.1)↘(↘2))/0.1 = 39punti. Si
-deﬁnisca la parabola con una opportuna lambda.
-(d)Si implementi uno snippet simile a quello del punto precedente ma che rappresenti la parabola data nel piano
-R↔Z,o v v e r oc o no r d i n a t ed it i p oint.
+(a) Si definisca una classePairparametrica su 2 genericsAeBche rappresenta coppieimmutabili.
+(b) Si finisca di implementare la classeFunSeqopportunamente. Per realizzare il confronto delle ascisse, si noti
+che il type parameterXèv incolat on o ns o l oa de sser eu nNumberma anche a implementareComparable<X>.
+(c) Si implementi uno snippet di codice che utilizzi la classe FunSeqper rappresentare la parabolax2+2x↘1
+nel pianoR↔Rnell’intervallo di dominio[↘2,2)con incremento di ascissa0.1. Ciò significa che le ascisse
+partono da↘2ep rocedon oas t e pd i0.1fino a2(escluso), producendo((2↘0.1)↘(↘2))/0.1 = 39punti. Si
+definisca la parabola con una opportuna lambda.
+(d) Si implementi uno snippet simile a quello del punto precedente ma che rappresenti la parabola data nel piano
+R↔Z,ovver oc o no rdinat ed it i p oint.
 
 **Soluzione** *(spostata dalla sezione 4 del PDF originale)*
 
@@ -1384,8 +1382,8 @@ Le funzioni come oggetti (`Function<A,B>`) permettono composizione e lazy evalua
 **Testo dell'esercizio**
 
 [Esame 01/06/2023]
-1.Vogliamo realizzare in Java 8+ una classeBST,p a r a m e t r i c as uu nt i p og e n e r i c oT,c h er a p p r e s e n t aa l b e r ib i n a r id i
-ricerca (Binary Search Tree) i cui nodi sono decorati con valori di tipo T.U na l b e r ob i n a r i od ir i c e r c aèu nn o r m a l e
+1. Vogliamo realizzare in Java 8+ una classeBST,parametric as uu nt i p og eneric oT,c h er appresent aa lber ib inar id i
+ricerca (Binary Search Tree) i cui nodi sono decorati con valori di tipo T.U na lber ob inari od ir icerc aèu nn ormale
 albero binario, tuttavia gli elementi al suo interno vengono mantenuti con un certo ordine dato da una peculiare
 proprietà ricorsiva. Si prenda in esame il seguente esempio che per semplicità utilizza degli interi:
 1 11
@@ -1439,7 +1437,7 @@ publicTmax(){/* da implementare */ }
 }
 ```
 
-(a)Si implementi ricorsivamente il metodo insertRec()badando a rispettare la proprietà degli alberi binari
+(a) Si implementi ricorsivamente il metodo insertRec()badando a rispettare la proprietà degli alberi binari
 di ricerca enunciata sopra. Per determinare se discendere nel sotto-ramo sinistro oppure in quello destro è
 necessario utilizzare ilComparatorpassato in costruzione per confrontare l’argomento xcon il campodata
 del nodon.
@@ -1581,11 +1579,11 @@ L'invariante del BST (sinistra < radice <= destra) e' mantenuta ad ogni inserime
 **Testo dell'esercizio**
 
 [Esame 13/09/2022 – 20/06/2019]
-1.Vogliamo realizzare in Java 8+ una classeTreeNode,p a r a m e t r i c as uu nt i p og e n e r i c oT,c h er a p p r e s e n t an o d id i
-un albero binario decorati con valori di tipo T.Q u a n d oe n t r a m b iis o t t o - a l b e r is i n i s t r oed e s t r od iu nn o d os o n o
-assenti, allora il nodo rappresenta una foglia. Seguono ora le speciﬁche dettagliate.
-(a)Gli alberi devono essereiterabiliel ’ i t e r a t o r ed e v ea t t r a v e r s a r el ’ a l b e r oi nD F S(Depth-First Search), fornendo
-gli elementi di tipoTinpre-ordine,o v v e r on e l l ’ o r d i n em o s t r a t od aq u e s t oe s e m p i o :
+1. Vogliamo realizzare in Java 8+ una classeTreeNode,parametric as uu nt i p og eneric oT,c h er appresent an o d id i
+un albero binario decorati con valori di tipo T.Quand oe ntramb iis otto - alber is inistr oed estr od iu nn o d os ono
+assenti, allora il nodo rappresenta una foglia. Seguono ora le specifiche dettagliate.
+(a) Gli alberi devono essereiterabiliel’iterator ed e v ea ttraversar el’alber oi nD F S(Depth-First Search), fornendo
+gli elementi di tipoTinpre-ordine,ovver on ell’ordin em ostrat od aq uest oe sempio :
 1 1
 2 /\
 3 25
@@ -1593,15 +1591,15 @@ gli elementi di tipoTinpre-ordine,o v v e r on e l l ’ o r d i n em o s t r a 
 5 34 6
 6 /\
 7 78
-(b)Gli alberi devono essere confrontabili tramite il metodoequals().D u e a l b e r i s o n o u g u a l i s e t u t t i i s o t t o - a l b e r i
+(b) Gli alberi devono essere confrontabili tramite il metodoequals().Duealberisonougualisetuttiisotto - alberi
 sono uguali e sono costituiti da elementi uguali.
 
-(c)Si deﬁniscano gli opportuni costruttori ed eventualmente dei metodi statici che fungono da pseudo-costruttori.
+(c) Si definiscano gli opportuni costruttori ed eventualmente dei metodi statici che fungono da pseudo-costruttori.
 L’obiettivo è fare in modo che gli alberi siano facili da costruire innestando ricorsivamente le chiamate. Non
 si permetta l’istanziazione di alberi vuoti o non inizializzati da popolare successivamente con dei setter.
-(d)Si implementino uno o più snippet di test che mettono alla prova tutte le caratteristiche richieste.
-(e)Si implementi unpretty printertramite un override del metodotoString().
-Si implementi la classeTreeNodesecondo le speciﬁche date, rappresentando la struttura dati nella maniera che si
+(d) Si implementino uno o più snippet di test che mettono alla prova tutte le caratteristiche richieste.
+(e) Si implementi unpretty printertramite un override del metodotoString().
+Si implementi la classeTreeNodesecondo le specifiche date, rappresentando la struttura dati nella maniera che si
 ritiene più conveniente e fornendo tutti i metodi necessari. È importante il riuso di codice, l’information hiding ed
 una implementazione che escluda il più possibile stati di invalidità grazie ad un saggio uso dei tipi.
 
@@ -1820,39 +1818,38 @@ L'iteratore incapsula la traversata in-order senza esporre la struttura interna.
 
 **Testo dell'esercizio**
 
-[Esame01/07/2022– 08/09/2018]S ii m p l e m e n t ii nJ a v a8 +u n as o t t o c l a s s eg e n e r i c ad ijava.util.ArrayLis->
-tdi nomeSkippableArrayListche estende la superclasse con un iteratore in grado di discriminare gli elementi
+[Esame 01/07/2022 – 08/09/2018] Si implementi in Java 8+ una sottoclasse generica di java.util.ArrayList
+di nome SkippableArrayList che estende la superclasse con un iteratore in grado di discriminare gli elementi
 secondo un predicato booleano. Gli elementi che soddisfano il predicato vengono processati da una certa funzione di
-trasformazione5;g l ia l t r iv e n g o n op a s s a t ia du n as e c o n d ac a l l b a c k( n o nu n af u n z i o n ed it r a s f o r m a z i o n e ) .
-1.Realizziamo in Java 8+ una sottoclasse di java.util.ArrayListdi nomeSkippableArrayListparametrica su
+trasformazione5;g l ia ltr iv engon op assat ia du n as econd ac allback( n o nu n af unzion ed it rasformazione ) .
+1. Realizziamo in Java 8+ una sottoclasse di java.util.ArrayListdi nomeSkippableArrayListparametrica su
 un tipoTche estende la superclasse con un iteratore in grado di discriminare gli elementi secondo un predicato e
 di processarli tramite due funzioni distinte a seconda dell’esito dell’applicazione del predicato all’elemento.
-(a)Si deﬁnisca unainterfaccia funzionaledi nomePredicatespecializzando l’interfaccia genericajava.util.->
-Functiondel JDK in modo che il dominio sia un generic Ted il codominio siaBoolean.
-(b)Si deﬁnisca una interfacciaEitherparametrica su un tipo genericoTe che deﬁnisce due metodi. Il primo
-metodo, di nomeonSuccess,p r e n d eu nTer i t o r n au nTev i e n ec h i a m a t od a l l ’ i t e r a t o r eq u a n d oi lp r e d i c a t o
-ha successo. Il secondo metodo, di nomeonFailure,v i e n ei n v o c a t oi n v e c eq u a n d oi lp r e d i c a t of a l l i s c e ,p r e n d e
-un argomento di tipoTen o np r o d u c ea l c u nr i s u l t a t o ,t u t t a v i ap u òl a n c i a r eu n ae c c e z i o n ed it i p oException:
-(c)Si deﬁnisca la sottoclasseSkippableArrayListparametrica su un tipoEes ii m p l e m e n t iu nm e t o d op u b -
-blico avente ﬁrmaIterator<E>iterator(Predicate<E>p,Either<E>f)che crea un iteratore con le
+(a) Si definisca una interfaccia funzionale di nome Predicate specializzando l’interfaccia generica
+java.util.Function del JDK in modo che il dominio sia un generic T e il codominio sia Boolean.
+(b) Si definisca una interfaccia Either parametrica su un tipo generico T e che definisce due metodi. Il primo
+metodo, di nome onSuccess, prende un T e ritorna un T e viene chiamato dall’iteratore quando il predicato
+ha successo. Il secondo metodo, di nome onFailure, viene invocato invece quando il predicato fallisce, prende
+un argomento di tipoTen o np roduc ea lcu nr isultato ,tuttavi ap u òl anciar eu n ae ccezion ed it i p oException:
+(c) Si definisca la sottoclasseSkippableArrayListparametrica su un tipoEes ii mplement iu nm etod op u b -
+blico avente firmaIterator<E>iterator(Predicate<E>p,Either<E>f)che crea un iteratore con le
 caratteristiche accennate sopra. Più precisamente:
-•l’iteratore parte sempre dall’inizio della collezione ed arriva alla ﬁne, andando avanti di un elemento alla
+•l’iteratore parte sempre dall’inizio della collezione ed arriva alla fine, andando avanti di un elemento alla
 volta normalmente;
 •ad ogni passo l’iteratore applica il predicatopall’elemento di tipoTcorrente, che chiameremox:s ep(x)
-computatrueallora viene invocato il metodoonSuccessdifep a s s a t ol ’ e l e m e n t oxcome argomento;
-altrimenti viene invocato il metodoonFailureep a s s a t oxcome argomento a quest’ultimo;
+computatrueallora viene invocato il metodoonSuccessdifep assat ol’element oxcome argomento;
+altrimenti viene invocato il metodoonFailureep assat oxcome argomento a quest’ultimo;
 •l’invocazione dionFailuredeve essere racchiusa dentro un blocco che assicura iltrappingdelle eccezioni:
 in altre parole, una eccezione proveniente dall’invocazione dionFailurenon deve interrompere l’iteratore;
-•quando viene invocatoonSuccess,i ls u or i s u l t a t ov i e n er e s t i t u i t oc o m ee l e m e n t oc o r r e n t ed a l l ’ i t e r a t o r e ;
-•quando viene invocatoonFailure,l ’ i t e r a t o r er i t o r n al ’ e l e m e n t oo r i g i n a l ec h eh af a t t of a l l i r ei lp r e d i c a t o .
-(d)Si scriva un esempio di codicemainche:
+•quando viene invocatoonSuccess,i ls u or isultat ov ien er estituit oc o m ee lement oc orrent ed all’iteratore ;
+•quando viene invocatoonFailure,l’iterator er itorn al’element oo riginal ec h eh af att of allir ei lp redicato .
+(d) Si scriva un esempio di codicemainche:
 •costruisce unaArrayListdi interi vuota di nomedst;
-•costruisce unaSkippableArrayListdi interi di nomesrcel ap o p o l ac o nn u m e r ic a s u a l ic o m p r e s it r a0
-e1 0 ,i n c l u s ig l ie s t r e m i6;
-•invocandosolamente una voltail metodoiterator(Predicate<E>,Either<E>)disrccon gli argo-
-menti opportuni, somma 1 a tutti gli elementi disrcmaggiori di 5 e appende in coda adstquelli minori
-ou g u a l ia5 .
-•Il metodoiterator()con due parametri richiesto dal punto (c)èu no v e r r i d eou no v e r l o a d ?
+•costruisce unaSkippableArrayListdi interi di nomesrcel ap opol ac o nn umer ic asual ic ompres it r a0
+e1 0 ,inclus ig l ie strem i6;
+•invocandosolamente una voltail metodoiterator(Predicate<E>,Either<E>)disrccon gli argomenti opportuni, somma 1 a tutti gli elementi disrcmaggiori di 5 e appende in coda adstquelli minori
+ou gual ia5 .
+•Il metodoiterator()con due parametri richiesto dal punto (c) èu no verrid eou no verload ?
 
 **Soluzione** *(spostata dalla sezione 4 del PDF originale)*
 
@@ -1923,15 +1920,15 @@ Estendere `ArrayList` con un metodo `skip` aggiunge solo la logica specifica sen
 
 **Testo dell'esercizio**
 
-[Esame03/06/2022– 31/01/2020 – 24/05/2018]D e ﬁ n i a m oi nJ a v a8 +u ns i s t e m ad ic l a s s ie di n t e r f a c c ec h e
-rappresentano ﬁgure geometriche piane e solide. Le ﬁgure geometriche rappresentate non sono posizionate nel piano
+[Esame03/06/2022– 31/01/2020 – 24/05/2018]D e fi niam oi nJ a v a8 +u ns istem ad ic lass ie di nterfacc ec h e
+rappresentano figure geometriche piane e solide. Le figure geometriche rappresentate non sono posizionate nel piano
 cartesiano o nello spazio, sono pertanto prive di coordinate. Per semplicità esse contengono solamente le informazioni
 sulla lunghezza dei lati o delle facce di cui sono costituite.
-5Una funzione di trasformazione è una funzione in cui dominio è uguale al codominio, per esempio una funzione f:ωèu n af u n z i o n e
+5Una funzione di trasformazione è una funzione in cui dominio è uguale al codominio, per esempio una funzione f:ωèu n af unzione
 di trasformazione sull’insiemeω.
 6Si utilizzi la classeRandomdel JDK per generare numeri casuali.
 
-1.Prima di cominciare, realizziamo una piccola libreria interna che consiste in alcuni metodi statici generici altamente
+1. Prima di cominciare, realizziamo una piccola libreria interna che consiste in alcuni metodi statici generici altamente
 riusabili. Sia data la funzione di ordine superiore foldimplementata tramite un metodo statico pubblico:
 
 ```java
@@ -1943,31 +1940,31 @@ returnst;
 }
 ```
 
-(a)Si implementi tramiteuna solainvocazione difold()la funzione di ordine superioresumByavente la seguente
-ﬁrma:
+(a) Si implementi tramiteuna solainvocazione difold()la funzione di ordine superioresumByavente la seguente
+firma:
 
 ```java
 publicstatic<T>doublesumBy(Iterable<T>i,Function<T,Double>f);
 ```
 
-Essa calcola la sommatoria di tutti gli elementi di i trasformandoli in doubletramitef.L a u t i l i z z e r e m o a d
+Essa calcola la sommatoria di tutti gli elementi di i trasformandoli in doubletramitef.Lautilizzeremoad
 esempio per calcolare il perimetro di un poligono sommando la lunghezza di tutti i suoi lati, oppure l’area
-laterale totale di un solido sommando l’area di tutte le superﬁci piane di cui è costituito.
-(b)Av r e m o b i s o g n o d i o r d i n a r e l e n o s t r e ﬁ g u r e g e o m e t r i ch e s u l l a b a s e d i d i ve r s i c r i t e r i , a d e s e m p i o l ’ a r e a o i l
-volume. Si implementi il metodo staticocompareBy()avente la seguente ﬁrma:
+laterale totale di un solido sommando l’area di tutte le superfici piane di cui è costituito.
+(b) Av remobisognodiordinarelenostre fi guregeometri ch esullabasedidi ve rsicriteri , adesempiol’areaoil
+volume. Si implementi il metodo staticocompareBy()avente la seguente firma:
 
 ```java
 publicstatic<T>intcompareBy(Ts1,Ts2,Function<T,Double>f);
 ```
 
-Esso confrontas1eds2conventerdoli prima indoubletramitef,r i d u c e n d op e r t a n t oi lc o n f r o n t oa lc o n f r o n t o
+Esso confrontas1eds2conventerdoli prima indoubletramitef,riducend op ertant oi lc onfront oa lc onfronto
 tra due numeridouble.
-(c)Quale forma di polimorﬁsmo forniscono i generics deﬁniti sulla ﬁrma di un metodo come ad esempio quelli
+(c) Quale forma di polimorfismo forniscono i generics definiti sulla firma di un metodo come ad esempio quelli
 del metodofold()di cui sopra?
-->Polimorﬁsmo subtype ->Polimorﬁsmo parametrico ->Polimorﬁsmo parametrico ﬁrst-class
-->Polimorﬁsmo ad-hoc
-2.Deﬁniamo ora i tipi essenziali per rappresentare ﬁgure geometriche piane e solide.
-(a)La classeEdgerappresenta grandezze 1-dimensionali come lati di poligoni, spigoli di poliedri, segmenti e
+->Polimorfismo subtype ->Polimorfismo parametrico ->Polimorfismo parametrico first-class
+->Polimorfismo ad-hoc
+2. Definiamo ora i tipi essenziali per rappresentare figure geometriche piane e solide.
+(a) La classeEdgerappresenta grandezze 1-dimensionali come lati di poligoni, spigoli di poliedri, segmenti e
 circonferenze.
 
 ```java
@@ -1981,8 +1978,8 @@ publicintcompareTo(Edges){/* DA IMPLEMENTARE */ }
 }
 ```
 
-Si implementi il metodocompareTo()tramiteuna solainvocazione dellacompareBy()deﬁnita sopra.
-(b)L’interfacciaSurfacerappresenta ﬁgure piane qualunque:
+Si implementi il metodocompareTo()tramiteuna solainvocazione dellacompareBy()definita sopra.
+(b) L’interfacciaSurfacerappresenta figure piane qualunque:
 
 ```java
 publicinterfaceSurfaceextendsComparable<Surface>{
@@ -1993,10 +1990,10 @@ defaultintcompareTo(Surfaces){/* DA IMPLEMENTARE */ }
 }
 ```
 
-Si dia una implementazione di default del metodo compareTo()tramiteuna solainvocazione dellacompa->
-reBy()deﬁnita sopra che esegua il confronto tra le aree.
-(c)Il sotto-tipoPolygonrappresenta poligoni: l’interfaccia specializzaSurfacedando una implementazione di
-default al metodoperimeter()ep e r m e t t ea n c h el ’ i t e r a z i o n ed e il a t id ic u ii lp o l i g o n os t e s s oèc o s t i t u i t o .
+Si dia una implementazione di default del metodo compareTo() tramite una sola invocazione della
+compareBy() definita sopra che esegua il confronto tra le aree.
+(c) Il sotto-tipoPolygonrappresenta poligoni: l’interfaccia specializzaSurfacedando una implementazione di
+default al metodoperimeter()ep ermett ea nch el’iterazion ed e il a t id ic u ii lp oligon os tess oèc ostituito .
 
 ```java
 publicinterfacePolygonextendsSurface,Iterable<Edge>{
@@ -2007,8 +2004,8 @@ defaultdoubleperimiter(){/* DA IMPLEMENTARE */ }
 
 
 Si dia una implementazione di default del metodoperimeter()tramiteuna solainvocazione dellasumBy()
-deﬁnita sopra.
-(d)L’interfacciaSolidrappresenta solidi qualunque:
+definita sopra.
+(d) L’interfacciaSolidrappresenta solidi qualunque:
 
 ```java
 publicinterfaceSolidextendsComparable<Solid>{
@@ -2019,14 +2016,13 @@ defaultintcompareTo(Solids){/* DA IMPLEMENTARE */ }
 }
 ```
 
-Si implementi il metodocompareTo()tramiteuna solainvocazione dellacompareBy()deﬁnita sopra che
+Si implementi il metodocompareTo()tramiteuna solainvocazione dellacompareBy()definita sopra che
 esegua il confronto tra i volumi.
-(e)Polyhedronèu ns o t t o t i p od iSolider a p p r e s e n t ap o l i e d r i . L ’ i n t e r f a c c i aèp a r a m e t r i c ar i s p e t t oa ls o t t o t i p od i
+(e) Polyhedronèu ns ottotip od iSolider appresent ap oliedri . L’interfacci aèp arametric ar ispett oa ls ottotip od i
 Polygonche descrive le facce di cui il poliedro è costituito. Ad esempio, le facce di un cubo sono quadrati: una
 classeCubeimplementerebbe pertanto l’interfacciaPolyhedronaventeSquarecometype argument,Square
 ↑Polygon.
-UnPolyhedronpermette l’iterazione delle facce poligonali di cui esso è costituito; fornisce inoltre una imple-
-mentazione di default del metodoouterArea()che calcola semplicemente la sommatoria delle aree delle sue
+UnPolyhedronpermette l’iterazione delle facce poligonali di cui esso è costituito; fornisce inoltre una implementazione di default del metodoouterArea()che calcola semplicemente la sommatoria delle aree delle sue
 facce.
 
 ```java
@@ -2036,19 +2032,18 @@ defaultdoubleouterArea(){/* DA IMPLEMENTARE */ }
 }
 ```
 
-Si implementi il metodoouterArea()tramiteuna solainvocazione dellasumBy()deﬁnita sopra.
-3.Si proceda ora alla deﬁnizione di una gerarchia di classi che rappresentano ﬁgure geometriche speciﬁche implemen-
-tando le interfacce ﬁn qui introdotte.
-(a)Si implementi una classe che rappresentasfereimmutabili avente nomeSphereec h ei m p l e m e n t al ’ i n t e r f a c c i a
-Solid. Il costruttore diSpheredeve prendere come parametro solamente undouble:i l r a g g i o d e l l a s f e r a .
-(b)Si implementi una classe che rappresentacilindriimmutabili avente nomeCilinderec h ei m p l e m e n t al ’ i n -
-terfacciaSolid. Il costruttore diCilinderdeve prendere come parametri duedouble:i l r a g g i o d e l l a b a s e e
+Si implementi il metodoouterArea()tramiteuna solainvocazione dellasumBy()definita sopra.
+3. Si proceda ora alla definizione di una gerarchia di classi che rappresentano figure geometriche specifiche implementando le interfacce fin qui introdotte.
+(a) Si implementi una classe che rappresentasfereimmutabili avente nomeSphereec h ei mplement al’interfaccia
+Solid. Il costruttore diSpheredeve prendere come parametro solamente undouble:ilraggiodellasfera .
+(b) Si implementi una classe che rappresentacilindriimmutabili avente nomeCilinderec h ei mplement al’i n -
+terfacciaSolid. Il costruttore diCilinderdeve prendere come parametri duedouble:ilraggiodellabasee
 l’altezza del cilindro.
-(c)Si implementi una classe che rappresenta rettangoliimmutabili avente nomeRectangleec h ei m p l e m e n t a
-l’interfacciaPolygon. Il costruttore diRectangledeve prendere come parametri duedouble:b a s e e a l t e z z a .
-(d)Si implementi una classe che rappresenta quadrati immutabili avente nomeSquareec h ee s t e n d eRectangle.
-Il costruttore diSquaredeve prendere un solo parametro di tipodouble:i l l a t o .
-4.Si prenda in considerazione la seguente classe che rappresenta parallelepipedi immutabili. I parallelepipedi sono
+(c) Si implementi una classe che rappresenta rettangoliimmutabili avente nomeRectangleec h ei mplementa
+l’interfacciaPolygon. Il costruttore diRectangledeve prendere come parametri duedouble:baseealtezza .
+(d) Si implementi una classe che rappresenta quadrati immutabili avente nomeSquareec h ee stend eRectangle.
+Il costruttore diSquaredeve prendere un solo parametro di tipodouble:illato .
+4. Si prenda in considerazione la seguente classe che rappresenta parallelepipedi immutabili. I parallelepipedi sono
 poliedri aventi facce rettangolari.
 
 ```java
@@ -2072,12 +2067,12 @@ returnList.of(r1,r2,r3,r1,r2,r3).iterator();
 ```
 
 
-(a)Si implementi il metodovolume().
-(b)Si deﬁnisca la classeCubecome sottoclasse diParallelepiped. Il costruttore diCubedeve prendere solamente
-un parametro di tipodouble:l a l u n g h e z z a d e l l o s p i g o l o .
-(c)Èp o s s i b i l ec o - v a r i a r ei lt i p od ir i t o r n od e lm e t o d oiterator()diCubein modo che ritorni unIterator<S->
-quare>?S i m o t i v i l a r i s p o s t a .
-(d)Assumendo l’implementazione diCubedi cui al punto (b), si prenda in considerazione il seguente snippet:
+(a) Si implementi il metodovolume().
+(b) Si definisca la classeCubecome sottoclasse diParallelepiped. Il costruttore diCubedeve prendere solamente
+un parametro di tipodouble:lalunghezzadellospigolo .
+(c) È possibile co-variare il tipo di ritorno del metodo iterator() di Cube in modo che ritorni un
+Iterator<Square>? Si motivi la risposta.
+(d) Assumendo l’implementazione diCubedi cui al punto (b), si prenda in considerazione il seguente snippet:
 
 ```java
 intfacet_cnt=1;
@@ -2091,7 +2086,7 @@ System.out.printf("side #%d/%d = %f\n",side_cnt++,facet_cnt,e.length());
 ```
 
 Tale co dice compila? Si motivi la risp osta.
-5.Si prenda in considerazione il seguente snippet di codice che crea una lista eterogena di poliedri le cui facce sono
+5. Si prenda in considerazione il seguente snippet di codice che crea una lista eterogena di poliedri le cui facce sono
 almeno rettangoli.
 
 ```java
@@ -2102,8 +2097,8 @@ List<Polyhedron<?extendsRectangle>>polys=List.of(c1,c2,p1,p2);
 
 Seguono ora alcune chiamate ai metodiCollections.sort()del JDK. Gli oggetti nella listapolyssono sempre
 gli stessi 4 (i cubic1ec2ed i parallelepipedip1ep2), ma ogni invocazione disort()li ordina in maniera diversa
-as e c o n d ad e lc r i t e r i od io r d i n a m e n t o . P e rc i a s c u n ai n v o c a z i o n es ii n d i c h iq u a l eo g g e t t ov i e n em e s s oi nt e s t aa l l a
-lista, ovvero quale oggetto computerebbe l’espressionepolys.get(0),o p p u r es en o nc o m p i l a .
+as econd ad e lc riteri od io rdinamento . P e rc iascun ai nvocazion es ii ndich iq ual eo ggett ov ien em ess oi nt est aa lla
+lista, ovvero quale oggetto computerebbe l’espressionepolys.get(0),oppur es en o nc ompila .
 
 ```java
 Collections.sort(polys)
@@ -2401,7 +2396,7 @@ La gerarchia di figure con metodi `area()` e `perimeter()` polimorfici evita if/
 
 **Testo dell'esercizio**
 
-[Esame 20/06/2019]S ic o n s i d e r il as e g u e n t ei n t e r f a c c i ap a r a m e t r i c ai nl i n g u a g g i oJ a v a :
+[Esame 20/06/2019]S ic onsider il as eguent ei nterfacci ap arametric ai nl inguaggi oJ ava :
 
 ```java
 publicinterfaceEquatable<T>{
@@ -2409,10 +2404,10 @@ booleanequalsTo(Tx);
 }
 ```
 
-Essa non sostituisce il meccanismo basato sul metodo equals(Object)della classeObject,t u t t a v i ap e r m e t t ed i
+Essa non sostituisce il meccanismo basato sul metodo equals(Object)della classeObject,tuttavi ap ermett ed i
 implementare il confronto di uguaglianza in maniera più sicura delegando parte della logica ad un metodo fortemente
 tipato.
-Si consideri ora la classe parametricaPerson,c h es u p p o r t ai lc o n f r o n t od iu g u a g l i a n z ac o no g g e t t id it i p oP:
+Si consideri ora la classe parametricaPerson,c h es upport ai lc onfront od iu guaglianz ac o no ggett id it i p oP:
 
 ```java
 publicclassPerson<PextendsPerson<P>>implementsEquatable<P>{
@@ -2435,13 +2430,13 @@ publicStringtoString(){returnname;}
 }
 ```
 
-1.Si implementi il metodoequals(Object)della classePersonin modo che, datip1ep2di tipoPerson,l es e g u e n t i
+1. Si implementi il metodoequals(Object)della classePersonin modo che, datip1ep2di tipoPerson,l es eguenti
 invarianti siano rispettate:
-•p1.equals(p1)==true
-•p1.equals(null)==false
-•p1.equals(e)==falsese l’espressioneeha tipo diverso dal tipo dip17
-•p1.equals(p2)==p1.equalsTo(p2)
-2.Si implementi il metodoequalsTo(P)della classePersonin modo che due oggetti siano uguali quando hanno il
+•p1. equals(p1)==true
+•p1. equals(null)==false
+•p1. equals(e)==falsese l’espressioneeha tipo diverso dal tipo dip17
+•p1. equals(p2)==p1. equalsTo(p2)
+2. Si implementi il metodoequalsTo(P) della classePersonin modo che due oggetti siano uguali quando hanno il
 medesimo nome e la medesima età.
 Si consideri ora il seguente codice:
 
@@ -2461,7 +2456,7 @@ publicbooleanequalsTo(Artistother){/* da implementare */ }
 publicclassHairimplementsEquatable<Hair>{
 ```
 
-7Ricordiamo che il metodo della classeObjectavente ﬁrmaClass<?extendsObject>getClass()consente di estrarre a runtime il tipo
+7Ricordiamo che il metodo della classeObjectavente firmaClass<?extendsObject>getClass()consente di estrarre a runtime il tipo
 rawdi un oggetto.
 
 ```java
@@ -2485,21 +2480,20 @@ BROWN,DARK,BLONDE,RED,GRAY;
 }
 ```
 
-1.Si implementino i metodiequals(Object)eequalsTo(Hair)della classeHairin modo che due oggetti siano uguali
+1. Si implementino i metodiequals(Object)eequalsTo(Hair)della classeHairin modo che due oggetti siano uguali
 quando hanno la medesima lunghezza ed i medesimi colori (indipendentemente dal loro ordine). Si rispettino le
-stesse invarianti del punto (a) per l’implementazione del metodo equals(Object)es id e l e g h i ,c o m ep e rl ac l a s s e
-Person,l ap a r t ef o r t e m e n t et i p a t ad e lc o n f r o n t oa lm e t o d oequalsTo(Hair).
-2.Il metodoequalsTo(Artist)èd a v v e r ou noverridedel metodoequalsTo(P)ereditato dalla superclasse?
-->No, perché latype erasureelimina il genericPche viene sostuito col suo constraintPersonnella super-
-classe, la quale introduce di fatto un metodo equalsTo(Person),d ic u iequalsTo(Artist)non è un
+stesse invarianti del punto (a) per l’implementazione del metodo equals(Object)es id eleghi ,com ep e rl ac lasse
+Person,l ap art ef ortement et ipat ad e lc onfront oa lm etod oequalsTo(Hair).
+2. Il metodoequalsTo(Artist)èd avver ou noverridedel metodoequalsTo(P) ereditato dalla superclasse?
+->No, perché latype erasureelimina il genericPche viene sostuito col suo constraintPersonnella superclasse, la quale introduce di fatto un metodo equalsTo(Person),d ic u iequalsTo(Artist)non è un
 override ma un overload.
 ->Sì, perché il metodoequalsTo()viene gestito in modo particolare dal compilatore Java, permettendo
-override anche con ﬁrme differenti.
-->No, perché la ﬁrma è diversa e quindi è un overload, non un override.
+override anche con firme differenti.
+->No, perché la firma è diversa e quindi è un overload, non un override.
 ->Sì, perché il generic Pviene sostituito col tipo Artistnello scope della sottoclasse, pertanto viene
-ereditato un metodoequalsTo(Artist),r e n d e n d oq u e s t ou nv e r oo v e r r i d e .
-3.Si implementi il metodoequalsTo(Artist)della classeArtistin modo che due oggetti siano uguali quando hanno
-im e d e s i m in o m e ,e t àec a p e l l i . S ib a d iar i u s a r eo p p o r t u n a m e n t el ’ i m p l e m e n t a z i o n ee r e d i t a t ad a l l as u p e r c l a s s e .
+ereditato un metodoequalsTo(Artist),rendend oq uest ou nv e r oo verride .
+3. Si implementi il metodoequalsTo(Artist)della classeArtistin modo che due oggetti siano uguali quando hanno
+im edesim in ome ,e t àec apelli . S ib a d iar iusar eo pportunament el’implementazion ee reditat ad all as uperclasse .
 Si considerino ora i seguenti binding in Java:
 
 ```java
@@ -2514,7 +2508,7 @@ Artistmorgan=newArtist("Morgan",47,newHair(20,Set.of(Color.GRAY,Color.DARK))),
 madonna=newArtist("Madonna",60,newHair(50,Set.of(Color.BLONDE)));
 ```
 
-4.Si prenda in considerazione il seguente metodo della classe java.util.Collectionsdel JDK 7+ per computare
+4. Si prenda in considerazione il seguente metodo della classe java.util.Collectionsdel JDK 7+ per computare
 l’elemento massimo in una collection secondo un criterio di ordinamento dato:
 
 ```java
@@ -2528,11 +2522,11 @@ List<Artist>artists=Arrays.asList((Artist)david,morgan,madonna);
 List<Person>persons=Arrays.asList(alice,david,morgan,madonna);
 ```
 
-(a)Si scriva uno statement di invocazione del metodo max()che computi l’oggetto della listaartistsavente il
+(a) Si scriva uno statement di invocazione del metodo max()che computi l’oggetto della listaartistsavente il
 più alto prodotto tra lunghezza dei capelli e numero di colori.
-(b)Si scriva uno statement di invocazione del metodo max()che computi l’oggetto della listapersonsavente il
-nome che viene per primo in ordine lessicograﬁco.
-(c)Il seguente statement sarebbe accettato dal compilatore Java 7+?
+(b) Si scriva uno statement di invocazione del metodo max()che computi l’oggetto della listapersonsavente il
+nome che viene per primo in ordine lessicografico.
+(c) Il seguente statement sarebbe accettato dal compilatore Java 7+?
 
 ```java
 Artistc=Collections.max(artists,newComparator<Person>(){
@@ -2723,18 +2717,17 @@ La gerarchia `Person -> Artist` con `equalsTo()` parametrico mostra come estende
 
 **Testo dell'esercizio**
 
-[Esame30/05/2019– 22/01/2019]S ii m p l e m e n t ii ls e g u e n t es i s t e m ad ii t e r a t o r iet r a s f o r m a z i o n it r ai t e r a t o r i .
-1.Si deﬁnisca unainterfaccia funzionalesimile ajava.util.BiFunctionche rappresenta funzioni binarie, parame-
-trica sui 2 tipi degli argomenti e sul tipo di ritorno.
-2.Si deﬁnisca un tipo per la coppia eterogenea immutabile, ovvero una classe Pairparametrica su 2 tipi distinti che
+[Esame30/05/2019– 22/01/2019]S ii mplement ii ls eguent es istem ad ii terator iet rasformazion it r ai teratori .
+1. Si definisca unainterfaccia funzionalesimile ajava.util.BiFunctionche rappresenta funzioni binarie, parametrica sui 2 tipi degli argomenti e sul tipo di ritorno.
+2. Si definisca un tipo per la coppia eterogenea immutabile, ovvero una classe Pairparametrica su 2 tipi distinti che
 rappresentano rispettivamente il tipo del primo e del secondo elemento della coppia.
-3.Si deﬁnisca un tipo per la tripla eterogenea immutabile, ovvero una sottoclasse diPairdi nomeTriple,p a r a m e t r i c a
+3. Si definisca un tipo per la tripla eterogenea immutabile, ovvero una sottoclasse diPairdi nomeTriple,parametrica
 su 3 tipi distinti che rappresentano i tipi dei 3 elementi.
-4.Si deﬁnisca un metodo staticoevalIteratorgenerico su 3 tipiA,BeCche, dato un iteratore su coppieA≃Bed
-una funzione binariaA≃B↗C,p r o d u c eu nn u o v oi t e r a t o r es ut r i p l eA≃B≃Cche si comporta come unwrapperdi
+4. Si definisca un metodo staticoevalIteratorgenerico su 3 tipiA,BeCche, dato un iteratore su coppieA≃Bed
+una funzione binariaA≃B↗C,produc eu nn uov oi terator es ut ripl eA≃B≃Cche si comporta come unwrapperdi
 quello in input. L’iteratore in output applica la funzione binaria ad ogni coppia di elementi letti dall’iteratore in
 input e produce una tripla con i due valori appena letti e passati alla funzione assieme al risultato di quest’ultima.
-Si utilizzino i tipiPair,TripleeBiFunctiondeﬁniti nei punti precedenti.
+Si utilizzino i tipiPair,TripleeBiFunctiondefiniti nei punti precedenti.
 
 **Soluzione** *(spostata dalla sezione 4 del PDF originale)*
 
@@ -2803,9 +2796,9 @@ Definire un `Iterator<T>` dedicato con stato interno rende la scansione riproduc
 **Testo dell'esercizio**
 
 [Esame 30/05/2019]
-1.Si implementi un classeFiboSequencele cui istanze rappresentano sequenze contigue di numeri di Fibonacci di
+1. Si implementi un classeFiboSequencele cui istanze rappresentano sequenze contigue di numeri di Fibonacci di
 lunghezza data in costruzione. Tali istanze devono essere iterabilitramite il costruttofor-eachdi Java, devono
-pertanto implementare l’interfaccia parametrica del JDKjava.util.Iterable<T>.A d e s e m p i o , i l s e g u e n t e c o d i c e
+pertanto implementare l’interfaccia parametrica del JDKjava.util.Iterable<T>.Adesempio , ilseguentecodice
 deve compilare e stampare i primi 100 numeri di Fibonacci:
 
 ```java
@@ -2817,8 +2810,8 @@ System.out.println(n);
 Requisito obbligatorio è che i numeri di Fibonacci generati dall’iteratore8sottostiano ad un meccanismo dicaching
 che ne allevia il costo computazionale memorizzando il risultato di ogni passo di ricorsione, in modo che ogni
 computazione successiva con il medesimo input costi solamente un accesso in lettura alla cache.
-2.Si scriva il codicede-zuccheratodello statementfor-eachdi cui al punto precedente.
-3.Si riscriva la classeFiboSequencein modo che la cache sia condivisa tra molteplici istanze.
+2. Si scriva il codicede-zuccheratodello statementfor-eachdi cui al punto precedente.
+3. Si riscriva la classeFiboSequencein modo che la cache sia condivisa tra molteplici istanze.
 
 **Soluzione** *(spostata dalla sezione 4 del PDF originale)*
 
@@ -2956,7 +2949,7 @@ Generare Fibonacci tramite un iteratore (lazy) evita di calcolare tutta la seque
 
 **Testo dell'esercizio**
 
-[Esame 04/09/2018]S ip r e n d ai nc o n s i d e r a z i o n eq u e s t as e m p l i ﬁ c a z i o n ed e l l ac l a s s ejava.util.Randomdel JDK:
+[Esame 04/09/2018]S ip rend ai nc onsiderazion eq uest as empli fi cazion ed ell ac lass ejava.util.Randomdel JDK:
 essenzialmente essa o!re un costruttore senza parametri, un secondo costruttore con il seed per inizializzare il PRNG
 ed alcuni metodi per generare valori numerici di tipo differente:
 
@@ -2972,11 +2965,11 @@ publicdoublenextDouble(){...}
 
 8Nell’esempio l’iteratore è implicitamente utilizzato dal costrutto for-each.
 
-1.Si scriva unwrapperdella classeRandomche si comporta come unsingleton,f a c e n d oa t t e n z i o n ear i p r o d u r r eo g n i
+1. Si scriva unwrapperdella classeRandomche si comporta come unsingleton,facend oa ttenzion ear iprodurr eo gni
 aspetto dell’originale.
-2.Si deﬁnisca una classeRandomIteratorche implementa l’interfacciajava.util.Iterator<Integer>del JDK e
+2. Si definisca una classeRandomIteratorche implementa l’interfacciajava.util.Iterator<Integer>del JDK e
 che si comporta come un iteratore su interi, generando un numero casuale ad ogni invocazione del metodo next()
-anziché scorrendo una vera collection, ﬁno ad esaurire la sequenza di lunghezza speciﬁcata in costruzione. Si
+anziché scorrendo una vera collection, fino ad esaurire la sequenza di lunghezza specificata in costruzione. Si
 implementino opportunamente il costruttore ed i metodi richiesti dall’interfaccia.
 
 **Soluzione** *(spostata dalla sezione 4 del PDF originale)*
@@ -3063,28 +3056,27 @@ Incapsulare `Random` in una classe dedicata con interfaccia ristretta migliora t
 
 **Testo dell'esercizio**
 
-[Esame 20/06/2018]S ii m p l e m e n t ii nJ a v au n as o t t o c l a s s eg e n e r i c ad iArrayListdi nomeFancyArrayListche estende
+[Esame 20/06/2018]S ii mplement ii nJ a v au n as ottoclass eg eneric ad iArrayListdi nomeFancyArrayListche estende
 le funzionalità della superclasse con un iteratore più versatile. Il nuovo iteratore deve essere in grado di andare sia
 avanti che indietro secondo un valore di incremento intero non nullo; e di processare gli elementi che incontra durante
 l’attraversamento applicando una funzione di trasformazione9.
-1.Si deﬁnisca unainterfaccia funzionaledi nomeFunctionparametrica sia sul tipo del dominio che sul tipo del
-codominio, equivalente a quella deﬁnita dal JDK 8+ nel package java.util.function.
-2.Si deﬁnisca la sottoclasseFancyArrayListparametrica su un tipoEes ii m p l e m e n t iu nm e t o d op u b b l i c oa v e n t eﬁ r -
+1. Si definisca unainterfaccia funzionaledi nomeFunctionparametrica sia sul tipo del dominio che sul tipo del
+codominio, equivalente a quella definita dal JDK 8+ nel package java.util.function.
+2. Si definisca la sottoclasseFancyArrayListparametrica su un tipoEes ii mplement iu nm etod op ubblic oa vent efi r -
 maIterator<E>iterator(intstep,Function<E,E>f)che crea un iteratore con le caratteristiche accennate
-sopra tramite unaclasse anonima.P i ù p r e c i s a m e n t e :
-•quando il valore del parametrostepèp o s i t i v o ,l ’ i t e r a t o r ep a r t ed a l l ’ i n i z i od e l l ac o l l e z i o n eev aavantiincre-
-mentando il cursore distepposizioni ad ogni passo; quando invece stepèn e g a t i v o ,l ’ i t e r a t o r ep a r t ed a l l a
-ﬁne della collezione e vaindietrodecrementando il cursore;
+sopra tramite unaclasse anonima.Piùprecisamente :
+•quando il valore del parametrostepèp ositivo ,l’iterator ep art ed all’inizi od ell ac ollezion eev aavantiincrementando il cursore distepposizioni ad ogni passo; quando invece stepèn egativo ,l’iterator ep art ed alla
+fine della collezione e vaindietrodecrementando il cursore;
 •ad ogni passo l’iteratore applica la funzione di trasformazione fall’elemento da restituire.
-3.Si aggiungano aFancyArrayListis e g u e n t im e t o d ip u b b l i c i ,b a d a n d oa di m p l e m e n t a r l ii nf u n z i o n ed e lm e t o d o
+3. Si aggiungano aFancyArrayListis eguent im etod ip ubblici ,badand oa di mplementarl ii nf unzion ed e lm etodo
 iterator(int,Function<E,E>)realizzato per l’esercizio precedente,senza replicazionidi codice. Per ciascuno
-si speciﬁchi inoltre se è un override oppure no, utilizzando opportunamente l’annotazione @Override.
-(a)Si implementi il metodo avente ﬁrmaIterator<E>iterator()che produce un iteratore convenzionale che
+si specifichi inoltre se è un override oppure no, utilizzando opportunamente l’annotazione @Override.
+(a) Si implementi il metodo avente firmaIterator<E>iterator()che produce un iteratore convenzionale che
 procede in avanti di una posizione alla volta.
-(b)Si implementi il metodo avente ﬁrmaIterator<E>backwardIterator()che produce un iteratore rovescio
+(b) Si implementi il metodo avente firmaIterator<E>backwardIterator()che produce un iteratore rovescio
 che procede indietro di una posizione alla volta.
-4.Si rifattorizzi il metodoiterator(int,Function<E,E>)realizzato per il punto (2)i nm o d oc h en o nu s iu n a
-classe anonima, ma una nuova classe innestatastaticaep a r a m e t r i c ad in o m eFancyIterator.S i p r e s t i p a r t i c o l a r e
+4. Si rifattorizzi il metodoiterator(int,Function<E,E>)realizzato per il punto (2)i nm o d oc h en o nu s iu n a
+classe anonima, ma una nuova classe innestatastaticaep arametric ad in o m eFancyIterator.Siprestiparticolare
 attenzione all’uso dei generics ed al passaggio esplicito della enclosing instanceal costruttore.
 
 **Soluzione** *(spostata dalla sezione 4 del PDF originale)*
@@ -3191,20 +3183,20 @@ returnf.apply(r);
 
 **Testo dell'esercizio**
 
-[Esame 20/06/2018]S ir e a l i z z ii nJ a v au na l g o r i t m oc h et r o v ai lm i n i m oe di lm a s s i m oi nu n al i s t ag e n e r i c aer e s t i t u i s c a
-ir i s u l t a t i ,r i s p e t t i v a m e n t e ,c o m ep r i m oes e c o n d oe l e m e n t od iu n ac o p p i ao m o g e n e a .
-1.Si deﬁnisca un tipo per la coppia eterogenea, ovvero una classe Pairparametrica su due tipi distintiAeBche
+[Esame 20/06/2018]S ir ealizz ii nJ a v au na lgoritm oc h et rov ai lm inim oe di lm assim oi nu n al ist ag eneric aer estituisca
+ir isultati ,rispettivamente ,com ep rim oes econd oe lement od iu n ac oppi ao mogenea .
+1. Si definisca un tipo per la coppia eterogenea, ovvero una classe Pairparametrica su due tipi distintiAeBche
 rappresentano rispettivamente il tipo del primo e del secondo elemento della coppia.
-2.Si implementi un metodo statico e generico avente la seguente ﬁrma 10:
+2. Si implementi un metodo statico e generico avente la seguente firma 10:
 static<E>Pair<E,E>findMinAndMax(List<E>l,Comparator<E>c)
 L’algoritmo di ricerca del minimo e del massimo deve eseguire una sola traversatadella lista; si assuma che gli
 argomenti siano non-nulli e che la lista abbia sempre almeno un elemento.
-3.Si deﬁnisca un metodo in overload con il precedente che non usi un Comparatorma aggiunga il constraintComp->
-arableal genericE,s e c o n d ol as e g u e n t eﬁ r m a :
+3. Si definisca un metodo in overload con il precedente che non usi un Comparator ma aggiunga il constraint
+Comparable al generic E, secondo la seguente firma:
 static<EextendsComparable<E>>Pair<E,E>findMinAndMax(List<E>l)
 Si implementi questo metodo in funzione del precedente, senza replicarel’algoritmo di ricerca.
 9Una funzione di trasformazione è una funzione in cui dominio è uguale al codominio, per esempio f:ωper un qualche insiemeω.
-10L’interfaccia parametricaComparator<T>include un metodo binario avente ﬁrma intcompare(Ta,Tb), il quale confronta i due
+10L’interfaccia parametricaComparator<T>include un metodo binario avente firma intcompare(Ta,Tb), il quale confronta i due
 argomenti e ritorna un intero secondo la semantica standard del confronto at r ev i ein Java.
 
 **Soluzione** *(spostata dalla sezione 4 del PDF originale)*
@@ -3260,7 +3252,7 @@ Una singola passata (O(n)) e' sufficiente per trovare sia minimo che massimo. L'
 
 **Testo dell'esercizio**
 
-[Esame 24/05/2018]S ia s s u m a n ol es e g u e n t ic l a s s ie di n t e r f a c c eJ a v a ,i n n e s t a t ep e rb r e v i t ài nu n as o l ac l a s s ea
+[Esame 24/05/2018]S ia ssuman ol es eguent ic lass ie di nterfacc eJ ava ,innestat ep e rb revit ài nu n as o l ac lass ea
 top-level:
 
 ```java
@@ -3305,9 +3297,9 @@ publicintgetWeight(){return50;}
 }
 ```
 
-1.Come sarebbe possibile rifattorizzare questo codice in modo da ridurre al minimo le ripetizioni e massimizzare il
+1. Come sarebbe possibile rifattorizzare questo codice in modo da ridurre al minimo le ripetizioni e massimizzare il
 riuso? Si scriva il codice rifattorizzato, facendo attenzione a non cambiare il comportamento del programma.
-2.Si prenda in considerazione il seguente metodo main()per la classeHannaBarbera,s u p p o n e n d oc h el er e s t a n t i
+2. Si prenda in considerazione il seguente metodo main()per la classeHannaBarbera,supponend oc h el er estanti
 classi ed interfacce innestate siano quelle rifattorizzate secondo quanto richiesto dall’esercizio 1.
 
 ```java
@@ -3324,11 +3316,10 @@ System.out.println(String.format("Tom now weights %d",tom.getWeight()));
 }
 ```
 
-(a)Qualora una o più parti del metodo main()non siano compatibili a causa della rifattorizzazione eseguita
-precedentemente, si scriva in maniera chiara quali modiﬁche sono necessarie per renderlo compilabile mante-
-nendo la semantica dell’originale; se preferibile, si riscriva per chiarezza l’intero codicemain()opportunamente
-modiﬁcato.
-(b)Qual’è il peso del gatto Tom che viene scritto in output alla ﬁne?
+(a) Qualora una o più parti del metodo main()non siano compatibili a causa della rifattorizzazione eseguita
+precedentemente, si scriva in maniera chiara quali modifiche sono necessarie per renderlo compilabile mantenendo la semantica dell’originale; se preferibile, si riscriva per chiarezza l’intero codicemain()opportunamente
+modificato.
+(b) Qual’è il peso del gatto Tom che viene scritto in output alla fine?
 
 **Soluzione** *(spostata dalla sezione 4 del PDF originale)*
 
@@ -3453,13 +3444,13 @@ La modellazione dei personaggi Hanna Barbera usa la gerarchia per condividere co
 **Testo dell'esercizio**
 
 [Esame 10/09/2024 –01/06/2023]
-1.Vogliamo implementare in C++ una classe pair templatizzata su due tipi generici AeBche rappresentano i tipi
+1. Vogliamo implementare in C++ una classe pair templatizzata su due tipi generici AeBche rappresentano i tipi
 del primo e del secondo elemento della coppia. Si utilizzi la versione del linguaggio che si preferisce, è sufficiente
 dichiarare quale.
-(a)La classepairdeve rispettare gli stili della generic programming e comportarsi come un valore: si deﬁniscano
+(a) La classepairdeve rispettare gli stili della generic programming e comportarsi come un valore: si definiscano
 gli opportuni costruttori, tra cui quello per copia, e l’operatore di assegnamento.
-(b)Si implementino tutti i metodi e gli operatori ritenuti necessari o interessanti.
-(c)Si implementi un costruttore per copia templatizzato su due tipi generici CeDche è in grado di costruire una
+(b) Si implementino tutti i metodi e gli operatori ritenuti necessari o interessanti.
+(c) Si implementi un costruttore per copia templatizzato su due tipi generici CeDche è in grado di costruire una
 pair<A,B>dato un argomento di tipoconstpair<C,D>&.
 
 **Soluzione** *(spostata dalla sezione 4 del PDF originale)*
@@ -3594,18 +3585,18 @@ Il template `pair<A,B>` e' un esempio classico di contenitore generico C++: sfru
 **Testo dell'esercizio**
 
 [Esame 25/06/2024 – 05/09/2023 –03/06/2022]
-1.Si scriva in C++ una classe genericamatrixche rappresenta matrici bidimensionali di valori di tipoT,d o v eTèu n
-tipo templatizzato. Tale classe deve comportarsi come un valore,s e c o n d ol os t i l ed e icontainerdi STL, pertanto
+1. Si scriva in C++ una classe genericamatrixche rappresenta matrici bidimensionali di valori di tipoT,dov eTèu n
+tipo templatizzato. Tale classe deve comportarsi come un valore,second ol os til ed e icontainerdi STL, pertanto
 deve supportare il costruttore per copia, l’operatore di assegnamento ed il costruttore di default. Si aggiungano
-poi metodi e operatori a piacere, tra cui almenois e g u e n t i :
+poi metodi e operatori a piacere, tra cui almenois eguenti :
 •costruttore con 2 parametri + 1 opzionale: numero di righe, numero di colonne e valore iniziale di tipo T
 •distruttore (se necessario);
 •member typeiterator,const_iteratorevalue_type;
 •accesso tramite riga e colonna implementando 2 overload (const e non-const) di operator();
-•2o v e r l o a d( c o n s ten o n - c o n s t )d e im e t o d ibegin()edend()per poter iterare tutta la matrice dall’angolo
+•2o verload( cons ten o n - const )d e im etod ibegin()edend()per poter iterare tutta la matrice dall’angolo
 superiore sinistro all’angolo inferiore destro come se fosse piatta.
 L’implementazione può utilizzare STL liberamente, se lo si desidera.
-Si prenda a riferimento il seguente snippet per la speciﬁca dei requisiti del tipo matrix:
+Si prenda a riferimento il seguente snippet per la specifica dei requisiti del tipo matrix:
 
 ```cpp
 matrix<double>m1; // non inizializzata
@@ -3732,10 +3723,10 @@ La matrice template separa rappresentazione (array bidimensionale) da operazioni
 **Testo dell'esercizio**
 
 [Esame 14/06/2024]
-1.Si svolgano i serguenti esercizi in linguaggio C++11.
-(a)Si implementi una funzione templatizzata su un tipo Cche, dato un container STL avente tipoC,n es o m m a
+1. Si svolgano i serguenti esercizi in linguaggio C++11.
+(a) Si implementi una funzione templatizzata su un tipo Cche, dato un container STL avente tipoC,n es omma
 tutti gli elementi tramite l’operatore di addizione e ritorna il risultato della sommatoria.
-(b)Quali vincoli sul template parameter Csono implicitamente richiesti? Si scrivano dettagliatamente tutti i
+(b) Quali vincoli sul template parameter Csono implicitamente richiesti? Si scrivano dettagliatamente tutti i
 vincoli per C e per gli eventuali member type utilizzati nell’implementazione.
 Esempio:il tipoCdeve avere il tal metodo, deve supportare il tal costruttore, il tal operatore ecc.; poi deve
 avere un certo member type e quest’ultimo deve supportare il tal metodo, operatore ecc.
@@ -3793,12 +3784,12 @@ La sommatoria generica usa template + `operator+` per funzionare su qualsiasi ti
 **Testo dell'esercizio**
 
 [Esame 10/01/2024]
-1.Si implementino in C++11 alcune varianti della funzione map()rispettando la sua semantica tipica: la funzione
+1. Si implementino in C++11 alcune varianti della funzione map()rispettando la sua semantica tipica: la funzione
 passata come argomento allamap()deve essere applicata ad ogni elemento della sequenza di input, producendo
 una sequenza di output con tutti i risultati delle applicazioni.
-(a)Si implementi la seguente versione dellamap()che opera su iteratori. Si badi che in questo caso la funzione
+(a) Si implementi la seguente versione dellamap()che opera su iteratori. Si badi che in questo caso la funzione
 non ha tipo di ritorno. L’output consiste in un iteratore passato come argomento: lì la funzione dovrà scrivere
-ir i s u l t a t i .
+ir isultati .
 
 ```cpp
 template<classInputIterator,classOutputIterator>
@@ -3806,19 +3797,19 @@ voidmap(InputIteratorfrom,InputIteratorto,OutputIteratorout,
 function<typenameOutputIterator::value_type(typenameInputIterator::value_type)>f)
 ```
 
-(b)Si implementi la seguente versione dellamap()che opera su vector di STL. In questo caso l’output è un vero
-ep r o p r i ot i p od ir i t o r n o . L ’ i m p l e m e n t a z i o n ed e v ei n v o c a r el amap()di cui al punto precedente.
+(b) Si implementi la seguente versione dellamap()che opera su vector di STL. In questo caso l’output è un vero
+ep ropri ot i p od ir itorno . L’implementazion ed e v ei nvocar el amap()di cui al punto precedente.
 
 ```cpp
 template<classA,classB>
 vector<B>map(constvector<A>&v,function<B(A)>f)
 ```
 
-(c)Il tipo templatizzatofunctionè deﬁnito da STL a partire dallo standard C++11, così come le espressioni
+(c) Il tipo templatizzatofunctionè definito da STL a partire dallo standard C++11, così come le espressioni
 lambda. Nessuno dei due esisteva in C++vanilla(oggi chiamato C++03).
-i.Come sarebbe stato possibile scrivere in C++03 le ﬁrme delle map()di cui ai punti (a) e (b) senza usare
+i.Come sarebbe stato possibile scrivere in C++03 le firme delle map()di cui ai punti (a) e (b) senza usare
 il tipofunction?
-ii.Le ﬁrme compatibili con C++03 potrebbero coesistere con le ﬁrme originali di cui ai punti ( a)e(b)? In
+ii.Le firme compatibili con C++03 potrebbero coesistere con le firme originali di cui ai punti ( a)e(b)? In
 altre parole, sarebbero considerati tutti overload validi dal compilatore C++11?
 iii.Come sarebbe stato possibile invocare lemap()compatibili con C++03 senza le lambda?
 
@@ -3930,9 +3921,9 @@ La `map` template usa `operator[]` per accesso chiave-valore. La gestione dell'a
 **Testo dell'esercizio**
 
 [Esame 30/06/2023]
-1.Si implementi in C++ una classe templatizzata fun_seqanaloga a quella dell’esercizio2.1.7(Java), adottando
+1. Si implementi in C++ una classe templatizzata fun_seqanaloga a quella dell’esercizio2.1.7(Java), adottando
 però i pattern, gli stili e le convenzioni di C++ e di STL. Alcuni suggerimenti:
-•si usi il tipostd::pairdeﬁnito da STL per rappresentare le coppie;
+•si usi il tipostd::pairdefinito da STL per rappresentare le coppie;
 •l’iterabilità in C++ è rappresentata delconceptdenominatoContainerin STL;
 •la funzione di incremento passata al costruttore in Java non è necessaria in C++ e può essere sostituita dagli
 opportuni operatori;
@@ -4039,7 +4030,7 @@ Le funzioni come callable (`operator()`) in C++ consentono composizione e stato 
 **Testo dell'esercizio**
 
 [Esame 13/01/2023]
-1.Si prenda in considerazione la seguente classe C++14 che rappresenta curve deﬁnite tramite funzioni unarieR↗R
+1. Si prenda in considerazione la seguente classe C++14 che rappresenta curve definite tramite funzioni unarieR↗R
 in un certo intervallo di dominio[a, b]⇐R.
 
 ```cpp
@@ -4090,20 +4081,18 @@ iteratorend()const{/* DA IMPLEMENTARE */ }
 };
 ```
 
-(a)Si implementi il metododerivative()che calcola la derivata, cioè la curva con una lambda che calcola il
-rapporto differenzialef(x+dx)->f(x)
-dx
-(b)Si implementi il metodoprimitive()che calcola la primitiva, ovvero la curva che rappresenta l’integrale
-indeﬁnito con una lambda che calcola il prodotto differenziale f(x)·dx.
-(c)Si implementi il metodointegral()che calcola l’integrale deﬁnito
+(a) Si implementi il metodo derivative() che calcola la derivata, cioè la curva con una lambda che calcola il
+rapporto differenziale (f(x+dx) - f(x)) / dx.
+(b) Si implementi il metodoprimitive()che calcola la primitiva, ovvero la curva che rappresenta l’integrale
+indefinito con una lambda che calcola il prodotto differenziale f(x)·dx.
+(c) Si implementi il metodointegral()che calcola l’integrale definito
 ∫b
-af(x)dx,o v v e r ol as o m m a t o r i ad e i
+af(x) dx,ovver ol as ommatori ad e i
 prodotti differenziali calcolati dalla primitiva nell’intervallo[a, b].
 
-(d)Si implementino i metodi relativi all’iteratore tenendo presente che:
+(d) Si implementino i metodi relativi all’iteratore tenendo presente che:
 •il metodobegin()computa un iteratore all’inizio dell’intervallo[a, b];
-•il metodoend()computa un iteratore oltre la ﬁne dell’intervallo[a, b],i n c l u d e n d ol ’ e s t r e m obnell’itera-
-zione;
+•il metodoend()computa un iteratore oltre la fine dell’intervallo[a, b],includend ol’estrem obnell’iterazione;
 •l’operatore di de-reference dell’iteratore produce una coppia di reali che rappresentano un punto della
 curva sul piano cartesiano;
 •gli operatori di pre e post incremento incrementano l’ascissa corrente xdella quantitàdx.
@@ -4272,24 +4261,24 @@ Le curve come gerarchia di classi con `operator<<` per stampa e metodi virtuali 
 **Testo dell'esercizio**
 
 [Esame 13/09/2022]
-1.Vogliamo realizzare in C++ lo stesso sistema di alberi binari di cui al Quesito 2.1.9(Java). La traduzione del
+1. Vogliamo realizzare in C++ lo stesso sistema di alberi binari di cui al Quesito 2.1.9(Java). La traduzione del
 codice da Java a C++ non deve essere letterale: è necessario adottare gli stili e le convenzioni di C++ e di STL, ad
-esempio formulando il confronto tramite l’overloading degli opportuni operatori, deﬁnendo gli opportuni member
-type per gli iteratori e implementando gli overload const e non-const dei metodi laddove necessario. La classe tre->
-e_nodedeve avere un template parameterTed aderire allo stile dellavalue-oriented programming, comportandosi
-come un valore con gli opportuni costruttori e operatori di assegnamento. Segue la speciﬁca dettagliata.
-(a)Gli alberi devono essereiterabiliel ’ i t e r a t o r ed e v ea t t r a v e r s a r el ’ a l b e r oi nm a n i e r aa l g o r i t m i c a m e n t ee q u i v a -
-lente all’implementazione Java di cui al Quesitoa(Es.2.1.9Java). Si deﬁniscano imember typeper iteratori
-const e non-const e le relative coppie di metodi begin()edend().S e n e c e s s a r i o , i m p l e m e n t a r e g l i i t e r a t o r i
+esempio formulando il confronto tramite l’overloading degli opportuni operatori, definendo gli opportuni member
+type per gli iteratori e implementando gli overload const e non-const dei metodi laddove necessario. La classe
+tree_node deve avere un template parameter T ed aderire allo stile della value-oriented programming, comportandosi
+come un valore con gli opportuni costruttori e operatori di assegnamento. Segue la specifica dettagliata.
+(a) Gli alberi devono essere iterabili e l’iteratore deve attraversare l’albero in maniera algoritmicamente
+equivalente all’implementazione Java di cui al Quesito a (Es. 2.1.9 Java). Si definiscano i member type per iteratori
+const e non-const e le relative coppie di metodi begin()edend().Senecessario , implementaregliiteratori
 tramite classi ausiliarie.
-(b)La deﬁnizione di equivalenza di due alberi è semanticamente equivalente a quella deﬁnita nel Quesito b(Es.
+(b) La definizione di equivalenza di due alberi è semanticamente equivalente a quella definita nel Quesito b(Es.
 2.1.9Java). Si assuma che gli oggetti di tipo Tsiano confrontabili tramite l’operatore==.
-(c)Si deﬁniscano gli opportuni costruttori, operatori di assegnamento ed eventuali distruttori secondo lo stile della
+(c) Si definiscano gli opportuni costruttori, operatori di assegnamento ed eventuali distruttori secondo lo stile della
 value-oriented programming. Se vantaggioso, si forniscano metodi statici che fungano da pseudo-costruttori
-ep e r m e t t a n od ic o s t r u i r ea l b e r if a c i l m e n t ei n n e s t a n d or i c o r s i v a m e n t el ec h i a m a t e .
-(d)Si implementino uno o più snippet di test.
-(e)Si implementi unpretty printertramite un overload globale dell’operatore<<.
-Si utilizzi la revisione del linguaggio C++ che si preferisce, purché si speciﬁchi quale. È importante fare buon uso
+ep ermettan od ic ostruir ea lber if acilment ei nnestand or icorsivament el ec hiamate .
+(d) Si implementino uno o più snippet di test.
+(e) Si implementi unpretty printertramite un overload globale dell’operatore<<.
+Si utilizzi la revisione del linguaggio C++ che si preferisce, purché si specifichi quale. È importante fare buon uso
 del type system, riusando il codice laddove possibile.
 
 **Soluzione** *(spostata dalla sezione 4 del PDF originale)*
@@ -4725,8 +4714,8 @@ L'albero binario value-oriented gestisce copia profonda, move e RAII tramite cos
 **Testo dell'esercizio**
 
 [Esame 01/07/2022]
-1.Si deﬁnisca in linguaggio C++ una classe smart_ptrtemplatizzata su un tipoTche implementi la logica di uno
-smart pointer.S i i m p l e m e n t i n o t u t t i i c o s t r u t t o r i , i d i s t r u t t o r i e g l i o p e r a t o r i c h e s i r i t e n g o n o n e c e s s a r i e d u t i l i
+1. Si definisca in linguaggio C++ una classe smart_ptrtemplatizzata su un tipoTche implementi la logica di uno
+smart pointer.Siimplementinotuttiicostruttori , idistruttorieglioperatorichesiritengononecessariedutili
 affinché uno smart pointer si comporti in maniera compatibile con un pointer C. In altre parole, uno smart pointer
 deve implementare non solo ilreference countingma deve anche comportarsi come un puntatore classico, inclusi
 gli operatori di incremento/decremento, l’aritmetica dei puntatori ed ovviamente il de-reference.
