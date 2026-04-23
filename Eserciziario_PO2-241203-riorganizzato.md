@@ -4944,18 +4944,10 @@ Lo smart pointer con reference counting (`shared_ptr`-like) implementa RAII: il 
 
 ## Sezione 3 – Domande aperte
 
-Le seguenti domande verificano le conoscenze generali sugli argomenti del corso.
+Le seguenti domande servono a verificare le conoscenze dello studente relativamente agli argomenti coperti durante il corso. Lo studente deve dimostrare di aver studiato l’argomento ed essere in grado di esporlo in modo adeguato.
 
-```cpp
-Le seguenti domande servono a veriﬁcare le conoscenze dello studente relativamente agli argomenti coperti durante il
-corso. Lo studente deve dimostrare di aver studiato l’argomento ed essere in grado di esporlo in modo adeguato.
-1.Incapsulamento:s p i e g a r e c o s a s i i n t e n d e p e r m e t o d o s e t t e r .F o r n i r e a l m e n o u n a m o t i v a z i o n e p e r l a q u a l e l ’ u s o d i
-setter è preferibile alla deﬁnizione di campi pubblici. Fare un esempio concreto (con codice) di un setter che svolge
-una funzione non ottenibile con un campo pubblico.
-2.Ereditarietà:s p i e g a r e a p p r o f o n d i t a m e n t e i n c o n c e t t o d i s o v r a s c r i t t u r a d i u n m e t o d o e q u a l i s o n o l e c o n d i z i o n i
-nelle quali può essere utile. Fare un esempio pratico mostrando le necessarie porzioni di codice.
-3.Espressioni Lambda:c o n s i d e r a r e l ’ i n t e r f a c c i aActionListenercon l’unico metodovoid actionPerformed(ActionEvent
-e). Considerare ilJButton bem o s t r a r e( c o nc o d i c e )c o m eu t i l i z z a r ei lm e t o d ovoid addActionListener(ActionListener
-l)per aggiungere unActionListenerche stampi a console la stringa "Java",c o d i ﬁ c a t or i s p e t t i v a m e n t ec o m e
-una classe anonima e come un’espressione Lambda.
-```
+1. Incapsulamento: spiegare cosa si intende per metodo setter. Fornire almeno una motivazione per la quale l’uso di setter è preferibile alla definizione di campi pubblici. Fare un esempio concreto (con codice) di un setter che svolge una funzione non ottenibile con un campo pubblico.
+
+2. Ereditarietà: spiegare approfonditamente in concetto di sovrascrittura di un metodo e quali sono le condizioni nelle quali può essere utile. Fare un esempio pratico mostrando le necessarie porzioni di codice.
+
+3. Espressioni Lambda: considerare l’interfaccia `ActionListener` con l’unico metodo `void actionPerformed(ActionEvent e)`. Considerare il `JButton b` e mostrare (con codice) come utilizzare il metodo `void addActionListener(ActionListener l)` per aggiungere un `ActionListener` che stampi a console la stringa "Java", codificato rispettivamente come una classe anonima e come un’espressione Lambda.
