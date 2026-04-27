@@ -571,15 +571,19 @@ di cui è composto il poligono. Ad esempio, una lista contenente i seguenti 3 pu
 C=(3,0) rappresenta un triangolo rettangolo in cui il primo lato è AB, il secondo è BC ed il terzo è CA.
 
 ```java
-publicabstractclassPolygon{
-protectedfinalList<Point>points;
-protectedPolygon(List<Point>points){
-assertpoints.size()>=3;
-this.points=points;
+public abstract class Polygon {
+
+protected final List<Point> points;
+protected Polygon(List<Point> points) {
+
+assert points.size() >= 3;
+this.points = points;
+
 }
-publicIterator<Line>lineIterator(){/* da implementare */ }
-publicdoubleperimeter(){/* da implementare */ }
-publicabstractdoublearea();
+public Iterator<Line> lineIterator() { /* da implementare */ }
+public double perimeter() { /* da implementare */ }
+public abstract double area();
+
 }
 ```
 
@@ -598,10 +602,10 @@ perimetro del poligono iterando sui segmenti che lo compongono.
 (a) Si implementi una sottoclasse di **Polygon** di nome **Triangle** che rappresenta triangoli qualunque.
 
 ```java
-publicclassTriangleextendsPolygon{
-publicTriangle(Pointp1,Pointp2,Pointp3){/* da implementare */ }
-@Override
-publicdoublearea(){/* da implementare */ }
+public class Triangle extends Polygon {
+    public Triangle(Point p1, Point p2, Point p3) { /* da implementare */ }
+    @Override
+    public double area() { /* da implementare */ }
 }
 ```
 
@@ -615,10 +619,10 @@ costrutto **assert**.
 (c) Si implementi una sottoclasse di **Polygon** di nome **Rectangle** che rappresenta rettangoli.
 
 ```java
-publicclassRectangleextendsPolygon{
-publicRectangle(Pointp1,Pointp3){/* da implementare */ }
-@Override
-publicdoublearea(){/* da implementare */ }
+public class Rectangle extends Polygon {
+    public Rectangle(Point p1, Point p3) { /* da implementare */ }
+    @Override
+    public double area() { /* da implementare */ }
 }
 ```
 
@@ -629,8 +633,8 @@ area()in modo che calcoli l’area del rettangolo.
 (d) Si implementi una sottoclasse di **Rectangle** di nome **Square** che rappresenta quadrati.
 
 ```java
-publicstaticclassSquareextendsRectangle{
-publicSquare(Pointp1,doubleside){/* da implementare */ }
+public static class Square extends Rectangle {
+    public Square(Point p1, double side) { /* da implementare */ }
 }
 ```
 
@@ -639,14 +643,18 @@ opportunamente.
 3. Si prenda in considerazione il seguente codice, in cui compare l’invocazione di un metodo statico maxda definire:
 
 ```java
-Squaresq1=newSquare(newPoint(10.,-4.),0.1),
-sq2=newSquare(newPoint(1.,20.),0.01);
-Collection<Square>squares=List.of(sq1,sq2);
-Rectangler=max(squares,newComparator<Polygon>(){
+Square sq1 = new Square(new Point(10., -4.), 0.1),
+sq2 = new Square(new Point(1., 20.), 0.01);
+
+Collection<Square> squares = List.of(sq1, sq2);
+Rectangle r = max(squares, new Comparator<Polygon>() {
+
 @Override
-publicintcompare(Polygona,Polygonb){
-return(int)(a.area()-b.area());
+public int compare(Polygon a, Polygon b) {
+return (int) (a.area() - b.area());
+
 }
+
 });
 ```
 
@@ -663,171 +671,230 @@ gli elementi della collection di input.
 **Soluzione** *(spostata dalla sezione 4 del PDF originale)*
 
 ```java
-importjava.util.*;
+import java.util.*;
 
-publicclassEs{
+public class Es {
 
 // 1.a
-publicstaticclassPoint{
-publicfinaldoublex,y;
+public static class Point {
 
-publicPoint(doublex,doubley){
-this.x=x;
-this.y=y;
+public final double x, y;
+
+public Point(double x, double y) {
+
+this.x = x;
+this.y = y;
+
 }
 
 }
 
 // 1.b
-publicstaticclassLine{
-privatefinalPointp1,p2;
+public static class Line {
 
-publicLine(Pointp1,Pointp2){
-this.p1=p1;
-this.p2=p2;
+private final Point p1, p2;
+
+public Line(Point p1, Point p2) {
+
+this.p1 = p1;
+this.p2 = p2;
+
 }
 
-publicdoublelength(){
-returnMath.sqrt(Math.pow(p1.x-p2.x,2.)+Math.pow(p1.y-p2.y,2.));
+public double length() {
+
+return Math.sqrt(Math.pow(p1.x - p2.x, 2.) + Math.pow(p1.y - p2.y, 2.));
+
 }
+
 }
 
 // 1.c
-publicabstractstaticclassPolygon{
-protectedfinalList<Point>points;
+public abstract static class Polygon {
 
-protectedPolygon(List<Point>points){
-assertpoints.size()>=3;// 1.c.i: RISPOSTA: il motivo per cui è necessario questo
-assert è che non è possibile vincolare la lunghezza di una lista con il type
-system: i tipi non esprimono valori numerici statici
+protected final List<Point> points;
 
-this.points=points;
+protected Polygon(List<Point> points) {
+
+assert points.size() >= 3; // 1.c.i: RISPOSTA: il motivo per cui è necessario questo
+// assert è che non è possibile vincolare la lunghezza di una lista con il type
+// system: i tipi non esprimono valori numerici statici
+
+this.points = points;
+
 }
 
 // 1.c.ii
-publicIterator<Line>lineIterator(){
-returnnewIterator<>(){
-privatefinalIterator<Point>it=points.iterator();
-privatePointlast=it.next(); // ci sono sempre almeno 3 punti, non può
-fallire questa next()
+public Iterator<Line> lineIterator() {
+
+return new Iterator<>() {
+
+private final Iterator<Point> it = points.iterator();
+private Point last = it.next(); // ci sono sempre almeno 3 punti, non può fallire questa next()
 
 @Override
-publicbooleanhasNext(){
-returnit.hasNext();
+public boolean hasNext() {
+
+return it.hasNext();
+
 }
 
 @Override
-publicLinenext(){
-Pointp=it.next();
-Liner=newLine(last,p);
-last=p;
-returnr;
+public Line next() {
+
+Point p = it.next();
+Line r = new Line(last, p);
+last = p;
+return r;
+
 }
+
 };
+
 }
 
 // 1.c.iii
-publicdoubleperimeter(){
-Iterator<Line>lineIt=lineIterator();
-doubler=0.;
-while(lineIt.hasNext()){
-r+=lineIt.next().length();
+public double perimeter() {
+
+Iterator<Line> lineIt = lineIterator();
+double r = 0.;
+while (lineIt.hasNext()) {
+
+r += lineIt.next().length();
+
 }
-returnr;
+return r;
 
 }
 
-publicabstractdoublearea();
+public abstract double area();
+
 }
 
 // 2.a
-publicstaticclassTriangleextendsPolygon{
-publicTriangle(Pointp1,Pointp2,Pointp3){
-super(List.of(p1,p2,p3));
+public static class Triangle extends Polygon {
+
+public Triangle(Point p1, Point p2, Point p3) {
+
+super(List.of(p1, p2, p3));
+
 }
 
 @Override
-publicdoublearea(){
-Pointp1=points.get(0),p2=points.get(1);
+public double area() {
+
+Point p1 = points.get(0), p2 = points.get(1);
 // versione facile con la base orizzontale (sufficiente per la valutazione
-dell'esame)
-if(p1.x==p2.x){
-doublebase=newLine(p1,p2).length(),h=newLine(newPoint(p2.x,p1.y),
+// dell'esame)
+if (p1.x == p2.x) {
+
+double base = new Line(p1, p2).length(), h = new Line(new Point(p2.x, p1.y),
 p2).length();
-returnbase*h/2.;
+return base * h / 2.;
+
 }
 // versione generale con la formula di Erone (non necessaria per la valutazione
-dell'esame)
-else{
-Pointp3=points.get(2);
-doublep=perimeter()/2., // semiperimetro
-a=newLine(p1,p2).length(),
-b=newLine(p2,p3).length(),
-c=newLine(p3,p1).length();
-returnMath.sqrt(p*(p-a)*(p-b)*(p-c));
+// dell'esame)
+
+else {
+
+Point p3 = points.get(2);
+double p = perimeter() / 2.,
+
+// semiperimetro
+
+a = new Line(p1, p2).length(),
+b = new Line(p2, p3).length(),
+c = new Line(p3, p1).length();
+
+return Math.sqrt(p * (p - a) * (p - b) * (p - c));
+
 }
+
 }
 
 }
 
 // 2.b
-publicstaticclassRightTriangleextendsTriangle{
-publicRightTriangle(Pointp1,doubleb,doubleh){
-super(p1,newPoint(p1.x+b,p1.y),newPoint(p1.x,p1.y+h));
+public static class RightTriangle extends Triangle {
+
+public RightTriangle(Point p1, double b, double h) {
+
+super(p1, new Point(p1.x + b, p1.y), new Point(p1.x, p1.y + h));
+
 }
+
 }
 
 // 2.c
-publicstaticclassRectangleextendsPolygon{
-publicRectangle(Pointp1,Pointp3){
-super(List.of(p1,newPoint(p1.x,p3.y),p3,newPoint(p3.x,p1.y)));
+public static class Rectangle extends Polygon {
+public Rectangle(Point p1, Point p3) {
+
+super(List.of(p1, new Point(p1.x, p3.y), p3, new Point(p3.x, p1.y)));
+
 }
 
 @Override
-publicdoublearea(){
-Pointp1=points.get(0),p2=points.get(1),p4=points.get(3);
-Lineb=newLine(p1,p4),h=newLine(p1,p2);
-returnb.length()*h.length();
+public double area() {
+
+Point p1 = points.get(0), p2 = points.get(1), p4 = points.get(3);
+Line b = new Line(p1, p4), h = new Line(p1, p2);
+return b.length() * h.length();
+
 }
+
 }
 
 // 2.d
 
-publicstaticclassSquareextendsRectangle{
-publicSquare(Pointp1,doubleside){
-super(p1,newPoint(p1.x+side,p1.y+side));
+public static class Square extends Rectangle {
+public Square(Point p1, double side) {
+
+super(p1, new Point(p1.x + side, p1.y + side));
+
 }
 
 }
 
 // 3.a
-static<T>Tmax(Collection<T>l,Comparator<?superT>cmp){
-assertl.size()>1;
-Tmax=l.iterator().next(); // prendo il primo elemento
-for(Tx:l){
-if(cmp.compare(x,max)>0)max=x;
+static <T> T max(Collection<T> l, Comparator<? super T> cmp) {
+
+assert l.size() > 1;
+T max = l.iterator().next(); // prendo il primo elemento
+for (T x : l) {
+
+if (cmp.compare(x, max) > 0) max = x;
+
 }
-returnmax;
+return max;
+
 }
 
-publicstaticvoidmain(String[]args){
-Squaresq1=newSquare(newPoint(10.,-4.),0.1),
-sq2=newSquare(newPoint(1.,20.),0.01);
-Collection<Square>squares=List.of(sq1,sq2);
-Rectangler=max(squares,newComparator<Polygon>(){
+public static void main(String[] args) {
+
+Square sq1 = new Square(new Point(10., -4.), 0.1),
+
+sq2 = new Square(new Point(1., 20.), 0.01);
+
+Collection<Square> squares = List.of(sq1, sq2);
+Rectangle r = max(squares, new Comparator<Polygon>() {
+
 @Override
-publicintcompare(Polygona,Polygonb){
-return(int)(a.area()-b.area());
+public int compare(Polygon a, Polygon b) {
+return (int) (a.area() - b.area());
+
 }
+
 });
 // 3.b: il metodo max() ritorna sq2 perché la sottrazione nel confronto è invertita,
-quindi la ricerca del massimo in realtà restituisce il più piccolo anziché il più
-grande;
-
+// quindi la ricerca del massimo in realtà restituisce il più piccolo anziché il più
+// grande;
+//
 // ed il quadrato con area minore è sq2, perché 0.01^2 = 0.0001 mentre 0.1^2 = 0.01,
-quindi sq2 è di fatto il più piccolo.
+// quindi sq2 è di fatto il più piccolo.
 
 // 3.c: l'area di r (cioè di sq2) è 0.01^2 = 0.0001 = 10^-4
+
 }
 
 }
@@ -909,93 +976,131 @@ computazioni dei thread.
 **Soluzione** *(spostata dalla sezione 4 del PDF originale)*
 
 ```java
-importjava.util.ArrayList;
-importjava.util.Iterator;
-importjava.util.List;
-importjava.util.function.Consumer;
-importjava.util.function.Function;
-importjava.util.function.Supplier;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
-publicclassEs1{
+public class Es1 {
 
-publicstatic<A,B>Iterator<B>mapIterator(Iterator<A>it,Function<A,B>f){
-returnnewIterator<>(){
+public static <A, B> Iterator<B> mapIterator(Iterator<A> it, Function<A, B> f) {
+
+return new Iterator<>() {
+
 @Override
-publicbooleanhasNext(){
-returnit.hasNext();
+public boolean hasNext() {
+
+return it.hasNext();
+
 }
 
 @Override
-publicBnext(){
+public B next() {
 
-returnf.apply(it.next());
+return f.apply(it.next());
+
 }
+
 };
+
 }
 
-publicstatic<T>voidforEach(Iterable<T>it,Consumer<T>f){
-for(Tx:it)
+public static <T> void forEach(Iterable<T> it, Consumer<T> f) {
+
+for (T x : it)
+
 f.accept(x);
+
 }
 
-publicstaticclassPair<X,Y>{
-publicfinalXfst;
-publicfinalYsnd;
-publicPair(Xx,Yy){
-fst=x;
-snd=y;
-}
+public static class Pair<X, Y> {
+
+public final X fst;
+public final Y snd;
+public Pair(X x, Y y) {
+
+fst = x;
+snd = y;
+
 }
 
-publicstaticvoidmain1(String[]args){
-List<Pair<Function<String,Integer>,String>>l=newArrayList<>();
-Iterator<Integer>it=mapIterator(l.iterator(),(p)->p.fst.apply(p.snd));
 }
 
-publicstatic<A,B>Iterator<B>applyFuns(Iterable<Pair<Function<A,B>,A>>l){
-returnmapIterator(l.iterator(),(p)->p.fst.apply(p.snd));
+public static void main1(String[] args) {
+
+List<Pair<Function<String, Integer>, String>> l = new ArrayList<>();
+Iterator<Integer> it = mapIterator(l.iterator(), (p) -> p.fst.apply(p.snd));
+
 }
 
-publicstaticvoidmain2(String[]args){
-List<Pair<Consumer<Integer>,Integer>>l=newArrayList<>();
-forEach(l,(p)->p.fst.accept(p.snd));
+public static <A, B> Iterator<B> applyFuns(Iterable<Pair<Function<A, B>, A>> l) {
+
+return mapIterator(l.iterator(), (p) -> p.fst.apply(p.snd));
+
 }
 
-publicstatic<A>voidacceptFuns(Iterable<Pair<Consumer<A>,A>>l){
-forEach(l,(p)->p.fst.accept(p.snd));
+public static void main2(String[] args) {
+
+List<Pair<Consumer<Integer>, Integer>> l = new ArrayList<>();
+forEach(l, (p) -> p.fst.accept(p.snd));
+
 }
 
-publicstatic<A,B>Iterator<Supplier<B>>asyncMapIterator(Iterator<A>it,Function<A,B>
-f){
-returnnewIterator<>(){
+public static <A> void acceptFuns(Iterable<Pair<Consumer<A>, A>> l) {
+
+forEach(l, (p) -> p.fst.accept(p.snd));
+
+}
+
+public static <A, B> Iterator<Supplier<B>> asyncMapIterator(Iterator<A> it, Function<A, B>
+
+f) {
+return new Iterator<>() {
+
 @Override
-publicbooleanhasNext(){
-returnit.hasNext();
+public boolean hasNext() {
+
+return it.hasNext();
+
 }
 
 @Override
-publicSupplier<B>next(){
-finalAx=it.next();
-finalB[]r=(B[])newObject[1];
-Threadt=newThread(()->{r[0]=f.apply(x);});
+public Supplier<B> next() {
+
+final A x = it.next();
+final B[] r = (B[]) new Object[1];
+Thread t = new Thread(() -> { r[0] = f.apply(x); });
 t.start();
-return()->{
-try{
+return () -> {
+try {
+
 t.join();
-}catch(InterruptedExceptione){
-thrownewRuntimeException(e);
+
+} catch (InterruptedException e) {
+throw new RuntimeException(e);
+
 }
 
-returnr[0];
+return r[0];
+
 };
-}
-};
+
 }
 
-publicstatic<T>voidasyncForEach(Iterable<T>it,Consumer<T>f){
-for(Tx:it)
-newThread(()->f.accept(x)).start();
+};
+
 }
+
+public static <T> void asyncForEach(Iterable<T> it, Consumer<T> f) {
+
+for (T x : it)
+
+new Thread(() -> f.accept(x)).start();
+
+}
+
 }
 ```
 
@@ -1049,79 +1154,106 @@ ii. Si reimplementi **parallelFactorial()** tramite una singola invocazione dell
 **Soluzione** *(spostata dalla sezione 4 del PDF originale)*
 
 ```java
-importjava.util.ArrayList;
-importjava.util.Collection;
-importjava.util.List;
-importjava.util.function.Function;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.function.Function;
 
-publicclassEs1{
+public class Es1 {
 
 // 1.a
-publicstaticclassFactorialThreadextendsThread{
-privatefinalintn;
-privatelongres;
+public static class FactorialThread extends Thread {
 
-publicFactorialThread(intn){
-this.n=n;
+private final int n;
+private long res;
+
+public FactorialThread(int n) {
+
+this.n = n;
+
 }
 
 @Override
-publicvoidrun(){
-res=fact(n);
+public void run() {
+
+res = fact(n);
+
 }
 
-publiclonggetResult(){
-try{
+public long getResult() {
+
+try {
+
 join();
-}catch(InterruptedExceptione){
-thrownewRuntimeException(e);
+
+} catch (InterruptedException e) {
+throw new RuntimeException(e);
+
 }
-returnres;
+return res;
+
 }
 
-publicintgetN(){
-returnn;
+public int getN() {
+
+return n;
+
 }
 
-privatestaticlongfact(intn){
-if(n<=1)return1;
-returnn*fact(n-1);
+private static long fact(int n) {
+
+if (n <= 1) return 1;
+return n * fact(n - 1);
+
 }
 
 }
 
 // 1.b + 1.c
-publicstaticList<FactorialThread>parallelFactorial(Iterable<Integer>c){
-List<FactorialThread>r=newArrayList<>();
+public static List<FactorialThread> parallelFactorial(Iterable<Integer> c) {
 
-for(intn:c){
-FactorialThreadt=newFactorialThread(n);
+List<FactorialThread> r = new ArrayList<>();
+
+for (int n : c) {
+
+FactorialThread t = new FactorialThread(n);
 t.start();
 r.add(t);
+
 }
-returnr;
+return r;
+
 }
 
 // 1.d
-publicstaticvoidmain(String[]args){
-for(FactorialThreadt:parallelFactorial(List.of(0,1,2,3,11,12,23,35))) //
-chiamare anche parallelFactorial2() per provarla
-System.out.printf("fact(%d) = %d\n",t.getN(),t.getResult());
+public static void main(String[] args) {
+
+for (FactorialThread t : parallelFactorial(List.of(0, 1, 2, 3, 11, 12, 23, 35))) // chiamare anche parallelFactorial2() per provarla
+System.out.printf("fact(%d) = %d\n", t.getN(), t.getResult());
+
 }
 
 // 1.e.i
-publicstatic<A,B>List<B>map(Iterable<A>i,Function<A,B>f){
-List<B>r=newArrayList<>();
-for(Aa:i)
+public static <A, B> List<B> map(Iterable<A> i, Function<A, B> f) {
+
+List<B> r = new ArrayList<>();
+for (A a : i)
+
 r.add(f.apply(a));
-returnr;
+
+return r;
+
 }
 
 // 1.e.ii
-publicstaticCollection<FactorialThread>parallelFactorial2(Collection<Integer>c){
-returnmap(c,(n)->{FactorialThreadt=newFactorialThread(n);t.start();returnt;
+public static Collection<FactorialThread> parallelFactorial2(Collection<Integer> c) {
+
+return map(c, (n) -> { FactorialThread t = new FactorialThread(n); t.start(); return t;
+
 });
+
 }
+
 }
 ```
 
@@ -1142,19 +1274,26 @@ un thread diverso deve processare ciascun elemento.
 (a) Si implementi tutto ciò che è necessario dello snippet seguente.
 
 ```java
-static<A,B>Iterator<Supplier<B>>asyncIterator(Iterator<A>it,Function<A,B>f){
-returnnewIterator<>(){
-@Override
-publicbooleanhasNext(){/* da implemetare */ }
+static <A, B> Iterator<Supplier<B>> asyncIterator(Iterator<A> it, Function<A, B> f) {
 
-privateclassFutureimplementsSupplier<B>{
-publicFuture(Supplier<B>f){/* da implementare */ }
+return new Iterator<>() {
+
+@Override
+public boolean hasNext() { /* da implemetare */ }
+
+private class Future implements Supplier<B> {
+
+public Future(Supplier<B> f) { /* da implementare */ }
+
 /* da completare/implementare */
+
 }
 
 @Override
-publicSupplier<B>next(){/* da implementare */ }
+public Supplier<B> next() { /* da implementare */ }
+
 };
+
 }
 ```
 
@@ -1169,65 +1308,88 @@ all’esercizio precedente per scorrere l’argomento iterabile e ordinare in ma
 **Soluzione** *(spostata dalla sezione 4 del PDF originale)*
 
 ```java
-importorg.jetbrains.annotations.NotNull;
-importorg.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-importjava.util.Collections;
-importjava.util.Iterator;
-importjava.util.List;
-importjava.util.function.Function;
-importjava.util.function.Supplier;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
-publicclassMain{
+public class Main {
 
 // 1.a
-publicstatic<A,B>Iterator<Supplier<B>>asyncIterator(Iterator<A>it,Function<A,B>f){
-returnnewIterator<>(){
+public static <A, B> Iterator<Supplier<B>> asyncIterator(Iterator<A> it, Function<A, B> f) {
+
+return new Iterator<>() {
+
 @Override
-publicbooleanhasNext(){
-returnit.hasNext();
+public boolean hasNext() {
+
+return it.hasNext();
+
 }
 
-privateclassFutureimplementsSupplier<B>{
+private class Future implements Supplier<B> {
+
 @Nullable
-privateBr;
+private B r;
 @NotNull
-privatefinalThreadt;
+private final Thread t;
 
-publicFuture(Supplier<B>f){
+public Future(Supplier<B> f) {
 
-t=newThread(()->{r=f.get();});
+t = new Thread(() -> { r = f.get(); });
 t.start();
+
 }
 
 @Override
 @NotNull
-publicBget(){
-try{
+public B get() {
+
+try {
+
 t.join();
-}catch(InterruptedExceptione){
-thrownewRuntimeException(e);
+
+} catch (InterruptedException e) {
+throw new RuntimeException(e);
+
 }
-returnr;
+return r;
+
 }
+
 }
 
 @Override
-publicSupplier<B>next(){
-Aa=it.next();
-returnnewFuture(()->f.apply(a));
+public Supplier<B> next() {
+
+A a = it.next();
+return new Future(() -> f.apply(a));
+
 }
+
 };
+
 }
 
 // 1.b
-static<TextendsComparable<?superT>>voidsortLists(Iterable<List<T>>c){
-Iterator<Supplier<List<T>>>it=asyncIterator(c.iterator(),(l)->{
-Collections.sort(l);returnl;});
-while(it.hasNext()){
-Supplier<List<T>>f=it.next();
-System.out.println(f.get()); // questo non è davvero necessario, ma
+static <T extends Comparable<? super T>> void sortLists(Iterable<List<T>> c) {
+Iterator<Supplier<List<T>>> it = asyncIterator(c.iterator(), (l) -> {
+
+Collections.sort(l); return l; });
+
+while (it.hasNext()) {
+
+Supplier<List<T>> f = it.next();
+System.out.println(f.get());
+
+// questo non è davvero necessario, ma
+
 }
+
 }
 
 }
@@ -1251,20 +1413,20 @@ Gli iteratori asincroni separano la produzione (thread interno) dal consumo (thr
 funzione **X→Y** in un determinato intervallo del dominio **X**.
 
 ```java
-publicclassFunSeq<XextendsNumber&Comparable<?superX>,YextendsNumber>
-implementsIterable<Pair<X,Y>>{
+public class FunSeq<X extends Number & Comparable<? super X>, Y extends Number>
+        implements Iterable<Pair<X, Y>> {
 
-privatefinalXa,b;
-privatefinalFunction<?superX,?extendsY>f;
-privatefinalFunction<X,X>inc;
+    private final X a, b;
+    private final Function<? super X, ? extends Y> f;
+    private final Function<X, X> inc;
 
-publicFunSeq(Xa,Xb,Function<?superX,?extendsY>f,Function<X,X>inc){
-this.a=a;
-this.b=b;
-this.f=f;
-this.inc=inc;
-}
-/* da finire di implementare */
+    public FunSeq(X a, X b, Function<? super X, ? extends Y> f, Function<X, X> inc) {
+        this.a = a;
+        this.b = b;
+        this.f = f;
+        this.inc = inc;
+    }
+    /* da finire di implementare */
 }
 ```
 
@@ -1287,84 +1449,107 @@ R↔Z, ovvero con ordinate di tipo **int**.
 **Soluzione** *(spostata dalla sezione 4 del PDF originale)*
 
 ```java
-importjava.util.Iterator;
-importjava.util.function.Function;
+import java.util.Iterator;
+import java.util.function.Function;
 
-publicclassEs1{
+public class Es1 {
 
 // 1.a
-publicstaticclassPair<A,B>{
-publicfinalAfst;
-publicfinalBsnd;
+public static class Pair<A, B> {
 
-publicPair(Aa,Bb){
-fst=a;
-snd=b;
+public final A fst;
+public final B snd;
+
+public Pair(A a, B b) {
+
+fst = a;
+snd = b;
+
 }
+
 }
 
-publicstaticclassFunSeq<XextendsNumber&Comparable<?superX>,YextendsNumber>
-implementsIterable<Pair<X,Y>>{
+public static class FunSeq<X extends Number & Comparable<? super X>, Y extends Number>
 
-privatefinalXa,b;
+implements Iterable<Pair<X, Y>> {
 
-privatefinalFunction<?superX,?extendsY>f;
-privatefinalFunction<X,X>inc;
+private final X a, b;
 
-publicFunSeq(Xa,Xb,Function<?superX,?extendsY>f,Function<X,X>inc){
-this.a=a;
-this.b=b;
-this.f=f;
-this.inc=inc;
+private final Function<? super X, ? extends Y> f;
+private final Function<X, X> inc;
+
+public FunSeq(X a, X b, Function<? super X, ? extends Y> f, Function<X, X> inc) {
+
+this.a = a;
+this.b = b;
+this.f = f;
+this.inc = inc;
+
 }
 
 // 1.b
 @Override
-publicIterator<Pair<X,Y>>iterator(){
-returnnewIterator<>(){
-privateXx=a;
+public Iterator<Pair<X, Y>> iterator() {
+
+return new Iterator<>() {
+private X x = a;
 @Override
-publicbooleanhasNext(){
-returnx.compareTo(b)<=0;
+public boolean hasNext() {
+
+return x.compareTo(b) <= 0;
+
 }
 
 @Override
-publicPair<X,Y>next(){
-Pair<X,Y>r=newPair<>(x,f.apply(x));
-x=inc.apply(x);
-returnr;
+public Pair<X, Y> next() {
+
+Pair<X, Y> r = new Pair<>(x, f.apply(x));
+x = inc.apply(x);
+return r;
+
 }
+
 };
+
 }
+
 }
 
 // 1.c
-publicstaticvoidtest1(){
-for(Pair<Double,Double>p:newFunSeq<>(-2.,2.,(x)->x*x-2*x+1,(x)->x+
-0.1)){
-finaldoublex=p.fst,y=p.snd;
-System.out.printf("f(%g) = %g\n",x,y);
+public static void test1() {
+
+for (Pair<Double, Double> p : new FunSeq<>(-2., 2., (x) -> x * x - 2 * x + 1, (x) -> x +
+
+0.1)) {
+final double x = p.fst, y = p.snd;
+System.out.printf("f(%g) = %g\n", x, y);
+
 }
+
 }
 
 // 1.d
-publicstaticvoidtest2(){
-for(Pair<Double,Integer>p:newFunSeq<>(-2.,2.,(x)->(int)(x*x-2*x+1),
-(x)->x+0.1)){
-finaldoublex=p.fst;
-finalinty=p.snd;
-System.out.printf("f(%g) = %d\n",x,y);
-}
+public static void test2() {
+
+for (Pair<Double, Integer> p : new FunSeq<>(-2., 2., (x) -> (int) (x * x - 2 * x + 1),
+
+(x) -> x + 0.1)) {
+final double x = p.fst;
+final int y = p.snd;
+System.out.printf("f(%g) = %d\n", x, y);
+
 }
 
+}
 
-publicstaticvoidmain(String[]args){
+public static void main(String[] args) {
+
 test1();
 test2();
-}
+
 }
 
-
+}
 ```
 
 **Spiegazione rapida del ragionamento**
@@ -1398,38 +1583,38 @@ così che l’albero sia sempre in uno stato valido.
 Segue l’implementazione da completare della classe **BST**.
 
 ```java
-publicclassBST<T>implementsIterable<T>{
-protectedfinalComparator<?superT>cmp;
-protectedNoderoot;
+public class BST<T> implements Iterable<T> {
+    protected final Comparator<? super T> cmp;
+    protected Node root;
 
-protectedclassNode{
-protectedfinalTdata;
-protectedNodeleft,right;
+    protected class Node {
+        protected final T data;
+        protected Node left, right;
 
-protectedNode(Tdata,Nodeleft,Noderight){
-this.data=data;
-this.left=left;
-this.right=right;
-}
-}
+        protected Node(T data, Node left, Node right) {
+            this.data = data;
+            this.left = left;
+            this.right = right;
+        }
+    }
 
-publicBST(Comparator<?superT>cmp){
-this.cmp=cmp;
-}
+    public BST(Comparator<? super T> cmp) {
+        this.cmp = cmp;
+    }
 
-publicvoidinsert(Tx){
-root=insertRec(root,x);
-}
+    public void insert(T x) {
+        root = insertRec(root, x);
+    }
 
-protectedNodeinsertRec(Noden,Tx){/* da implementare */ }
+    protected Node insertRec(Node n, T x) { /* da implementare */ }
 
-protectedvoiddfsInOrder(Noden,Collection<T>out){/* da implementare */ }
+    protected void dfsInOrder(Node n, Collection<T> out) { /* da implementare */ }
 
-@Override
-publicIterator<T>iterator(){/* da implementare */ }
+    @Override
+    public Iterator<T> iterator() { /* da implementare */ }
 
-publicTmin(){/* da implementare */ }
-publicTmax(){/* da implementare */ }
+    public T min() { /* da implementare */ }
+    public T max() { /* da implementare */ }
 }
 ```
 
@@ -1441,124 +1626,163 @@ del nodo **n**.
 **Soluzione** *(spostata dalla sezione 4 del PDF originale)*
 
 ```java
-importorg.jetbrains.annotations.NotNull;
-importorg.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-importjava.util.*;
-importjava.util.function.Function;
-importjava.util.function.Supplier;
+import java.util.*;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
-publicclassEs1{
+public class Es1 {
 
 // NOTA: la classe è statica solamente perché è nested per praticità
-publicstaticclassBST<T>implementsIterable<T>{
-@NotNull
-protectedfinalComparator<?superT>cmp;
-@Nullable
-protectedNoderoot;
+public static class BST<T> implements Iterable<T> {
 
-publicBST(@NotNullComparator<?superT>cmp){
-this.cmp=cmp;
+@NotNull
+protected final Comparator<? super T> cmp;
+@Nullable
+protected Node root;
+
+public BST(@NotNull Comparator<? super T> cmp) {
+
+this.cmp = cmp;
+
 }
 
-publicvoidinsert(@NotNullTx){
-root=insertRec(root,x);
+public void insert(@NotNull T x) {
+root = insertRec(root, x);
+
 }
 
 // 1.a
 @NotNull
-protectedNodeinsertRec(@NullableNoden,@NotNullTx){
-if(n==null)
-returnnewNode(x);
-intr=cmp.compare(x,n.data);
-if(r<0)
-n.left=insertRec(n.left,x);
-elseif(r>0)
-n.right=insertRec(n.right,x);
-returnn;
+protected Node insertRec(@Nullable Node n, @NotNull T x) {
+
+if (n == null)
+
+return new Node(x);
+
+int r = cmp.compare(x, n.data);
+if (r < 0)
+
+n.left = insertRec(n.left, x);
+
+else if (r > 0)
+
+n.right = insertRec(n.right, x);
+
+return n;
+
 }
 
 // 1.b.i
-protectedvoiddfsInOrder(@NullableNoden,@NotNullCollection<T>out){
-if(n!=null){
-dfsInOrder(n.left,out);
+protected void dfsInOrder(@Nullable Node n, @NotNull Collection<T> out) {
+
+if (n != null) {
+
+dfsInOrder(n.left, out);
 out.add(n.data);
-dfsInOrder(n.right,out);
+dfsInOrder(n.right, out);
+
 }
+
 }
 
 // 1.b.ii
 @NotNull
 @Override
-publicIterator<T>iterator(){
-Collection<T>c=newArrayList<>();
-dfsInOrder(root,c);
-returnc.iterator();
+public Iterator<T> iterator() {
+
+Collection<T> c = new ArrayList<>();
+dfsInOrder(root, c);
+return c.iterator();
+
 }
 
 // 1.c
 
 @Nullable
-publicTmin(){
-if(root==null)returnnull;
-Noden=root;
-while(n.left!=null)n=n.left;
-returnn.data;
+public T min() {
+
+if (root == null) return null;
+Node n = root;
+while(n.left != null) n = n.left;
+return n.data;
+
 }
 
 @Nullable
-publicTmax(){
-if(root==null)returnnull;
-Noden=root;
-while(n.right!=null)n=n.right;
-returnn.data;
+public T max() {
+
+if (root == null) return null;
+Node n = root;
+while(n.right != null) n = n.right;
+return n.data;
+
 }
 
+protected class Node {
 
-protectedclassNode{
 @NotNull
-privatefinalTdata;
+private final T data;
 @Nullable
-protectedNodeleft,right;
+protected Node left, right;
 
-protectedNode(@NotNullTdata,@NullableNodeleft,@NullableNoderight){
-this.data=data;
-this.left=left;
-this.right=right;
+protected Node(@NotNull T data, @Nullable Node left, @Nullable Node right) {
+
+this.data = data;
+this.left = left;
+this.right = right;
+
 }
 
-protectedNode(@NotNullTdata){
-this(data,null,null);
+protected Node(@NotNull T data) {
+
+this(data, null, null);
+
 }
+
 }
 
 @Override
 @NotNull
-publicStringtoString(){
-StringBuildersb=newStringBuilder();
-for(Tx:this){
+public String toString() {
+
+StringBuilder sb = new StringBuilder();
+for (T x : this) {
+
 sb.append(x);
-sb.append("");
+sb.append(" ");
+
 }
-returnsb.toString();
+return sb.toString();
+
 }
+
 }
 
 // 1.d
-publicstaticclassBST2<TextendsComparable<?superT>>extendsBST<T>{
-publicBST2(){
+public static class BST2<T extends Comparable<? super T>> extends BST<T> {
+
+public BST2() {
+
 super(Comparable::compareTo);
-}
+
 }
 
-publicstaticvoidmain(String[]args){
-BST<Integer>t=newBST2<>();
-Randomrnd=newRandom();
-for(inti=0;i<20;++i)
+}
+
+public static void main(String[] args) {
+
+BST<Integer> t = new BST2<>();
+Random rnd = new Random();
+for (int i = 0; i < 20; ++i)
 
 t.insert(rnd.nextInt(100));
+
 System.out.println(t);
-System.out.printf("min = %d\nmax = %d\n" ,t.min(),t.max());
+System.out.printf("min = %d\nmax = %d\n", t.min(), t.max());
+
 }
 
 }
@@ -1602,201 +1826,264 @@ una implementazione che escluda il più possibile stati di invalidità grazie ad
 **Soluzione** *(spostata dalla sezione 4 del PDF originale)*
 
 ```java
-// Questo sorgente contiene le soluzioni dell 'esame scritto di PO2 del 13/9/2022 per ciò che
-riguarda il quesito 1,
+// Questo sorgente contiene le soluzioni dell'esame scritto di PO2 del 13/9/2022 per ciò che
+// riguarda il quesito 1,
 // ovvero l'esercizio in Java.
 // Il quesito 2 riguardante C++ è in una Solution per Visual Studio a parte.
 
-importorg.jetbrains.annotations.NotNull;
-importorg.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-importjava.util.ArrayList;
-importjava.util.Collection;
-importjava.util.Iterator;
-importjava.util.concurrent.BlockingQueue;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.concurrent.BlockingQueue;
 
-publicclassEs1{
+public class Es1 {
 
 // 1.d
 
-publicstaticvoidmain(String[]args){
-TreeNode<Integer>t1=
+public static void main(String[] args) {
+
+TreeNode<Integer> t1 =
 TreeNode.lr(1,
+
 TreeNode.lr(2,
+
 TreeNode.v(3),
 TreeNode.v(4)),
+
 TreeNode.r(5,
+
 TreeNode.lr(6,
+
 TreeNode.v(7),
 TreeNode.v(8))));
 
-TreeNode<Integer>t2=
+TreeNode<Integer> t2 =
 TreeNode.lr(1,
+
 TreeNode.r(5,
+
 TreeNode.lr(6,
+
 TreeNode.v(7),
 TreeNode.v(8))),
+
 TreeNode.lr(2,
+
 TreeNode.v(3),
 TreeNode.v(4)));
 
-
 // test pretty printer
 System.out.println("pretty printer:");
-System.out.println("t1: "+t1);
-System.out.println("t2: "+t2);
+System.out.println("t1: " + t1);
+System.out.println("t2: " + t2);
 
 // test equality
 System.out.print("equality: ");
-System.out.println(t1.equals(t2)+", "+(t1.left!=null?t1.left.equals(t2.right):
-""));
+System.out.println(t1.equals(t2) + ", " + (t1.left != null ? t1.left.equals(t2.right) :
 
+""));
 
 // test iterator
 System.out.print("iterator: ");
-for(Integern:t1){
-System.out.printf("%d ",n);
+for (Integer n : t1) {
+
+System.out.printf("%d ", n);
+
 }
 System.out.println();
 
 }
 
-publicstaticclassTreeNode<T>implementsIterable<T>{
+public static class TreeNode<T> implements Iterable<T> {
 
 @NotNull
-privatefinalTdata;
+private final T data;
 @Nullable
-privatefinalTreeNode<T>left,right;
+private final TreeNode<T> left, right;
 @Nullable
-privateTreeNode<T>parent=null;
+private TreeNode<T> parent = null;
 
 // 1.c
 
-publicTreeNode(@NotNullTdata,@NullableTreeNode<T>left,@NullableTreeNode<T>
-right){
-this.data=data;
-this.left=left;
-this.right=right;
-if(left!=null)left.parent=this;
-if(right!=null)right.parent=this;
+public TreeNode(@NotNull T data, @Nullable TreeNode<T> left, @Nullable TreeNode<T>
+
+right) {
+this.data = data;
+this.left = left;
+this.right = right;
+if (left != null) left.parent = this;
+if (right != null) right.parent = this;
+
 }
 
 // i seguenti pseudo-costruttori aiutano a costruire alberi in modo più succinto e
-controllato rispetto
+
+// controllato rispetto
+
 // all'innestamento dei costruttori
 
 // solo ramo sinistro
-publicstatic<T>TreeNode<T>l(@NotNullTdata,@NotNullTreeNode<T>left){
-returnnewTreeNode<>(data,left,null);
+public static <T> TreeNode<T> l(@NotNull T data, @NotNull TreeNode<T> left) {
+
+return new TreeNode<>(data, left, null);
+
 }
 
 // solo ramo destro
-publicstatic<T>TreeNode<T>r(@NotNullTdata,@NotNullTreeNode<T>right){
-returnnewTreeNode<>(data,null,right);
+public static <T> TreeNode<T> r(@NotNull T data, @NotNull TreeNode<T> right) {
+
+return new TreeNode<>(data, null, right);
+
 }
 
 // ramo sinistro e destro
-publicstatic<T>TreeNode<T>lr(@NotNullTdata,@NotNullTreeNode<T>left,@NotNull
-TreeNode<T>right){
-returnnewTreeNode<>(data,left,right);
+public static <T> TreeNode<T> lr(@NotNull T data, @NotNull TreeNode<T> left, @NotNull
+
+TreeNode<T> right) {
+return new TreeNode<>(data, left, right);
+
 }
 
 // foglia
-publicstatic<T>TreeNode<T>v(@NotNullTdata){
-returnnewTreeNode<>(data,null,null);
+public static <T> TreeNode<T> v(@NotNull T data) {
+
+return new TreeNode<>(data, null, null);
+
 }
 
 // 1.b
 
 @Override
 
-publicbooleanequals(@NullableObjecto){
-if(oinstanceofTreeNode){
-BlockingQueue<Integer>b;
+public boolean equals(@Nullable Object o) {
 
-TreeNode<T>t=(TreeNode<T>)o;
-returnareEqual(data,t.data)&&areEqual(left,t.left)&&areEqual(right,
+if (o instanceof TreeNode) {
+
+BlockingQueue<Integer> b;
+
+TreeNode<T> t = (TreeNode<T>) o;
+return areEqual(data, t.data) && areEqual(left, t.left) && areEqual(right,
+
 t.right);
+
 }
-returnfalse;
+return false;
+
 }
 
-privatestaticbooleanareEqual(@NullableObjecta,@NullableObjectb){
-returna==b||(a!=null&&a.equals(b));
-//return Objects.equals(a, b); // alternativamente si può usare questo metodo
-del JDK
+private static boolean areEqual(@Nullable Object a, @Nullable Object b) {
+
+return a == b || (a != null && a.equals(b));
+//return Objects.equals(a, b);
+
+// del JDK
+
+// alternativamente si può usare questo metodo
+
 }
 
 // 1.e
 
 @Override
 @NotNull
-publicStringtoString(){
-returnString.format("%s%s%s",data,left!=null?String.format("(%s)",left):
-"",right!=null?
-String.format("[%s]",right):"");
+public String toString() {
+
+return String.format("%s%s%s", data, left != null ? String.format("(%s)", left) :
+
+"", right != null ?
+String.format("[%s]", right) : "");
+
 }
 
 // 1.a
 
 @Override
-publicIterator<T>iterator(){
-returniterator_easy();// stub ad una delle due implementazione; cambiare lo stub
-per testare l'altra
-}
+public Iterator<T> iterator() {
 
+return iterator_easy(); // stub ad una delle due implementazione; cambiare lo stub
+
+// per testare l'altra
+
+}
 
 // questo è l'implementazione facile, suggerita pubblicamente dal docente in classe
-duranto l'appello del 13/9/22
-privateIterator<T>iterator_easy(){
-Collection<T>r=newArrayList<>();
+
+// duranto l'appello del 13/9/22
+private Iterator<T> iterator_easy() {
+
+Collection<T> r = new ArrayList<>();
 dfs(r);
-returnr.iterator();
+return r.iterator();
+
 }
 
-privatevoiddfs(Collection<T>c){
+private void dfs(Collection<T> c) {
+
 c.add(data);
-if(left!=null)left.dfs(c);
-if(right!=null)right.dfs(c);
+if (left != null) left.dfs(c);
+if (right != null) right.dfs(c);
+
 }
 
-// questo è l'implementazione ottimizzata, che attraversa l 'albero senza liste d'appoggio
-privateIterator<T>iterator_opt(){
-returnnewIterator<>(){
+// questo è l'implementazione ottimizzata, che attraversa l'albero senza liste d'appoggio
+private Iterator<T> iterator_opt() {
+
+return new Iterator<>() {
+
 @Nullable
-privateTreeNode<T>current=TreeNode.this;
+private TreeNode<T> current = TreeNode.this;
 
 @Override
 
-publicbooleanhasNext(){
-returncurrent!=null;
+public boolean hasNext() {
+
+return current != null;
+
 }
 
 @Nullable
-privatestatic<T>TreeNode<T>getNextNode(@NotNullTreeNode<T>n){
-if(n.left!=null)
-returnn.left;
-elseif(n.right!=null)
-returnn.right;
-else{
-while(n.parent!=null){
-finalTreeNode<T>last=n;
-n=n.parent;
-if(n.right!=null&&n.right!=last)
-returnn.right;
+private static <T> TreeNode<T> getNextNode(@NotNull TreeNode<T> n) {
+
+if (n.left != null)
+
+return n.left;
+
+else if (n.right != null)
+
+return n.right;
+
+else {
+
+while (n.parent != null) {
+
+final TreeNode<T> last = n;
+n = n.parent;
+if (n.right != null && n.right != last)
+
+return n.right;
+
 }
-returnnull;
+return null;
+
 }
+
 }
 
 @Override
 @NotNull
-publicTnext(){
-Tr=current.data;
-current=getNextNode(current);
-returnr;
+public T next() {
+
+T r = current.data;
+current = getNextNode(current);
+return r;
+
 }
+
 };
+
 }
 
 }
@@ -1849,57 +2136,79 @@ volta normalmente;
 **Soluzione** *(spostata dalla sezione 4 del PDF originale)*
 
 ```java
+// Questo sorgente contiene le soluzioni dell'esame scritto di PO2 del 1/7/2022 per ciò che
 
-// Questo sorgente contiene le soluzioni dell 'esame scritto di PO2 del 1/7/2022 per ciò che
-riguarda i quesiti 1-2, ovvero le domande che coinvolgono Java.
+// riguarda i quesiti 1-2, ovvero le domande che coinvolgono Java.
+
 // Il quesito 3 riguardante C++ è in un progetto Visual Studio a parte, non qui.
 // Il codice qui esposto è Java 8+.
 
-importjava.util.ArrayList;
-importjava.util.Iterator;
-importjava.util.function.Function;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.function.Function;
 
-publicclassEs1{
+public class Es1 {
 
 // 1.a
-publicinterfacePredicate<T>extendsFunction<T,Boolean>{}
+public interface Predicate<T> extends Function<T, Boolean> {}
 
 // 1.b
-publicinterfaceEither<T>{
-TonSuccess(Tx);
-voidonFailure(Tx)throwsException;
-}
+public interface Either<T> {
 
+T onSuccess(T x);
+void onFailure(T x) throws Exception;
+
+}
 
 // 1.c
-publicstaticclassSkippableArrayList<E>extendsArrayList<E>{
-publicIterator<E>iterator(Predicate<E>p,Either<E>f){
-finalIterator<E>it=super.iterator(); // può anche essere un campo privato
-della anonymous class
-returnnewIterator<E>(){
+public static class SkippableArrayList<E> extends ArrayList<E> {
+
+public Iterator<E> iterator(Predicate<E> p, Either<E> f) {
+
+final Iterator<E> it = super.iterator(); // può anche essere un campo privato della anonymous class
+return new Iterator<E>() {
+
 @Override
-publicbooleanhasNext(){
-returnit.hasNext();
+public boolean hasNext() {
+
+return it.hasNext();
+
 }
 
 @Override
-publicEnext(){
-Ex=it.next();
-if(p.apply(x))
-returnf.onSuccess(x);
-else{
-try{
+public E next() {
+
+E x = it.next();
+if (p.apply(x))
+
+return f.onSuccess(x);
+
+else {
+
+try {
+
 f.onFailure(x);
+
 }
-catch(Exceptione){
-e.printStackTrace(); // si può anche non fare niente dentro il
-catch, è indifferente
+catch (Exception e) {
+
+e.printStackTrace();
+
+// si può anche non fare niente dentro il
+
+// catch, è indifferente
+
 }
-returnx;
+return x;
+
 }
+
 }
+
 };
+
 }
+
 }
 
 }
@@ -1927,11 +2236,12 @@ di trasformazione sull’insiemeω.
 riusabili. Sia data la funzione di ordine superiore foldimplementata tramite un metodo statico pubblico:
 
 ```java
-publicstatic<T,State>Statefold(Iterable<T>i,finalStatest0,BiFunction<State,T,State>f){
-Statest=st0;
-for(finalTe:i)
-st=f.apply(st,e);
-returnst;
+public static <T, State> State fold(Iterable<T> i, final State st0, BiFunction<State, T,
+State> f) {
+    State st = st0;
+    for (final T e : i)
+        st = f.apply(st, e);
+    return st;
 }
 ```
 
@@ -1939,7 +2249,7 @@ returnst;
 firma:
 
 ```java
-publicstatic<T>doublesumBy(Iterable<T>i,Function<T,Double>f);
+public static <T> double sumBy(Iterable<T> i, Function<T, Double> f);
 ```
 
 Essa calcola la sommatoria di tutti gli elementi di **i** trasformandoli in **double** tramite **f**. La utilizzeremo ad
@@ -1949,7 +2259,7 @@ laterale totale di un solido sommando l’area di tutte le superfici piane di cu
 volume. Si implementi il metodo statico **compareBy()** avente la seguente firma:
 
 ```java
-publicstatic<T>intcompareBy(Ts1,Ts2,Function<T,Double>f);
+public static <T> int compareBy(T s1, T s2, Function<T, Double> f);
 ```
 
 Esso confronta **s1** e **s2** convertendoli prima in **double** tramite **f**, riducendo pertanto il confronto al confronto
@@ -1963,12 +2273,12 @@ del metodofold()di cui sopra?
 circonferenze.
 
 ```java
-publicclassEdgeimplementsComparable<Edge>{
-privatefinaldoublelen;
-publicEdge(doublelen){this.len=len;}
-publicdoublelength(){returnlen;}
-@Override
-publicintcompareTo(Edges){/* DA IMPLEMENTARE */ }
+public class Edge implements Comparable<Edge> {
+    private final double len;
+    public Edge(double len) { this.len = len; }
+    public double length() { return len; }
+    @Override
+    public int compareTo(Edge s) { /* DA IMPLEMENTARE */ }
 }
 }
 ```
@@ -1977,11 +2287,13 @@ Si implementi il metodocompareTo()tramiteuna solainvocazione dellacompareBy()def
 (b) L’interfacciaSurfacerappresenta figure piane qualunque:
 
 ```java
-publicinterfaceSurfaceextendsComparable<Surface>{
-doublearea();
-doubleperimiter();
+interface Surface extends Comparable<Surface> {
+
+double area();
+double perimiter();
 @Override
-defaultintcompareTo(Surfaces){/* DA IMPLEMENTARE */ }
+default int compareTo(Surface s) { /* DA IMPLEMENTARE */ }
+
 }
 ```
 
@@ -1991,9 +2303,11 @@ compareBy() definita sopra che esegua il confronto tra le aree.
 default al metodo **perimeter()** e permette anche l’iterazione dei lati di cui il poligono stesso è costituito.
 
 ```java
-publicinterfacePolygonextendsSurface,Iterable<Edge>{
+interface Polygon extends Surface, Iterable<Edge> {
+
 @Override
-defaultdoubleperimiter(){/* DA IMPLEMENTARE */ }
+default double perimiter() { /* DA IMPLEMENTARE */ }
+
 }
 ```
 
@@ -2003,11 +2317,12 @@ definita sopra.
 (d) L’interfacciaSolidrappresenta solidi qualunque:
 
 ```java
-publicinterfaceSolidextendsComparable<Solid>{
-doubleouterArea();// area laterale totale
-doublevolume();
+interface Solid extends Comparable<Solid> {
+double outerArea(); // area laterale totale
+double volume();
 @Override
-defaultintcompareTo(Solids){/* DA IMPLEMENTARE */ }
+default int compareTo(Solid s) { /* DA IMPLEMENTARE */ }
+
 }
 ```
 
@@ -2020,9 +2335,11 @@ Un **Polyhedron** permette l’iterazione delle facce poligonali di cui esso è 
 facce.
 
 ```java
-publicinterfacePolyhedron<PextendsPolygon>extendsSolid,Iterable<P>{
+interface Polyhedron<P extends Polygon> extends Solid, Iterable<P> {
+
 @Override
-defaultdoubleouterArea(){/* DA IMPLEMENTARE */ }
+default double outerArea() { /* DA IMPLEMENTARE */ }
+
 }
 ```
 
@@ -2040,22 +2357,22 @@ Il costruttore di **Square** deve prendere un solo parametro di tipo **double**:
 poliedri aventi facce rettangolari.
 
 ```java
-publicclassParallelepipedimplementsPolyhedron<Rectangle>{
-protectedfinaldoublewidth,height,depth;
-publicParallelepiped(doublewidth,doubleheight,doubledepth){
-this.width=width;
-this.height=height;
-this.depth=depth;
-}
-@Override
-publicdoublevolume(){/* DA IMPLEMENTARE */ }
-@Override
-publicIterator<Rectangle>iterator(){
-Rectangler1=newRectangle(width,height),
-r2=newRectangle(width,depth),
-r3=newRectangle(height,depth);
-returnList.of(r1,r2,r3,r1,r2,r3).iterator();
-}
+public class Parallelepiped implements Polyhedron<Rectangle> {
+    protected final double width, height, depth;
+    public Parallelepiped(double width, double height, double depth) {
+        this.width = width;
+        this.height = height;
+        this.depth = depth;
+    }
+    @Override
+    public double volume() { /* DA IMPLEMENTARE */ }
+    @Override
+    public Iterator<Rectangle> iterator() {
+        Rectangle r1 = new Rectangle(width, height),
+            r2 = new Rectangle(width, depth),
+            r3 = new Rectangle(height, depth);
+        return List.of(r1, r2, r3, r1, r2, r3).iterator();
+    }
 }
 ```
 
@@ -2137,245 +2454,349 @@ sumBy(y,Rectangle::perimiter)))
 **Soluzione** *(spostata dalla sezione 4 del PDF originale)*
 
 ```java
-importjava.util.*;
-importjava.util.function.BiFunction;
-importjava.util.function.Function;
+import java.util.*;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
-// Questo sorgente contiene le soluzioni dell 'esame scritto di PO2 del 3/6/2022 per ciò che
-riguarda i quesiti 1-5, ovvero le domande che coinvolgono Java.
+// Questo sorgente contiene le soluzioni dell'esame scritto di PO2 del 3/6/2022 per ciò che
+// riguarda i quesiti 1-5, ovvero le domande che coinvolgono Java.
 // Il quesito 6 riguardante C++ è in una Solution per Visual Studio a parte, non qui.
 
-publicclassAppello_3_6_22{
 
-publicstatic<T,State>Statefold(Iterable<T>i,finalStatest0,BiFunction<State,T,
-State>f){
-Statest=st0;
-for(finalTe:i){
-st=f.apply(st,e);
+public class Appello_3_6_22 {
+
+public static <T, State> State fold(Iterable<T> i, final State st0, BiFunction<State, T,
+
+State> f) {
+State st = st0;
+for (final T e : i) {
+
+st = f.apply(st, e);
+
 }
-returnst;
+return st;
+
 }
 
 // 1.a
-publicstatic<T>doublesumBy(Iterable<T>i,Function<T,Double>f){
-returnfold(i,0.,(r,x)->r+f.apply(x));
-}
+public static <T> double sumBy(Iterable<T> i, Function<T, Double> f) {
 
+return fold(i, 0., (r, x) -> r + f.apply(x));
+
+}
 
 // 1.b
-publicstatic<T>intcompareBy(Ts1,Ts2,Function<T,Double>f){
-returnDouble.compare(f.apply(s1),f.apply(s2));
+public static <T> int compareBy(T s1, T s2, Function<T, Double> f) {
+
+return Double.compare(f.apply(s1), f.apply(s2));
+
 }
 
-publicstaticclassEdgeimplementsComparable<Edge>{
-privatefinaldoublelen;
+public static class Edge implements Comparable<Edge> {
 
-publicEdge(doublelen){
-this.len=len;
+private final double len;
+
+public Edge(double len) {
+
+this.len = len;
+
 }
 
-publicdoublelength(){
-returnlen;
+public double length() {
+
+return len;
+
 }
 
 // 2.a
 @Override
-publicintcompareTo(Edges){
-returncompareBy(this,s,Edge::length);
-}
+public int compareTo(Edge s) {
+
+return compareBy(this, s, Edge::length);
+
 }
 
-publicinterfaceSurfaceextendsComparable<Surface>{
-doublearea();
+}
 
-doubleperimiter();
+public interface Surface extends Comparable<Surface> {
+
+double area();
+
+double perimiter();
 
 // 2.b
 @Override
-defaultintcompareTo(Surfaces){
-returncompareBy(this,s,Surface::area);
-}
+default int compareTo(Surface s) {
+
+return compareBy(this, s, Surface::area);
+
 }
 
-publicinterfacePolygonextendsSurface,Iterable<Edge>{
+}
+
+public interface Polygon extends Surface, Iterable<Edge> {
+
 // 2.c
 @Override
-defaultdoubleperimiter(){
-returnsumBy(this,Edge::length);
-}
+default double perimiter() {
+
+return sumBy(this, Edge::length);
+
 }
 
-publicinterfaceSolidextendsComparable<Solid>{
-doubleouterArea();
+}
 
-doublevolume();
+public interface Solid extends Comparable<Solid> {
+
+double outerArea();
+
+double volume();
 
 // 2.d
-defaultintcompareTo(Solids){
-returncompareBy(this,s,Solid::volume);
-}
+default int compareTo(Solid s) {
+
+return compareBy(this, s, Solid::volume);
+
 }
 
-publicinterfacePolyhedron<PextendsPolygon>extendsSolid,Iterable<P>{
+}
+
+public interface Polyhedron<P extends Polygon> extends Solid, Iterable<P> {
+
 // 2.e
 
 @Override
-defaultdoubleouterArea(){
-returnsumBy(this,P::area);
+default double outerArea() {
+
+return sumBy(this, P::area);
+
 }
+
 }
 
 // 3.a
-publicstaticclassSphereimplementsSolid{
-privatefinaldoubleradius;
+public static class Sphere implements Solid {
 
-publicSphere(doubleradius){
-this.radius=radius;
+private final double radius;
+
+public Sphere(double radius) {
+this.radius = radius;
+
 }
 
 @Override
-publicdoubleouterArea(){
-return4.*Math.PI*radius*radius;
+public double outerArea() {
+
+return 4. * Math.PI * radius * radius;
+
 }
 
 @Override
-publicdoublevolume(){
-return4./3.*Math.PI*radius*radius*radius;
+public double volume() {
+
+return 4. / 3. * Math.PI * radius * radius * radius;
+
 }
+
 }
 
 // 3.b
-publicstaticclassCilinderimplementsSolid{
-privatefinaldoubleradius,height;
+public static class Cilinder implements Solid {
 
-publicCilinder(doubleradius,doubleheight){
-this.radius=radius;
-this.height=height;
+private final double radius, height;
+
+public Cilinder(double radius, double height) {
+
+this.radius = radius;
+this.height = height;
+
 }
 
 @Override
-publicdoubleouterArea(){
-doubleb=Math.PI*radius*radius,l=2.*Math.PI*radius*height; // hanno
-capito solo laterale
-return2.*b+l;
+public double outerArea() {
+
+double b = Math.PI * radius * radius, l = 2. * Math.PI * radius * height;
+
+// hanno // hanno capito solo laterale
+
+
+return 2. * b + l;
+
 }
 
 @Override
-publicdoublevolume(){
-returnMath.PI*radius*radius*height;
+public double volume() {
+
+return Math.PI * radius * radius * height;
+
 }
+
 }
 
 // 3.c
-publicstaticclassRectangleimplementsPolygon{
-privatefinaldoublewidth,height;
+public static class Rectangle implements Polygon {
 
-publicRectangle(doublewidth,doubleheight){
-this.width=width;
-this.height=height;
+private final double width, height;
+
+public Rectangle(double width, double height) {
+
+this.width = width;
+this.height = height;
+
 }
 
 @Override
 
-publicdoublearea(){
-returnwidth*height;
+public double area() {
+
+return width * height;
+
 }
 
 @Override
-publicIterator<Edge>iterator(){
-Edgew=newEdge(width),h=newEdge(height);
-returnList.of(w,h,w,h).iterator();
+public Iterator<Edge> iterator() {
+
+Edge w = new Edge(width), h = new Edge(height);
+return List.of(w, h, w, h).iterator();
+
 }
+
 }
 
 // 3.d
-publicstaticclassSquareextendsRectangle{
-publicSquare(doubleside){
-super(side,side);
-}
+public static class Square extends Rectangle {
+
+public Square(double side) {
+
+super(side, side);
+
 }
 
-publicstaticclassParallelepipedimplementsPolyhedron<Rectangle>{
-protecteddoublewidth,height,depth;
+}
 
-publicParallelepiped(doublewidth,doubleheight,doubledepth){
-this.width=width;
-this.height=height;
-this.depth=depth;
+public static class Parallelepiped implements Polyhedron<Rectangle> {
+
+protected double width, height, depth;
+
+public Parallelepiped(double width, double height, double depth) {
+
+this.width = width;
+this.height = height;
+this.depth = depth;
+
 }
 
 // 4.a
 @Override
-publicdoublevolume(){
-returnwidth*height*depth;
+public double volume() {
+
+return width * height * depth;
+
 }
 
 @Override
-publicIterator<Rectangle>iterator(){
-Rectangler1=newRectangle(width,height),r2=newRectangle(width,depth),r3=
-newRectangle(height,depth);
-returnList.of(r1,r2,r3,r1,r2,r3).iterator();
+public Iterator<Rectangle> iterator() {
+
+Rectangle r1 = new Rectangle(width, height), r2 = new Rectangle(width, depth), r3 =
+
+new Rectangle(height, depth);
+
+return List.of(r1, r2, r3, r1, r2, r3).iterator();
+
 }
+
 }
 
 // 4.b
-publicstaticclassCubeextendsParallelepiped{
-publicCube(doubleside){
-super(side,side,side);
-}
+public static class Cube extends Parallelepiped {
+
+public Cube(double side) {
+
+super(side, side, side);
+
 }
 
+}
 
-publicstaticvoidmain(String[]args){
+public static void main(String[] args) {
+
 // 4.d
 {
-intfacet_cnt=1;
+
+int facet_cnt = 1;
 // questo foreach non compila perché Cube è sottotipo di Iterable<Rectangle>, non di
-Iterable<Square>
+
+// Iterable<Square>
+
 // si badi che NON è possibile co-variare il tipo di ritorno del metodo iterator() di
-Cube in modo che si specializzi in Iterator<Square>
+
+// Cube in modo che si specializzi in Iterator<Square>
+
+// type argument
 
 // perché è sound co-variare il tipo più esterno di un tipo parametrico, ma non il
-type argument
 // for (Square sq : new Cube(10.)) {
-for(Rectanglesq:newCube(10.)){// così invece compilerebbe
-intside_cnt=1;
-for(Edgee:sq){
-System.out.printf("side #%d/%d = %f\n",side_cnt++,facet_cnt,e.length());
+for (Rectangle sq : new Cube(10.)) {
+
+// così invece compilerebbe
+
+int side_cnt = 1;
+for (Edge e : sq) {
+
+System.out.printf("side #%d/%d = %f\n", side_cnt++, facet_cnt, e.length());
+
 }
 ++facet_cnt;
+
 }
+
 }
 
 // 5
 {
-Cubec1=newCube(1.),c2=newCube(2.);
-Parallelepipedp1=newParallelepiped(1.,2.,3.),p2=newParallelepiped(2.,3.,
-4.);
-List<Polyhedron<?extendsRectangle>>polys=newArrayList<>(List.of(c1,c2,p1,
-p2));
+
+Cube c1 = new Cube(1.), c2 = new Cube(2.);
+Parallelepiped p1 = new Parallelepiped(1., 2., 3.), p2 = new Parallelepiped(2., 3., 4.);
+List<Polyhedron<? extends Rectangle>> polys = new ArrayList<>(List.of(c1, c2, p1, p2));
+
+
 
 // per testare rapidamente i risultati di queste sort, si usi debugger
 Collections.sort(polys);
+
 // c1
-Collections.sort(polys,(x,y)->compareBy(x,y,Polyhedron::outerArea));
+
+Collections.sort(polys, (x, y) -> compareBy(x, y, Polyhedron::outerArea));
+
 // c1
-Collections.sort(polys,(x,y)->compareBy(x,y,(p)->p.outerArea()));
+
+Collections.sort(polys, (x, y) -> compareBy(x, y, (p) -> p.outerArea()));
+
 // c1
-// Collections.sort(polys, (x, y) -> compareBy(x, y, (r) -> r.perimiter()));
+
+Collections.sort(polys, (x, y) -> compareBy(x, y, (r) -> r.perimiter()));
+
 // non compila
-Collections.sort(polys,(x,y)->compareBy(x,y,newFunction<>(){
+
+Collections.sort(polys, (x, y) -> compareBy(x, y, new Function<>() {
+
 // c1
 @Override
-publicDoubleapply(Polyhedron<?extendsRectangle>r){
-returnr.volume();
+public Double apply(Polyhedron<? extends Rectangle> r) {
+
+return r.volume();
+
 }
+
 }));
-// Collections.sort(polys, (x, y) -> Double.compare(sumBy(x, Square::perimiter),
-// non compila
-// sumBy(y, Rectangle::perimiter)));
+
+Collections.sort(polys, (x, y) -> Double.compare(sumBy(x, Square::perimiter),
+        sumBy(y, Rectangle::perimiter)));    // non compila
+
 }
+
 }
+
 }
 ```
 
@@ -2392,8 +2813,9 @@ La gerarchia di figure con metodi `area()` e `perimeter()` polimorfici evita if/
 [Esame 20/06/2019] Si consideri la seguente interfaccia parametrica in linguaggio Java:
 
 ```java
-publicinterfaceEquatable<T>{
-booleanequalsTo(Tx);
+interface Equatable<T> {
+boolean equalsTo(T x);
+
 }
 ```
 
@@ -2403,23 +2825,27 @@ tipato.
 Si consideri ora la classe parametrica **Person**, che supporta il confronto di uguaglianza con oggetti di tipo **P**:
 
 ```java
-publicclassPerson<PextendsPerson<P>>implementsEquatable<P>{
-publicfinalStringname;
-publicfinalintage;
+class Person<P extends Person<P>> implements Equatable<P> {
 
-publicPerson(Stringname,intage){
-this.name=name;
-this.age=age;
+public final String name;
+public final int age;
+
+public Person(String name, int age) {
+
+this.name = name;
+this.age = age;
+
 }
 
 @Override
-publicbooleanequals(Objecto){/* da implementare */ }
+public boolean equals(Object o) { /* da implementare */ }
 
 @Override
-publicbooleanequalsTo(Pother){/* da implementare */ }
+public boolean equalsTo(P other) { /* da implementare */ }
 
 @Override
-publicStringtoString(){returnname;}
+public String toString() { return name; }
+
 }
 ```
 
@@ -2434,41 +2860,46 @@ medesimo nome e la medesima età.
 Si consideri ora il seguente codice:
 
 ```java
-publicclassArtistextendsPerson<Artist>{
-publicfinalHairhair;
+class Artist extends Person<Artist> {
 
-publicArtist(Stringname,intage,Hairhair){
-super(name,age);
-this.hair=hair;
+public final Hair hair;
+
+public Artist(String name, int age, Hair hair) {
+
+super(name, age);
+this.hair = hair;
+
 }
 
 @Override
-publicbooleanequalsTo(Artistother){/* da implementare */ }
-}
+public boolean equalsTo(Artist other) { /* da implementare */ }
 
-publicclassHairimplementsEquatable<Hair>{
+}
 ```
 
 > ⁷ Ricordiamo che il metodo della classe **Object** avente firma **Class<?> getClass()** consente di estrarre a runtime il tipo **raw** di un oggetto.
 
 ```java
-publicfinalintlength;
-publicfinalSet<Color>colors;
+public final int length;
+public final Set<Color> colors;
 
-publicHair(intlength,Set<Color>colors){
-this.colors=colors;
-this.length=length;
+public Hair(int length, Set<Color> colors) {
+
+this.colors = colors;
+this.length = length;
+
 }
 
 @Override
-publicbooleanequals(Objecto){/* da implementare */ }
+public boolean equals(Object o) { /* da implementare */ }
 
 @Override
-publicbooleanequalsTo(Hairx){/* da implementare */ }
-}
+public boolean equalsTo(Hair x) { /* da implementare */ }
 
-publicenumColor{
-BROWN,DARK,BLONDE,RED,GRAY;
+enum Color {
+
+BROWN, DARK, BLONDE, RED, GRAY;
+
 }
 ```
 
@@ -2518,180 +2949,249 @@ nome che viene per primo in ordine lessicografico.
 (c) Il seguente statement sarebbe accettato dal compilatore Java 7+?
 
 ```java
-Artistc=Collections.max(artists,newComparator<Person>(){
-publicintcompare(Persona,Personb){
-returna.age-b.age;
+Artist c = Collections.max(artists, new Comparator<Person>() {
+
+public int compare(Person a, Person b) {
+
+return a.age - b.age;
+
 }
+
 });
 ```
 
 **Soluzione** *(spostata dalla sezione 4 del PDF originale)*
 
 ```java
-importjava.util.*;
+import java.util.*;
 
-publicclassEs1{
+public class Es1 {
 
-publicinterfaceEquatable<T>{
-booleanequalsTo(Tx);
+public interface Equatable<T> {
+boolean equalsTo(T x);
+
 }
 
-publicstaticclassPerson<PextendsPerson<P>>implementsEquatable<P>{
+public static class Person<P extends Person<P>> implements Equatable<P> {
 
-publicfinalStringname;
-publicfinalintage;
+public final String name;
+public final int age;
 
+public Person(String name, int age) {
 
-publicPerson(Stringname,intage){
-this.name=name;
-this.age=age;
+this.name = name;
+this.age = age;
+
 }
 
 // 1.a
 @Override
-publicbooleanequals(Objecto){
+public boolean equals(Object o) {
+
 // self check
-if(this==o)
-returntrue;
+if (this == o)
+
+return true;
+
 // null check
-if(o==null)
-returnfalse;
+if (o == null)
+
+return false;
+
 // type check
-if(getClass()!=o.getClass())
-returnfalse;
+if (getClass() != o.getClass())
+
+return false;
+
 // field comparison
-returnequalsTo((P)o); // deleghiamo al metodo equalsTo(P) il confronto tipato
+return equalsTo((P) o);
+
 tra i campi
+
 }
+
+// deleghiamo al metodo equalsTo(P) il confronto tipato
 
 // 1.b
 @Override
-publicbooleanequalsTo(Pother){
-returnname.equals(other.name)&&age==other.age;
+public boolean equalsTo(P other) {
+
+return name.equals(other.name) && age == other.age;
+
 }
 
 @Override
-publicStringtoString(){
-returnname;
-}
+public String toString() {
+
+return name;
 
 }
 
-publicstaticclassArtistextendsPerson<Artist>{
+}
 
-publicfinalHairhair;
+public static class Artist extends Person<Artist> {
 
-publicArtist(Stringname,intage,Hairhair){
-super(name,age);
-this.hair=hair;
+public final Hair hair;
+
+public Artist(String name, int age, Hair hair) {
+
+super(name, age);
+this.hair = hair;
+
 }
 
 // 1.d RISPOSTA: 4
 // 1.e
 @Override
-publicbooleanequalsTo(Artistother){
-returnsuper.equalsTo(other)&&hair.equals(other.hair);
-}
+public boolean equalsTo(Artist other) {
+
+return super.equalsTo(other) && hair.equals(other.hair);
 
 }
 
-publicenumColor{
-BROWN,DARK,BLONDE,RED,GRAY;
 }
 
+public enum Color {
 
-publicstaticclassHairimplementsEquatable<Hair>{
-publicfinalintlength;
-publicfinalSet<Color>colors;
+BROWN, DARK, BLONDE, RED, GRAY;
 
-publicHair(intlength,Set<Color>colors){
-this.colors=colors;
-this.length=length;
+}
+
+public static class Hair implements Equatable<Hair> {
+
+public final int length;
+public final Set<Color> colors;
+
+public Hair(int length, Set<Color> colors) {
+
+this.colors = colors;
+this.length = length;
+
+}
+
+// uguale a Person.equals(Object)
+
+// 1.c
+@Override
+public boolean equals(Object o) {
+
+if (this == o)
+
+return true;
+
+if (o == null)
+
+return false;
+
+if (getClass() != o.getClass())
+
+return false;
+
+return equalsTo((Hair) o);
+
 }
 
 // 1.c
 @Override
-publicbooleanequals(Objecto){ // uguale a Person.equals(Object)
-if(this==o)
-returntrue;
-if(o==null)
-returnfalse;
-if(getClass()!=o.getClass())
-returnfalse;
-returnequalsTo((Hair)o);
+public boolean equalsTo(Hair x) {
+
+return colors.equals(x.colors) && length == x.length;
+
 }
 
-// 1.c
-@Override
-publicbooleanequalsTo(Hairx){
-returncolors.equals(x.colors)&&length==x.length;
-}
 }
 
+public static void print(String fmt, Object... o) {
+System.out.println(String.format(fmt, o));
 
-publicstaticvoidprint(Stringfmt,Object...o){
-System.out.println(String.format(fmt,o));
 }
 
-publicstaticvoidmain(String[]args){
-Personalice=newPerson("Alice",23),
-david=newArtist("Bowie",69,newHair(75,Set.of(Color.RED,Color.BROWN,
+public static void main(String[] args) {
+
+Person alice = new Person("Alice", 23),
+
+david = new Artist("Bowie", 69, new Hair(75, Set.of(Color.RED, Color.BROWN,
+
 Color.GRAY)));
 
-Artistmorgan=newArtist("Morgan",47,newHair(20,Set.of(Color.GRAY,Color.DARK))),
-madonna=newArtist("Madonna",60,newHair(50,Set.of(Color.BLONDE)));
+Artist morgan = new Artist("Morgan", 47, new Hair(20, Set.of(Color.GRAY, Color.DARK))),
+madonna = new Artist("Madonna", 60, new Hair(50, Set.of(Color.BLONDE)));
 
 // 1.g (lanciate il programma per printare le risposte booleane)
-List<Boolean>bs=Arrays.asList(
-alice.equals(null), // false
-alice.equals(alice), // true
-//null.equals(david), // alcuni compilatori rifiutano null.metodo(), altri
-lo accettano ma a runtime viene lanciato NullPointerException
-alice.equals(david), // false
-alice.equalsTo(morgan), // false
-morgan.equals(morgan), // true
-morgan.equals(madonna), // false
-morgan.equals(david), // false
-//morgan.equalsTo(david), // non compila
-david.equalsTo(morgan), // false
-madonna.equals(3) // false
+List<Boolean> bs = Arrays.asList(
+
+// false
+// true
+// alcuni compilatori rifiutano null.metodo(), altri
+// lo accettano ma a runtime viene lanciato NullPointerException
+
+alice.equals(null),
+alice.equals(alice),
+//null.equals(david), alice.equals(david),
+alice.equalsTo(morgan),
+morgan.equals(morgan),
+morgan.equals(madonna),
+morgan.equals(david),
+//morgan.equalsTo(david),
+david.equalsTo(morgan),
+madonna.equals(3)
 //, madonna.equalsTo("Madonna") // non compila
+
+// false
+// false
+// true
+// false
+// false
+// non compila
+// false
+// false
+
 );
 
-print("[1.g] %s",bs);
+print("[1.g] %s", bs);
 
 // 1.h
-List<Artist>artists=Arrays.asList((Artist)david,morgan,madonna);
-List<Person>persons=Arrays.asList(alice,david,morgan,madonna);
+List<Artist> artists = Arrays.asList((Artist) david, morgan, madonna);
+List<Person> persons = Arrays.asList(alice, david, morgan, madonna);
 
 // 1.h.i
-Artista=Collections.max(artists,newComparator<Artist>(){
+Artist a = Collections.max(artists, new Comparator<Artist>() {
+
 @Override
-publicintcompare(Artista,Artistb){
-returna.hair.length*a.hair.colors.size()-b.hair.length*
+public int compare(Artist a, Artist b) {
+
+return a.hair.length * a.hair.colors.size() - b.hair.length * 
 b.hair.colors.size();
+
 }
+
 });
-print("[1.h.i] %s",a);
+print("[1.h.i] %s", a);
 
 // 1.h.ii
-Personb=Collections.max(persons,newComparator<Person>(){
+Person b = Collections.max(persons, new Comparator<Person>() {
+
 @Override
-publicintcompare(Persona,Personb){
-returna.name.compareTo(b.name);
+public int compare(Person a, Person b) {
+return a.name.compareTo(b.name);
+
 }
+
 });
-print("[1.h.ii] %s",b);
+print("[1.h.ii] %s", b);
 
 // 1.h.iii: RISPOSTA: 2
-Artistc=Collections.max(artists,newComparator<Person>(){
-publicintcompare(Persona,Personb){
-returna.age-b.age;
+Artist c = Collections.max(artists, new Comparator<Person>() {
+
+public int compare(Person a, Person b) {
+
+return a.age - b.age;
+
 }
+
 });
 
 }
-
 
 }
 ```
@@ -2721,54 +3221,69 @@ Si utilizzino i tipi **Pair**, **Triple** e **BiFunction** definiti nei punti pr
 **Soluzione** *(spostata dalla sezione 4 del PDF originale)*
 
 ```java
-importjava.util.*;
+import java.util.*;
 
-publicclassEs2{
-
+public class Es2 {
 
 // 2.a
 @FunctionalInterface
-publicinterfaceBiFunction<A,B,C>{
-Capply(Aa,Bb);
+public interface BiFunction<A, B, C> {
+
+C apply(A a, B b);
+
 }
 
 // 2.b
-publicstaticclassPair<A,B>{
-publicfinalAfst;
-publicfinalBsnd;
+public static class Pair<A, B> {
 
-publicPair(Aa,Bb){
-this.fst=a;
-this.snd=b;
+public final A fst;
+public final B snd;
+
+public Pair(A a, B b) {
+
+this.fst = a;
+this.snd = b;
 
 }
+
 }
 
 // 2.c
-publicstaticclassTriple<A,B,C>extendsPair<A,B>{
-publicfinalCtrd;
+public static class Triple<A, B, C> extends Pair<A, B> {
 
-publicTriple(Aa,Bb,Cc){
-super(a,b);
-this.trd=c;
+public final C trd;
+
+public Triple(A a, B b, C c) {
+
+super(a, b);
+this.trd = c;
+
 }
+
 }
 
 // 2.d
-publicstatic<A,B,C>Iterator<Triple<A,B,C>>evalIterator(Iterator<Pair<A,B>>it,
-BiFunction<A,B,C>f){
-returnnewIterator<>(){
+public static <A, B, C> Iterator<Triple<A, B, C>> evalIterator(Iterator<Pair<A, B>> it, 
+BiFunction<A, B, C> f) {
+return new Iterator<>() {
+
 @Override
-publicbooleanhasNext(){
-returnit.hasNext();
+public boolean hasNext() {
+
+return it.hasNext();
+
 }
 
 @Override
-publicTriple<A,B,C>next(){
-Pair<A,B>p=it.next();
-returnnewTriple<>(p.fst,p.snd,f.apply(p.fst,p.snd));
+public Triple<A, B, C> next() {
+
+Pair<A, B> p = it.next();
+return new Triple<>(p.fst, p.snd, f.apply(p.fst, p.snd));
+
 }
+
 };
+
 }
 
 }
@@ -2805,124 +3320,165 @@ computazione successiva con il medesimo input costi solamente un accesso in lett
 **Soluzione** *(spostata dalla sezione 4 del PDF originale)*
 
 ```java
-importjava.util.HashMap;
-importjava.util.Iterator;
-importjava.util.Map;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
-publicclassEs3{
+public class Es3 {
 
 // 3.a
-publicstaticclassFiboSequenceimplementsIterable<Integer>{
+public static class FiboSequence implements Iterable<Integer> {
 
-privatefinalintmax;
-privatefinalMap<Integer,Integer>cache=newHashMap<>();
+private final int max;
+private final Map<Integer, Integer> cache = new HashMap<>();
 
-publicFiboSequence(intmax){
-this.max=max;
-}
+public FiboSequence(int max) {
 
-@Override
-publicIterator<Integer>iterator(){
-returnnewIterator<>(){
-privateinti=0;
-
-@Override
-publicbooleanhasNext(){
-returni<max;
+this.max = max;
 
 }
 
 @Override
-publicIntegernext(){
-returnfib(i++);
+public Iterator<Integer> iterator() {
+
+return new Iterator<>() {
+private int i = 0;
+
+@Override
+public boolean hasNext() {
+
+return i < max;
+
 }
 
-privateintfib(intn){
-if(n<2)return1;
-else{
-Integerx=cache.get(n);
-if(x!=null)returnx;
-else{
-intr=fib(n-1)+fib(n-2);
-cache.put(n,r); // si commenti questo statement per
+@Override
+public Integer next() {
+return fib(i++);
+
+}
+
+private int fib(int n) {
+if (n < 2) return 1;
+else {
+
+Integer x = cache.get(n);
+if (x != null) return x;
+else {
+
+int r = fib(n - 1) + fib(n - 2);
+cache.put(n, r);
+
+// si commenti questo statement per
 // disabilitare la cache e vedere la differenza
 // enorme di tempi di calcolo
-returnr;
+
+return r;
+
 }
+
 }
+
 }
+
 };
+
 }
+
 }
 
 // si lanci questo main e si osservi quanto velocemente la macchina produce 100 numeri di
+
 fibonacci:
-// se non ci fosse la cache sarebbe drammaticamente più lento a causa delle continue
+ // se non ci fosse la cache sarebbe drammaticamente più lento a causa delle continue
+
 ricorsioni
-publicstaticvoidmain(String[]args){
-for(intn:newFiboSequence(100)){
+ public static void main(String[] args) {
+
+for (int n : new FiboSequence(100)) {
+
 System.out.println(n);
-}
+
 }
 
+}
 
 // 3.b
-publicstaticvoidmain__desugared(){
+public static void main__desugared() {
+
 // questo for senza il terzo statement è equivalente ad un while
-for(Iterator<Integer>it=newFiboSequence(100).iterator();it.hasNext();){
-intn=it.next();
+for (Iterator<Integer> it = new FiboSequence(100).iterator(); it.hasNext(); ) {
+
+int n = it.next();
 System.out.println(n);
-}
+
 }
 
+}
 
 // 3.c
-publicstaticclassGlobalFiboSequenceimplementsIterable<Integer>{
+public static class GlobalFiboSequence implements Iterable<Integer> {
 
-privatefinalintmax;
-privatefinalstaticMap<Integer,Integer>cache=newHashMap<>();// è tutto uguale a
-// FiboSequence
-eccetto per
-//la cache che è
-statica
+private final int max;
+private final static Map<Integer, Integer> cache = new HashMap<>(); // è tutto uguale a
 
-publicGlobalFiboSequence(intmax){
+// FiboSequence, eccetto per
+// la cache che è statica
 
-this.max=max;
+public GlobalFiboSequence(int max) {
+
+this.max = max;
+
 }
 
 @Override
-publicIterator<Integer>iterator(){
-returnnewIterator<>(){
-privateinti=0;
+public Iterator<Integer> iterator() {
+
+return new Iterator<>() {
+private int i = 0;
 
 @Override
-publicbooleanhasNext(){
-returni<max;
+public boolean hasNext() {
+
+return i < max;
+
 }
 
 @Override
-publicIntegernext(){
-returnfib(i++);
+public Integer next() {
+return fib(i++);
+
 }
 
-privateintfib(intn){
-if(n<2)return1;
-else{
-Integerx=cache.get(n);
-if(x!=null)returnx;
-else{
-intr=fib(n-1)+fib(n-2);
-cache.put(n,r); // si commenti questo statement per disabilitare
+private int fib(int n) {
+if (n < 2) return 1;
+else {
+
+Integer x = cache.get(n);
+if (x != null) return x;
+else {
+
+int r = fib(n - 1) + fib(n - 2);
+cache.put(n, r);
 la cache
+
+// si commenti questo statement per disabilitare
+
 // e vedere la differenza enorme di tempi di
+
 calcolo
-returnr;
+
+return r;
+
 }
+
 }
+
 }
+
 };
+
 }
+
 }
 
 }
@@ -2943,12 +3499,12 @@ essenzialmente essa offre un costruttore senza parametri, un secondo costruttore
 ed alcuni metodi per generare valori numerici di tipo differente:
 
 ```java
-publicclassRandom{
-publicRandom(){...}
-publicRandom(intseed){...}
-publicbooleannextBoolean(){...}
-publicintnextInt(){...}
-publicdoublenextDouble(){...}
+public class Random {
+    public Random() { ... }
+    public Random(int seed) { ... }
+    public boolean nextBoolean() { ... }
+    public int nextInt() { ... }
+    public double nextDouble() { ... }
 }
 ```
 
@@ -2964,72 +3520,92 @@ implementino opportunamente il costruttore ed i metodi richiesti dall’interfac
 **Soluzione** *(spostata dalla sezione 4 del PDF originale)*
 
 ```java
-importorg.jetbrains.annotations.NotNull;
-importorg.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-importjava.util.Iterator;
-importjava.util.Random;
+import java.util.Iterator;
+import java.util.Random;
 
-publicclassEs7{
+public class Es7 {
 
 // 7.b
-publicstaticclassRandomSingleton{
-privateRandomSingleton(){
+public static class RandomSingleton {
+
+private RandomSingleton() {
 }
 
 @Nullable
-privatestaticRandominstance;
+private static Random instance;
 
 @NotNull
 
-privatestaticRandominstance(){
-if(instance==null)
-instance=newRandom();
-returninstance;
+private static Random instance() {
+
+if (instance == null)
+
+instance = new Random();
+
+return instance;
+
 }
 
 // fare un setter per cambiare il seed del PRNG è uno dei modi possibili per riprodurre
 // il comportamento originale della classe Random del JDK. Normalmente, per avere un
-// seed specifico è necessario costruire un oggetto Random tramite l 'apposito
+// seed specifico è necessario costruire un oggetto Random tramite l'apposito
 // costruttore. Nella nostra conversione a singleton rappresentiamo invece questo
 // aspetto come un setter che internamente reistanzia il singleton in maniera
 // trasparente all'utente.
-publicvoidsetSeed(intseed){
-instance=newRandom(seed);
+public void setSeed(int seed) {
+
+instance = new Random(seed);
+
 }
 
-publicstaticintnextInt(){
-returninstance().nextInt();
+public static int nextInt() {
+
+return instance().nextInt();
+
 }
 
-publicstaticbooleannextBoolean(){
-returninstance().nextBoolean();
+public static boolean nextBoolean() {
+
+return instance().nextBoolean();
+
 }
 
-publicstaticdoublenextDouble(){
-returninstance().nextDouble();
+public static double nextDouble() {
+return instance().nextDouble();
+
 }
 
 }
 
 // 7.c
-publicstaticclassRandomIteratorimplementsIterator<Integer>{
-privateintlen;
+public static class RandomIterator implements Iterator<Integer> {
 
-publicRandomIterator(intlen){
-this.len=len;
+private int len;
+
+public RandomIterator(int len) {
+
+this.len = len;
+
 }
 
 @Override
-publicbooleanhasNext(){
-returnlen>0;
+public boolean hasNext() {
+
+return len > 0;
+
 }
 
 @Override
-publicIntegernext(){
+public Integer next() {
+
 --len;
-returnRandomSingleton.nextInt();
+return RandomSingleton.nextInt();
+
 }
+
 }
 
 }
@@ -3071,90 +3647,120 @@ attenzione all’uso dei **generics** ed al passaggio esplicito della **enclosin
 **Soluzione** *(spostata dalla sezione 4 del PDF originale)*
 
 ```java
-importjava.util.ArrayList;
-importjava.util.Iterator;
+import java.util.ArrayList;
+import java.util.Iterator;
 
-publicclassEs10{
+public class Es10 {
 
-
-publicstaticclassFancyArrayList<E>extendsArrayList<E>{
+public static class FancyArrayList<E> extends ArrayList<E> {
 
 // 10.a
 @FunctionalInterface
-publicinterfaceFunction<A,B>{
-Bapply(Aa);
+public interface Function<A, B> {
+
+B apply(A a);
+
 }
 
 // 10.b
-publicIterator<E>iterator(intstep,Function<E,E>f){
-returnnewIterator<>(){
-privateintpos=step>0?0:size()-1;
+public Iterator<E> iterator(int step, Function<E, E> f) {
+
+return new Iterator<>() {
+
+private int pos = step > 0 ? 0 : size() - 1;
 
 @Override
-publicbooleanhasNext(){
-returnpos>=0&&pos<size();
+public boolean hasNext() {
+
+return pos >= 0 && pos < size();
+
 }
 
 @Override
-publicEnext(){
-Er=get(pos);
-pos+=step;
-returnf.apply(r);
+public E next() {
+
+E r = get(pos);
+pos += step;
+return f.apply(r);
+
 }
+
 };
+
 }
 
 // 10.c.i
 @Override
-publicIterator<E>iterator(){
-returniterator(1,(x)->x); // si può fare l 'identità con la lambda (solo Java
+public Iterator<E> iterator() {
+
+return iterator(1, (x) -> x);
+
+// si può fare l'identità con la lambda (solo Java
+
 8+)
+
 }
 
 // 10.c.ii
-publicIterator<E>backwardIterator(){
-returniterator(-1,newFunction<>(){// oppure con una anonymous class
+public Iterator<E> backwardIterator() {
+
+return iterator(-1, new Function<>() { // oppure con una anonymous class
+
 semplicissima
 @Override
-publicEapply(Ex){
-returnx;
+public E apply(E x) {
+
+return x;
+
 }
+
 });
+
 }
 
 // 10.d
 // bisogna chiamare questo metodo con un nome diverso da iterator()
 // altrimenti il sorgente non compila
-publicIterator<E>iterator__refactored(intstep,Function<E,E>f){
-returnnewFancyIterator<>(this,step,f);
+public Iterator<E> iterator__refactored(int step, Function<E, E> f) {
+
+return new FancyIterator<>(this, step, f);
+
 }
 
-// questa classe è il refactoring della anonynmous class dell 'esercizio 10.b:
+// questa classe è il refactoring della anonynmous class dell'esercizio 10.b:
 // la differenza è che conserva la enclosing instance esplicitamente
-privatestaticclassFancyIterator<E>implementsIterator<E>{
-privateFancyArrayList<E>enclosing;
+private static class FancyIterator<E> implements Iterator<E> {
 
-privateFunction<E,E>f;
-privateintstep,pos;
+private FancyArrayList<E> enclosing;
 
-publicFancyIterator(FancyArrayList<E>parent,intstep,Function<E,E>f){
-this.enclosing=parent;
-this.step=step;
-this.f=f;
-pos=step>0?0:parent.size()-1;
+private Function<E, E> f;
+private int step, pos;
+
+public FancyIterator(FancyArrayList<E> parent, int step, Function<E, E> f) {
+
+this.enclosing = parent;
+this.step = step;
+this.f = f;
+pos = step > 0 ? 0 : parent.size() - 1;
+
 }
 
 @Override
-publicbooleanhasNext(){// questo metodo è uguale
-returnpos>=0&&pos<enclosing.size();
+public boolean hasNext() { // questo metodo è uguale
+
+return pos >= 0 && pos < enclosing.size();
+
 }
 
 @Override
-publicEnext(){
-Er=enclosing.get(pos);
-pos+=step;
-returnf.apply(r);
+public E next() {
+
+E r = enclosing.get(pos);
+pos += step;
+return f.apply(r);
+
 }
+
 }
 
 }
@@ -3191,41 +3797,53 @@ Si implementi questo metodo in funzione del precedente, senza replicare l’algo
 **Soluzione** *(spostata dalla sezione 4 del PDF originale)*
 
 ```java
-importjava.util.Comparator;
-importjava.util.List;
+import java.util.Comparator;
+import java.util.List;
 
-publicclassEs11{
+public class Es11 {
 
 // 11.a
 // versione con campi pubblici immutabili, ma si potevano fare anche i getter volendo
-publicstaticclassPair<A,B>{
-publicfinalAa;
-publicfinalBb;
-publicPair(Aa,Bb){
-this.a=a;
-this.b=b;
+public static class Pair<A, B> {
+
+public final A a;
+public final B b;
+public Pair(A a, B b) {
+
+this.a = a;
+this.b = b;
+
 }
+
 }
 
 // 11.b
-publicstatic<E>Pair<E,E>findMinAndMax(List<?extendsE>l,Comparator<E>c){
-Emin=l.get(0),max=min;
-for(Ex:l){
-if(c.compare(x,max)>0)max=x;
-if(c.compare(x,min)<0)min=x;
+public static <E> Pair<E, E> findMinAndMax(List<? extends E> l, Comparator<E> c) {
+
+E min = l.get(0), max = min;
+for (E x : l) {
+
+if (c.compare(x, max) > 0) max = x;
+if (c.compare(x, min) < 0) min = x;
+
 }
-returnnewPair<>(min,max);
+return new Pair<>(min, max);
+
 }
 
 // 11.c
-publicstatic<EextendsComparable<E>>Pair<E,E>findMinAndMax(List<?extendsE>l){
-returnfindMinAndMax(l,newComparator<>(){
+public static <E extends Comparable<E>> Pair<E, E> findMinAndMax(List<? extends E> l) {
+
+return findMinAndMax(l, new Comparator<>() {
 
 @Override
-publicintcompare(Ea,Eb){
-returna.compareTo(b);
+public int compare(E a, E b) {
+return a.compareTo(b);
+
 }
+
 });
+
 }
 
 }
@@ -3245,44 +3863,54 @@ Una singola passata (O(n)) e' sufficiente per trovare sia minimo che massimo. L'
 top-level:
 
 ```java
-publicclassHannaBarbera{
+public class HannaBarbera {
 
-publicinterfaceFood{
-intgetWeight();
+public interface Food {
+int getWeight();
+
 }
 
-publicinterfaceAnimalextendsFood{
-voideat(Foodf);
+public interface Animal extends Food {
+
+void eat(Food f);
+
 }
 
-publicstaticclassMouseimplementsAnimal{
-privateintweight;
+public static class Mouse implements Animal {
 
-publicMouse(intweight){this.weight=weight;}
+private int weight;
 
-@Override
-publicvoideat(Foodf){weight+=f.getWeight()/2;}
+public Mouse(int weight) { this.weight = weight; }
 
 @Override
-publicintgetWeight(){returnweight;}
+public void eat(Food f) { weight += f.getWeight() / 2; }
+
+@Override
+public int getWeight() { return weight; }
+
 }
 
-publicstaticclassCatimplementsAnimal{
-privateintweight;
+public static class Cat implements Animal {
 
-publicCat(intweight){this.weight=weight;}
+private int weight;
 
-@Override
-publicvoideat(Foodf){weight+=f.getWeight()/5;}
+public Cat(int weight) { this.weight = weight; }
 
 @Override
-publicintgetWeight(){returnweight;}
+public void eat(Food f) { weight += f.getWeight() / 5; }
+
+@Override
+public int getWeight() { return weight; }
+
 }
 
-publicstaticclassCheeseimplementsFood{
+public static class Cheese implements Food {
+
 @Override
-publicintgetWeight(){return50;}
+public int getWeight() { return 50; }
+
 }
+
 }
 ```
 
@@ -3292,16 +3920,21 @@ riuso? Si scriva il codice rifattorizzato, facendo attenzione a non cambiare il 
 classi ed interfacce innestate siano quelle rifattorizzate secondo quanto richiesto dall’esercizio 1.
 
 ```java
-publicstaticvoidmain(String[]args){
-Animaltom=newCat(200);
-Animaljerry=newMouse(10);
-jerry.eat(newCheese());
-jerry.eat(newFood(){
+public static void main(String[] args) {
+
+Animal tom = new Cat(200);
+Animal jerry = new Mouse(10);
+jerry.eat(new Cheese());
+jerry.eat(new Food() {
+
 @Override
-publicintgetWeight(){return10;}
+public int getWeight() { return 10; }
+
 });
-tom.eat(jerry);
-System.out.println(String.format("Tom now weights %d",tom.getWeight()));
+
+tom.eat(jerry);
+System.out.println(String.format("Tom now weights %d", tom.getWeight()));
+
 }
 ```
 
@@ -3313,110 +3946,155 @@ modificato.
 **Soluzione** *(spostata dalla sezione 4 del PDF originale)*
 
 ```java
-publicclassEs12{
+public class Es12 {
 
 // tipi dati dal testo
 
-publicinterfaceFood{
-intgetWeight();
+public interface Food {
+int getWeight();
+
 }
 
-publicinterfaceAnimalextendsFood{
-voideat(Foodf);
+public interface Animal extends Food {
+
+void eat(Food f);
+
 }
 
-publicstaticclassMouseimplementsAnimal{
-privateintweight;
+public static class Mouse implements Animal {
 
-publicMouse(intweight){
-this.weight=weight;
-}
+private int weight;
 
-@Override
-publicvoideat(Foodf){
-weight+=f.getWeight()/3;
-}
+public Mouse(int weight) {
 
-@Override
-publicintgetWeight(){
-returnweight;
-}
-}
+this.weight = weight;
 
-publicstaticclassCatimplementsAnimal{
-privateintweight;
-
-publicCat(intweight){
-this.weight=weight;
 }
 
 @Override
-publicvoideat(Foodf){
-weight+=f.getWeight()/10;
+public void eat(Food f) {
+
+weight += f.getWeight() / 3;
+
 }
 
 @Override
-publicintgetWeight(){
-returnweight;
-}
+public int getWeight() {
+
+return weight;
+
 }
 
+}
 
-publicstaticclassCheeseimplementsFood{
+public static class Cat implements Animal {
+
+private int weight;
+
+public Cat(int weight) {
+
+this.weight = weight;
+
+}
+
 @Override
-publicintgetWeight(){
-return300;
-}
+public void eat(Food f) {
+
+weight += f.getWeight() / 10;
+
 }
 
+@Override
+public int getWeight() {
+
+return weight;
+
+}
+
+}
+
+public static class Cheese implements Food {
+
+@Override
+public int getWeight() {
+
+return 300;
+
+}
+
+}
 
 // 12.a
 // le interfacce Food e Animal non serve rifattorizzarle, sono a posto così
-publicabstractclassAbstractAnimalimplementsAnimal{
-privateintweight,div;
+public abstract class AbstractAnimal implements Animal {
 
-protectedAbstractAnimal(intweight,intdiv){
-this.weight=weight;
-}
+private int weight, div;
 
-@Override
-publicvoideat(Foodf){
-weight+=f.getWeight()/div;
+protected AbstractAnimal(int weight, int div) {
+
+this.weight = weight;
+
 }
 
 @Override
-publicintgetWeight(){
-returnweight;
-}
+public void eat(Food f) {
+
+weight += f.getWeight() / div;
+
 }
 
-publicclassCatextendsAbstractAnimal{
-protectedCat(intweight,intdiv){
-super(weight,5); // valori del tema A
+@Override
+public int getWeight() {
+
+return weight;
+
 }
 
-publicclassMouseextendsAbstractAnimal{
-protectedMouse(intweight,intdiv){
-super(weight,2);
-}
 }
 
+public class Cat extends AbstractAnimal {
+
+protected Cat(int weight, int div) {
+
+super(weight, 5);
+
+// valori del tema A
+
+}
+
+public class Mouse extends AbstractAnimal {
+
+protected Mouse(int weight, int div) {
+
+super(weight, 2);
+
+}
+
+}
 
 // 12.b.i
-publicstaticvoidmain(String[]args){
-Animaltom=newCat(200); // costanti del tema A
-Animaljerry=newMouse(10);
-jerry.eat(newCheese());
-jerry.eat(newFood(){
+public static void main(String[] args) {
+
+// costanti del tema A
+
+Animal tom = new Cat(200);
+Animal jerry = new Mouse(10);
+jerry.eat(new Cheese());
+jerry.eat(new Food() {
+
 @Override
-publicintgetWeight(){
-return10;
-}
-});
-tom.eat(jerry);
-System.out.println(String.format("Tom now weights %d",tom.getWeight()));//b.ii 208
+public int getWeight() {
+
+return 10;
 
 }
+
+});
+tom.eat(jerry);
+System.out.println(String.format("Tom now weights %d", tom.getWeight())); //b.ii 208
+
+}
+
 }
 ```
 
@@ -3445,122 +4123,148 @@ gli opportuni costruttori, tra cui quello per **copia**, e l’**operatore di as
 **Soluzione** *(spostata dalla sezione 4 del PDF originale)*
 
 ```cpp
-exportmodulepairs;
+export module pairs;
 
-import<string>;
-import<functional>;
-
+import <string>;
+import <functional>;
 
 export
-template<classA,typenameB>
-classpair
+template <class A, typename B>
+class pair
 {
-template<classC,typenameD>friendclasspair; // necessario per il copy
+
+template <class C, typename D> friend class pair; 
 constructor templatizzato
 
+// necessario per il copy
+
 private:
-Afirst;
-Bsecond;
+
+A first;
+B second;
 
 public:
-// 2.a
-pair():first(),second(){}
-pair(constA&a,constB&b):first(a),second(b){}
-pair(constpair<A,B>&p):first(p.first),second(p.second){}
 
-pair<A,B>&operator=(constpair<A,B>&p)
+// 2.a
+pair() : first(), second() {}
+pair(const A& a, const B& b) : first(a), second(b) {}
+pair(const pair<A, B>& p) : first(p.first), second(p.second) {}
+
+pair<A, B>& operator=(const pair<A, B>& p)
 {
-first=p.first;
-second=p.second;
-return*this;
+
+first = p.first;
+second = p.second;
+return *this;
+
 }
 
 // 2.c
-template<classC,typenameD>
-pair(constpair<C,D>&p):first(p.first),second(p.second){}
-
+template <class C, typename D>
+pair(const pair<C, D>& p) : first(p.first), second(p.second) {}
 
 // 2.b
-pair<A,B>operator++(int)
+pair<A, B> operator++(int)
 {
-pair<A,B>tmp(*this);
+
+pair<A, B> tmp(*this);
 first++;
 second++;
-returntmp;
+return tmp;
+
 }
 
-pair<A,B>&operator++()
+pair<A, B>& operator++()
 {
+
 ++first;
 ++second;
-return*this;
-}
-
-booloperator==(constpair<A,B>&p)const
-{
-returnfirst==p.first&&second==p.second;
+return *this;
 
 }
 
-booloperator!=(constpair<A,B>&p)const
+bool operator==(const pair<A, B>& p) const
 {
-return!(*this==p);
+
+return first == p.first && second == p.second;
+
+}
+
+bool operator!=(const pair<A, B>& p) const
+{
+
+return !(*this == p);
+
 }
 
 // altri operatori aritmentici ed in-place sono analoghi
-pair<A,B>operator+(constpair<A,B>&p)const
+pair<A, B> operator+(const pair<A, B>& p) const
 {
-returnpair<A,B>(first+p.first,second+p.second);
+
+return pair<A, B>(first + p.first, second + p.second);
+
 }
 
-pair<A,B>&operator+=(constpair<A,B>&p)
+pair<A, B>& operator+=(const pair<A, B>& p)
 {
-first+=p.first;
-second+=p.second;
-return*this;
+
+first += p.first;
+second += p.second;
+return *this;
+
 }
 
-constA&fst()const
+const A& fst() const
 {
-returnfirst;
+
+return first;
+
 }
 
-A&fst()
+A& fst()
 {
-returnfirst;
+
+return first;
+
 }
 
-constB&snd()const
+const B& snd() const
 {
-returnsecond;
+
+return second;
+
 }
 
-B&snd()
+B& snd()
 {
-returnsecond;
+
+return second;
+
 }
 
 };
 
-
-exportintmain()
+export int main()
 {
-pair<int,int>p1(4,5);
-pair<int,int>p2(p1);
 
-pair<std::string,bool>p3("ciao",true);
-pair<double,double>p4(p1);
+pair<int, int> p1(4, 5);
+pair<int, int> p2(p1);
 
-p1=p2;
+pair<std::string, bool> p3("ciao", true);
+pair<double, double> p4(p1);
 
-intn=p1.fst();
-p1.snd()=p1.snd()*3;
-p4+=p1; // converte implicitamente il RV in un pair<double, double> tramite un
+p1 = p2;
+
+int n = p1.fst();
+p1.snd() = p1.snd() * 3;
+p4 += p1; 
 conversion copy-constructor templatizzato
 
+// converte implicitamente il RV in un pair<double, double> tramite un
 
-return0;
 }
+
+return 0;
 ```
 
 **Spiegazione rapida del ragionamento**
@@ -3610,94 +4314,126 @@ cout<<*it;// de-reference const
 **Soluzione** *(spostata dalla sezione 4 del PDF originale)*
 
 ```cpp
-// Questo sorgente contiene le soluzioni dell 'esame scritto di PO2 del 3/6/2022 per ciò che
-riguarda il quesito 6, ovvero la domanda che coinvolge C++.
+// Questo sorgente contiene le soluzioni dell'esame scritto di PO2 del 3/6/2022 per ciò che
 // I quesiti 1-5 riguardanti Java sono in un progetto IntelliJ a parte, non qui.
 // Il codice C++ qui esposto è standard C++ vanilla (a.k.a. C++03), sebbene il progetto VS sia
-configurato con il compilatore di default C++14
+// configurato con il compilatore di default C++14
 
-#include<iostream>
-#include<vector>
+#include <iostream>
+#include <vector>
 
-usingnamespacestd;
+using namespace std;
 
 // 6
-template<classT>
-classmatrix
+template <class T>
+class matrix
 {
 private:
-size_tcols;
-vector<T>v;
+
+size_t cols;
+vector<T> v;
 
 public:
-matrix():cols(0),v(){}
-matrix(size_trows,size_tcols_):cols(cols_),v(rows*cols){}
-matrix(size_trows,size_tcols_,constT&v):cols(cols_),v(rows*cols,v){}
-matrix(constmatrix<T>&m):cols(m.cols),v(m.v){}
 
-typedefTvalue_type;
-typedeftypenamevector<T>::iteratoriterator;
-typedeftypenamevector<T>::const_iteratorconst_iterator;
+matrix() : cols(0), v() {}
+matrix(size_t rows, size_t cols_) : cols(cols_), v(rows * cols) {}
+matrix(size_t rows, size_t cols_, const T& v) : cols(cols_), v(rows* cols, v) {}
+matrix(const matrix<T>& m) : cols(m.cols), v(m.v) {}
 
-matrix<T>&operator=(constmatrix<T>&m)
-{
-v=m.v;
-return*this;
-}
+typedef T value_type;
+typedef typename vector<T>::iterator iterator;
+typedef typename vector<T>::const_iterator const_iterator;
 
-T&operator()(size_ti,size_tj)
-{
-returnv[i*cols+j];
-}
-
-constT&operator()(size_ti,size_tj)const
-{
-return(*this)(i,j);
-}
-
-iteratorbegin()
-{
-returnv.begin();
-}
-
-iteratorend()
+matrix<T>& operator=(const matrix<T>& m)
 {
 
-returnv.end();
+v = m.v;
+return *this;
+
 }
 
-const_iteratorbegin()const
+T& operator()(size_t i, size_t j)
 {
-returnbegin();
+
+return v[i * cols + j];
+
 }
 
-const_iteratorend()const
+const T& operator()(size_t i, size_t j) const
 {
-returnend();
+
+return (*this)(i, j);
+
 }
+
+iterator begin()
+{
+
+return v.begin();
+
+}
+
+iterator end()
+{
+
+return v.end();
+
+}
+
+const_iterator begin() const
+{
+
+return begin();
+
+}
+
+const_iterator end() const
+{
+
+return end();
+
+}
+
 };
 
-
-intmain()
+int main()
 {
-matrix<double>m1; // non inizializzata
-matrix<double>m2(10,20);// 10*20 inizializzata col default constructor di double
-matrix<double>m3(m2); // costruita per copia
-m1=m2; // assegnamento
-m3(3,1)=11.23; // operatore di accesso come left-value
 
-for(typenamematrix<double>::iteratorit=m1.begin();it!=m1.end();++it){
-typenamematrix<double>::value_type&x=*it; // de-reference non-const
-x=m2(0,
-2); //
+matrix<double> m1;
+matrix<double> m2(10, 20); // 10*20 inizializzata col default constructor di double
+matrix<double> m3(m2);
+m1 = m2;
+m3(3, 1) = 11.23;
+
+// costruita per copia
+// assegnamento
+// operatore di accesso come left-value
+
+// non inizializzata
+
+for (typename matrix<double>::iterator it = m1.begin(); it != m1.end(); ++it) {
+
+typename matrix<double>::value_type& x = *it;
+x = m2(0,
+
+2);
 operatore di accesso come right-value
+
+// de-reference non-const
+
+//
 
 }
 
-matrix<string>ms(5,4,"ciao");// 5*4 inizializzata col la stringa passata come terzo
+matrix<string> ms(5, 4, "ciao"); // 5*4 inizializzata col la stringa passata come terzo
+
 argomento
-for(typenamematrix<string>::const_iteratorit=ms.begin();it!=ms.end();++it)
-cout<<*it; // de-reference const
+ for (typename matrix<string>::const_iterator it = ms.begin(); it != ms.end(); ++it)
+
+cout << *it;
+
+// de-reference const
+
 }
 ```
 
@@ -3723,41 +4459,46 @@ avere un certo **member type** e quest’ultimo deve supportare il tal metodo, o
 **Soluzione** *(spostata dalla sezione 4 del PDF originale)*
 
 ```cpp
-// Questo sorgente contiene le soluzioni dell 'esame scritto di PO2 del 5/9/2023 per ciò che
-riguarda il quesito 2, ovvero la domanda che coinvolge C++.
+// Questo sorgente contiene le soluzioni dell'esame scritto di PO2 del 5/9/2023 per ciò che riguarda il quesito 2, ovvero la domanda che coinvolge C++.
 // I quesiti 1-5 riguardanti Java sono in un sorgente Java a parte, non qui.
 // Il codice C++ qui esposto è standard C++ vanilla (a.k.a. C++03), sebbene il progetto VS sia
-configurato con il compilatore di default C++14
+// configurato con il compilatore di default C++14
 
-#include<iostream>
-#include<vector>
+#include <iostream>
+#include <vector>
 
-usingnamespacestd;
+using namespace std;
 
-template<classContainer>
-ostream&operator<<(ostream&os,constContainer&c)
+template <class Container>
+ostream& operator<<(ostream& os, const Container& c)
 {
-os<<"[";
-for(typenameContainer::const_iteratorit=c.begin();it!=c.end();++it)
-os<<""<<*it;
-os<<"]";
-returnos;
+
+os << "[";
+for (typename Container::const_iterator it = c.begin(); it != c.end(); ++it)
+
+os << " " << *it;
+
+os << "]";
+return os;
+
 }
 
-
-template<classContainer>
-typenameContainer::value_typesum(constContainer&c)
+template <class Container>
+typename Container::value_type sum(const Container& c)
 {
-typenameContainer::value_typer;
-for(typenameContainer::const_iteratorit=c.begin();it!=c.end();++it)
+
+typename Container::value_type r;
+for (typename Container::const_iterator it = c.begin(); it != c.end(); ++it)
 {
-r+=*it;
+
+r += *it;
+
 }
-returnr;
+return r;
+
 }
 
-
-intmain()
+int main()
 {
 }
 ```
@@ -3781,17 +4522,17 @@ non ha tipo di ritorno. L’output consiste in un iteratore passato come argomen
 i risultati.
 
 ```cpp
-template<classInputIterator,classOutputIterator>
-voidmap(InputIteratorfrom,InputIteratorto,OutputIteratorout,
-function<typenameOutputIterator::value_type(typenameInputIterator::value_type)>f)
+template <class InputIterator, class OutputIterator>
+void map(InputIterator from, InputIterator to, OutputIterator out,
+    function<typename OutputIterator::value_type(typename InputIterator::value_type)> f)
 ```
 
 (b) Si implementi la seguente versione della **map()** che opera su **vector** di STL. In questo caso l’output è un vero
 e proprio tipo di ritorno. L’implementazione deve invocare la **map()** di cui al punto precedente.
 
 ```cpp
-template<classA,classB>
-vector<B>map(constvector<A>&v,function<B(A)>f)
+template <class A, class B>
+vector<B> map(const vector<A>& v, function<B(A)> f)
 ```
 
 (c) Il tipo templatizzato **function** è definito da STL a partire dallo standard **C++11**, così come le espressioni
@@ -3805,97 +4546,115 @@ iii. Come sarebbe stato possibile invocare le **map()** compatibili con **C++03*
 **Soluzione** *(spostata dalla sezione 4 del PDF originale)*
 
 ```cpp
-// Scritto PO2 10 9 24.cpp : This file contains the 'main'function. Program execution begins and
+// Scritto PO2 10 9 24.cpp : This file contains the 'main' function. Program execution begins and
+
 ends there.
-//
+ //
 
-#include<iostream>
-#include<functional>
-#include<vector>
-#include<type_traits>
+#include <iostream>
+#include <functional>
+#include <vector>
+#include <type_traits>
 
-usingnamespacestd;
+using namespace std;
 
 // 2.a
-template<classInputIterator,classOutputIterator>
-voidmap(InputIteratorfrom,InputIteratorto,OutputIteratorout,function<typename
-OutputIterator::value_type(typenameInputIterator::value_type)>f)
-{
-while(from!=to)
-*out++=f(*from++);
+template <class InputIterator, class OutputIterator>
+void map(InputIterator from, InputIterator to, OutputIterator out, function<typename
+
+OutputIterator::value_type(typename InputIterator::value_type)> f)
+
+while (from != to)
+
+*out++ = f(*from++);
+ {
+
 }
 
 // 2.b
-template<classA,classB>
-vector<B>map(constvector<A>&v,function<B(A)>f)
+template <class A, class B>
+vector<B> map(const vector<A>& v, function<B(A)> f)
 {
-vector<B>r(v.size());
-map(v.begin(),v.end(),r.begin(),f);
-returnr;
+
+vector<B> r(v.size());
+map(v.begin(), v.end(), r.begin(), f);
+return r;
+
 }
 
 // 2.c
-namespacecpp03{
+namespace cpp03 {
 
 // 2.c.i
-template<classA,classB,classF>
-vector<B>map(constvector<A>&v,Ff)
+template <class A, class B, class F>
+vector<B> map(const vector<A>& v, F f)
 {
-vector<B>r(v.size());
-for(inti=0;i<v.size();++i)
-r[i]=f(v[i]);
 
-returnr;
+vector<B> r(v.size());
+for (int i = 0; i < v.size(); ++i)
+
+r[i] = f(v[i]);
+
+return r;
+
 }
 
 // 2.c.ii
 // no, non possono coesistere, perché sarebbero overload ambigui. Infatti ho dovuto metterli
-in un sotto-namespace a parte per far compilare questo sorgente.
+// in un sotto-namespace a parte per far compilare questo sorgente.
+
+applicazione operator()
 
 // 2.c.iii
-// bisogna usare i function object, cioè oggetti per cui è definito l 'operatore di
-applicazione operator()
-// esempio:
-classmyfunction{
+// bisogna usare i function object, cioè oggetti per cui è definito l'operatore di // esempio:
+class myfunction {
 public:
-booloperator()(intn){returnn>2;}
+
+bool operator()(int n) { return n > 2; }
+
 };
 
-voidtest()
+void test()
 {
-vector<int>v1{1,2,3,4,5};
-vector<bool>v2=map<int,bool>(v1,myfunction());// senza le annotazioni esplicite dei
-template argument non compila (questo non è richiesto nell 'esame perché è una cosa
-molto sottile)
+
+vector<int> v1{ 1, 2, 3, 4, 5 };
+vector<bool> v2 = map<int, bool>(v1, myfunction()); // senza le annotazioni esplicite dei template argument non compila (questo non è richiesto nell'esame perché è una cosa molto sottile)
 
 }
+
 }
 
 // main for testing
 //
 
-template<classT>
-ostream&operator<<(ostream&os,constvector<T>&v)
+template <class T>
+ostream& operator<<(ostream& os, const vector<T>& v)
 {
-os<<"[ ";
-for(autoit=v.begin();it!=v.end();++it)
-os<<*it<<", ";
-os<<"\b\b]";
-returnos;
+
+os << "[ ";
+for (auto it = v.begin(); it != v.end(); ++it)
+
+os << *it << ", ";
+
+os << "\b\b ]";
+return os;
+
 }
 
-intmain()
+int main()
 {
-vector<int>v1{1,2,3,4,5};
-vector<bool>v2(v1.size());
-map(v1.begin(),v1.end(),v2.begin(),[](intn){returnn>2;});
 
-v2=map<int,bool>(v1,[](intn){returnn>2;});// anche qui bisogna mettere i template
+vector<int> v1{ 1, 2, 3, 4, 5 };
+vector<bool> v2(v1.size());
+map(v1.begin(), v1.end(), v2.begin(), [](int n) { return n > 2; });
+
+v2 = map<int, bool>(v1, [](int n) { return n > 2; }); // anche qui bisogna mettere i template 
 argument espliciti
 
-cout<<v1<<endl<<v2<<endl;
+cout << v1 << endl << v2 << endl;
 
-return0;
+return 0;
+
 }
 ```
 
@@ -3925,87 +4684,104 @@ Si scriva anche uno snippet analogo a quello del punto c (Es. 2.1.7 Java).
 **Soluzione** *(spostata dalla sezione 4 del PDF originale)*
 
 ```cpp
-exportmodulepairs;
+export module pairs;
 
-import<iostream>;
-import<functional>;
+import <iostream>;
+import <functional>;
 
-import<utility>;
+import <utility>;
 
-usingnamespacestd;
+using namespace std;
 
 export
-template<classX,classY>
-classfun_seq
+template <class X, class Y>
+class fun_seq
 {
 private:
-constXa,b,dx;
-constfunction<Y(constX&)>f;
+
+const X a, b, dx;
+const function<Y(const X&)> f;
 
 public:
-usingvalue_type=pair<X,Y>;
 
-fun_seq(constX&_a,constX&_b,constX&_dx,constfunction<Y(constX&)>&_f):
-a(_a),b(_b),dx(_dx),f(_f){}
+using value_type = pair<X, Y>;
 
-classiterator
+fun_seq(const X& _a, const X& _b, const X& _dx, const function<Y(const X&)>& _f) : 
+a(_a), b(_b), dx(_dx), f(_f) {}
+
+class iterator
 {
 private:
-Xx;
-fun_seq<X,Y>that;
+
+X x;
+fun_seq<X, Y> that;
 
 public:
-explicititerator(constX&_x,constfun_seq<X,Y>&_that):x(_x),that(_that)
+
+explicit iterator(const X& _x, const fun_seq<X, Y>& _that) : x(_x), that(_that)
+
 {}
 
-iterator(constiterator&it):x(it.x),that(it.that){}
+iterator(const iterator& it) : x(it.x), that(it.that) {}
 
-pair<X,Y>operator*()const
+pair<X, Y> operator*() const
 {
-returnpair<X,Y>(x,that.f(x));
+
+return pair<X, Y>(x, that.f(x));
+
 }
 
-booloperator!=(constiterator&it)
+bool operator!=(const iterator& it)
 {
-return!(x>it.x-that.dx&&x<it.x+that.dx);
+
+return !(x > it.x - that.dx && x < it.x + that.dx);
+
 }
 
-iteratoroperator++()
+iterator operator++()
 {
-iteratorr(*this);
-x+=that.dx;
-returnr;
+
+iterator r(*this);
+x += that.dx;
+return r;
+
 }
-};
-
-iteratorbegin()const
-{
-returniterator(a,*this);
-}
-
-iteratorend()const
-{
-returniterator(b,*this);
-}
-
-
 
 };
 
-
-exportintmain()
+iterator begin() const
 {
-fun_seq<double,double>sq1(-2.,2.,0.1,[](constdouble&x){returnx*x+2*x-
-1;});
-for(pair<double,double>p:sq1)
-cout<<"f("<<p.first<<") = "<<p.second<<endl;
 
-fun_seq<double,int>sq2(-2.,2.,0.1,[](constdouble&x){returnint(x*x+2*x-
-1);});
-for(pair<double,int>p:sq2)
-cout<<"f("<<p.first<<") = "<<p.second<<endl;
+return iterator(a, *this);
 
-return0;
+}
+
+iterator end() const
+{
+
+return iterator(b, *this);
+
+}
+
+};
+
+export int main()
+{
+
+fun_seq<double, double> sq1(-2., 2., 0.1, [](const double& x) { return x * x + 2 * x - for (pair<double, double> p : sq1)
+
+1; });
+
+cout << "f(" << p.first << ") = " << p.second << endl;
+
+fun_seq<double, int> sq2(-2., 2., 0.1, [](const double& x) { return int(x * x + 2 * x - for (pair<double, int> p : sq2)
+
+1); });
+
+cout << "f(" << p.first << ") = " << p.second << endl;
+
+return 0;
+
 }
 ```
 
@@ -4024,50 +4800,60 @@ Le funzioni come callable (`operator()`) in C++ consentono composizione e stato 
 in un certo intervallo di dominio **[a, b] ⊆ R**.
 
 ```cpp
-#include<functional>
-#include<iostream>
-#include<utility>
+#include <functional>
+#include <iostream>
+#include <utility>
 
-usingnamespacestd;
-usingreal=double;
-usingunary_fun=function<real(constreal&)>;
+using namespace std;
+using real = double;
+using unary_fun = function<real(const real&)>;
 
-#define RESOLUTION (1000) // risoluzione dell'intervallo [a, b]
+#define RESOLUTION (1000)
 
-classcurve
+// risoluzione dell'intervallo [a, b]
+
+class curve
 {
 private:
-reala,b;
-unary_funf;
+
+real a, b;
+unary_fun f;
+
 public:
-curve(constreal&a_,constreal&b_,constunary_fun&f_):f(f_),a(a_),b(b_){}
-curve(constreal&c)=default;
 
-realget_dx()const{return(b-a)/RESOLUTION;}
-pair<real,real>interval()const{returnpair<real,real>(a,b);}
-realoperator()(constreal&x)const{returnf(x);}
+curve(const real& a_, const real& b_, const unary_fun& f_) : f(f_), a(a_), b(b_) {}
+curve(const real& c) = default;
 
-curvederivative()const{/* DA IMPLEMENTARE */ }
-curveprimitive()const{/* DA IMPLEMENTARE */ }
-realintegral()const{/* DA IMPLEMENTARE */ }
+real get_dx() const { return (b - a) / RESOLUTION; }
+pair<real, real> interval() const { return pair<real, real>(a, b); }
+real operator()(const real& x) const { return f(x); }
 
-classiterator
+curve derivative() const { /* DA IMPLEMENTARE */ }
+curve primitive() const { /* DA IMPLEMENTARE */ }
+real integral() const { /* DA IMPLEMENTARE */ }
+
+class iterator
 {
 private:
-constcurve&c;
-realx;
-public:
-iterator(constcurve&c_,constreal&x_):c(c_),x(x_){}
-iterator(constiterator&c)=default;
 
-pair<real,real>operator*()const{/* DA IMPLEMENTARE */ }
-iteratoroperator++(){/* DA IMPLEMENTARE */ }
-iteratoroperator++(int){/* DA IMPLEMENTARE */ }
-booloperator!=(constiterator&it)const{/* DA IMPLEMENTARE */ }
+const curve& c;
+real x;
+
+public:
+
+iterator(const curve& c_, const real& x_) : c(c_), x(x_) {}
+iterator(const iterator& c) = default;
+
+pair<real, real> operator*() const { /* DA IMPLEMENTARE */ }
+iterator operator++() { /* DA IMPLEMENTARE */ }
+iterator operator++(int) { /* DA IMPLEMENTARE */ }
+bool operator!=(const iterator& it) const { /* DA IMPLEMENTARE */ }
+
 };
 
-iteratorbegin()const{/* DA IMPLEMENTARE */ }
-iteratorend()const{/* DA IMPLEMENTARE */ }
+iterator begin() const { /* DA IMPLEMENTARE */ }
+iterator end() const { /* DA IMPLEMENTARE */ }
+
 };
 ```
 
@@ -4099,142 +4885,187 @@ cout<<"c("<<x<<") = "<<y<<endl;
 **Soluzione** *(spostata dalla sezione 4 del PDF originale)*
 
 ```cpp
-#include<functional>
-#include<iostream>
-#include<utility>
-#include<algorithm>
+#include <functional>
+#include <iostream>
+#include <utility>
+#include <algorithm>
 
-usingnamespacestd;
+using namespace std;
 
-
-usingreal=double;
-usingunary_fun=function<real(constreal&)>;
+using real = double;
+using unary_fun = function<real(const real&)>;
 
 #define RESOLUTION (10)
 
-
-classcurve
+class curve
 {
 
 private:
-reala,b;
-unary_funf;
+
+real a, b;
+unary_fun f;
 
 public:
-curve(constreal&a_,constreal&b_,constunary_fun&f_):f(f_),a(a_),b(b_){}
 
-realget_dx()const{return(b-a)/RESOLUTION;}
+curve(const real& a_, const real& b_, const unary_fun& f_) : f(f_), a(a_), b(b_) {}
 
-pair<real,real>interval()const{returnpair<real,real>(a,b);}
+real get_dx() const { return (b - a) / RESOLUTION; }
 
-curvederivative()const
+pair<real, real> interval() const { return pair<real, real>(a, b); }
+
+curve derivative() const
 {
-returncurve(a,b,[&,dx=get_dx()](constreal&x){ // anche la capture
+
+return curve(a, b, [&, dx = get_dx()](const real& x) {
+
+// anche la capture
+
 [=] sarebbe stata sufficiente
-constrealdy=f(x+dx)-f(x);
-returndy/dx;
+
+const real dy = f(x + dx) - f(x);
+return dy / dx;
 });
+
 }
 
-
-curveprimitive()const
+curve primitive() const
 {
-returncurve(a,b,[&,dx=get_dx()](constreal&x){ // oppure la [&]
-constrealy=f(x);
-returny*dx;
+
+return curve(a, b, [&, dx = get_dx()](const real& x) {
+
+// oppure la [&]
+
+const real y = f(x);
+return y * dx;
 });
+
 }
 
-realintegral()const
+real integral() const
 {
-constunary_fun&F=primitive();
-returnF(b)-F(a);
+
+const unary_fun& F = primitive();
+return F(b) - F(a);
+
 }
 
-realoperator()(constreal&x)const
+real operator()(const real& x) const
 {
-returnf(x);
+
+return f(x);
+
 }
 
-classiterator
+class iterator
 {
 private:
-constcurve&c;
-realx;
+
+const curve& c;
+real x;
 
 public:
-iterator(constcurve&c_,constreal&x_):c(c_),x(x_){}
 
-pair<real,real>operator*()const
+iterator(const curve& c_, const real& x_) : c(c_), x(x_) {}
+
+pair<real, real> operator*() const
 {
-returnpair<real,real>(x,c.f(x));
+
+return pair<real, real>(x, c.f(x));
+
 }
 
-iterator&operator++() // il pre-incremento modifica sè stesso e non
+iterator& operator++()
+
+// il pre-incremento modifica sè stesso e non
+
 ritorna una copia
-{
-x+=c.get_dx();
-return*this;
+
+x += c.get_dx();
+return *this;
+ {
+
 }
 
-iteratoroperator++(int) // il post-incremento fa una copia, modifica sé
+iterator operator++(int) {
+
 stesso e ritorna la copia
-{
-autor(*this);
+
+auto r(*this);
 ++(*this);
-returnr;
+return r;
+
 }
 
-booloperator!=(constiterator&it)const
+// il post-incremento fa una copia, modifica sé
+
+bool operator!=(const iterator& it) const
 {
-returnfabs(x-it.x)>=c.get_dx(); // non si confrontano mai i
+
+return fabs(x - it.x) >= c.get_dx();
+
+// non si confrontano mai i
+
 float direttamente con l'operatore di uguaglianza o disuguaglianza
-}
-};
 
-iteratorbegin()const
-
-{
-returniterator(*this,a);
-}
-
-iteratorend()const
-{
-returniterator(*this,b+get_dx());
 }
 
 };
 
+iterator begin() const
 
-ostream&operator<<(ostream&os,constcurve&c)
 {
-os<<"dom = ["<<c.interval().first<<", "<<c.interval().second<<"] dx = " <<
-c.get_dx()<<": "<<endl;
-/*for (const pair<real, real>& p : c)
+
+}
+
+return iterator(*this, a);
+
+iterator end() const
 {
+
+return iterator(*this, b + get_dx());
+
+}
+
+};
+
+ostream& operator<<(ostream& os, const curve& c)
+{
+
+c.get_dx() << ": " << endl;
+
+os << "dom = [" << c.interval().first << ", " << c.interval().second << "] dx = " << /*for (const pair<real, real>& p : c)
+{
+
 const real& x = p.first, & y = p.second;
 os << "\tf(" << x << ") = " << y << endl;
+
 }*/
-for(curve::iteratorit=c.begin();it!=c.end();++it)
+for (curve::iterator it = c.begin(); it != c.end(); ++it)
 {
-constpair<real,real>&p=*it;
-constreal&x=p.first,&y=p.second;
-os<<"\tf("<<x<<") = "<<y<<endl;
+
+const pair<real, real>& p = *it;
+const real& x = p.first, & y = p.second;
+os << "\tf(" << x << ") = " << y << endl;
+
 }
-returnos<<endl;
+return os << endl;
+
 }
 
-intmain()
+int main()
 {
-curvef(-1.,1.,[](constreal&x){returnx*x;});
 
-cout<<f<<endl
-<<f.derivative()<<endl
-<<f.primitive()<<endl
-<<f.primitive().derivative()<<endl
-<<f.derivative().primitive()<<endl
+curve f(-1., 1., [](const real& x) { return x * x; });
+
+cout << f << endl
+
+<< f.derivative() << endl
+<< f.primitive() << endl
+<< f.primitive().derivative() << endl
+<< f.derivative().primitive() << endl
 ;
-return0;
+return 0;
+
 }
 ```
 
@@ -4272,421 +5103,566 @@ del type system, riusando il codice laddove possibile.
 **Soluzione** *(spostata dalla sezione 4 del PDF originale)*
 
 ```cpp
-
-// Questo sorgente contiene le soluzioni dell 'esame scritto di PO2 del 1/7/2022 per ciò che
-riguarda il quesito 2, ovvero l 'esercizio di C++.
+// Questo sorgente contiene le soluzioni dell'esame scritto di PO2 del 1/7/2022 per ciò che
+// riguarda il quesito 2, ovvero l'esercizio di C++.
 // Il quesito 1 riguardante Java è in un progetto IntelliJ a parte, non qui.
 // Il codice qui esposto è C++14.
 // ATTENZIONE: il codice qui fornito è ricco di dettagli e complessità, allo scopo di fornire
-materiale di studio. La versione richiesta all 'esame è molto più semplice.
+// materiale di studio. La versione richiesta all'esame è molto più semplice.
 
-#include<iostream>
-#include<iterator>
-#include<cstddef>
-#include<vector>
+#include <iostream>
+#include <iterator>
+#include <cstddef>
+#include <vector>
 
+using std::vector;
 
-usingstd::vector;
+#define EASY_ITERATOR 
+// degli iteratori
 
-#define EASY_ITERATOR // commentare questa macro per compilare la versione ottimizzata
-degli iteratori
-
-template<classT>
-classtree_node
+template <class T>
+class tree_node
 {
 public:
-Tdata;
-tree_node<T>*left,*right;
 
-staticboolare_equal(consttree_node<T>*a,consttree_node<T>*b)
+// commentare questa macro per compilare la versione ottimizzata
+
+T data;
+tree_node<T>* left, * right;
+
+static bool are_equal(const tree_node<T>* a, const tree_node<T>* b)
 {
-returna==b||(a!=nullptr&&b!=nullptr&&*a==*b);
+
+return a == b || (a != nullptr && b != nullptr && *a == *b);
+
 }
 
 public:
+
 // 2.c
 
-tree_node()=default;
-tree_node(consttree_node<T>&t)=default;
-tree_node<T>&operator=(consttree_node<T>&t)=default;
+tree_node() = default;
+tree_node(const tree_node<T>& t) = default;
+tree_node<T>& operator=(const tree_node<T>& t) = default;
 
 ~tree_node()
 {
-if(left!=nullptr)
+
+if (left != nullptr)
 {
-deleteleft;
-left=nullptr;
+
+delete left;
+left = nullptr;
+
 }
-if(right!=nullptr)
+if (right != nullptr)
 {
-deleteright;
-right=nullptr;
-}
+
+delete right;
+right = nullptr;
+
 }
 
-tree_node(constT&v,tree_node<T>*l,tree_node<T>*r):data(v),left(l),right(r)
+}
+
+tree_node(const T& v, tree_node<T>* l, tree_node<T>* r) : data(v), left(l), right(r)
 {
-#i f d e f E A S Y _ I T E R A T O R
+
+#
+
+#
+
+#
+
+ifdef EASY_ITERATOR
+
 prepopulate();
-#e l s e
-if(left!=nullptr)left->parent=this;
-if(right!=nullptr)right->parent=this;
-#e n d i f
+
+else
+
+if (left != nullptr) left->parent = this;
+if (right != nullptr) right->parent = this;
+
+endif
+
 }
 
 // 2.b
 
-booloperator==(consttree_node<T>&t)const
+bool operator==(const tree_node<T>& t) const
 {
-returndata==t.data&&are_equal(left,t.left)&&are_equal(right,t.right);
+
+return data == t.data && are_equal(left, t.left) && are_equal(right, t.right);
+
 }
 
 // 2.a
 
+using value_type = T;
 
-usingvalue_type=T;
+// implementazione facile degli iteratori, suggerita pubblicamente dal docente durante //
 
-
-// implementazione facile degli iteratori, suggerita pubblicamente dal docente durante
 l'appello del 13/9/22
-//
 
-#i f d e f E A S Y _ I T E R A T O R
+#
 
-usingconst_iterator=typenamevector<T>::const_iterator;
-usingiterator=typenamevector<T>::iterator;
+ifdef EASY_ITERATOR
+
+using const_iterator = typename vector<T>::const_iterator;
+using iterator = typename vector<T>::iterator;
 
 private:
-// per motivi di semplicità ogni nodo ha un campo di tipo vector che viene popolato al
-volo per essere iterator
-// si faccia attenzione ad un particolare: per poter ritornare begin() ed end() dello
-stesso vector, bisogna conservarlo come membro del nodo
-vector<T>children;
 
-voiddfs(vector<T>&v)
+volo per essere iterator
+
+// per motivi di semplicità ogni nodo ha un campo di tipo vector che viene popolato al // si faccia attenzione ad un particolare: per poter ritornare begin() ed end() dello vector<T> children;
+
+stesso vector, bisogna conservarlo come membro del nodo
+
+void dfs(vector<T>& v)
 {
+
 // perché non popoliamo direttamente il campo children? il motivo è molto
+  //
+
 sottile: ogni nodo ha un suo campo children, ma noi non vogliamo che ogni
 nodo popoli il proprio vector; noi vogliamo
 
-// che quando decidiamo di popolare il campo di children di un certo nodo,
-allora viene popolato il vector di QUEL nodo
-// ogni nodo quindi ha un suo campo children che viene popolato con i SUOI
-sottorami: tutto ciò è uno spreco di spazio, certo, però permette di fare
-iteratori a partire da QUALUNQUE nodo
+che quando decidiamo di popolare il campo di children di un certo nodo,
 
-// in maniera semplice e immutabile
+// allora viene popolato il vector di QUEL nodo
+// ogni nodo quindi ha un suo campo children che viene popolato con i SUOI
+
+// sottorami: tutto ciò è uno spreco di spazio, certo, però permette di fare
+// iteratori a partire da QUALUNQUE nodo
+
+in maniera semplice e immutabile
+ // add (nota bene: push_back non è disponibile in questo scope)
 v.push_back(data);
-if(left!=nullptr)left->dfs(v);
-if(right!=nullptr)right->dfs(v);
+if (left != nullptr) left->dfs(v);
+if (right != nullptr) right->dfs(v);
+
 }
 
 // questa viene chiamata dal costruttore: ogni nodo prepopola il proprio campo children
-voidprepopulate()
+void prepopulate()
 {
+
 dfs(children);
+
 }
 
 public:
 
-const_iteratorbegin()const
+const_iterator begin() const
 {
-returnchildren.begin();
+
+return children.begin();
+
 }
 
-const_iteratorend()const
+const_iterator end() const
 {
-returnchildren.end();
+
+return children.end();
+
 }
 
-iteratorbegin()
+iterator begin()
 {
-returnchildren.begin();
+
+return children.begin();
+
 }
 
-
-iteratorend()
+iterator end()
 {
-returnchildren.end();
-}
 
+return children.end();
+
+}
 
 // implementazione ottimizzata degli iteratori
 //
 
-#e l s e
+#
+
+else
 
 private:
-tree_node<T>*parent;
 
-statictree_node<T>*get_next_node(consttree_node<T>*n){
-if(n->left!=nullptr)
-returnn->left;
-elseif(n->right!=nullptr)
-returnn->right;
-else{
-while(n->parent!=nullptr){
-consttree_node<T>*last=n;
-n=n->parent;
-if(n->right!=nullptr&&n->right!=last)
-returnn->right;
+tree_node<T>* parent;
+
+static tree_node<T>* get_next_node(const tree_node<T>* n) {
+
+if (n->left != nullptr)
+return n->left;
+
+else if (n->right != nullptr)
+
+return n->right;
+
+else {
+
+while (n->parent != nullptr) {
+
+const tree_node<T>* last = n;
+n = n->parent;
+if (n->right != nullptr && n->right != last)
+
+return n->right;
+
 }
-returnnullptr;
+return nullptr;
+
 }
+
 }
 
 public:
+
 // iteratore non-const
-classmy_iterator
+class my_iterator
 {
-friendclassmy_const_iterator; // questo serve perché altrimenti
+
+friend class my_const_iterator;
+
+// questo serve perché altrimenti
+
 my_const_iterator non può accedere al campo current di my_iterator
 
 private:
-tree_node<T>*current;
+
+tree_node<T>* current;
 
 public:
-usingiterator_category=std::forward_iterator_tag; // questo member type
+
+using iterator_category = std::forward_iterator_tag; 
 indica che si tratta di un ForwardIterator, si veda la doc di STL per i
 dettagli
 
-usingdifference_type=std::ptrdiff_t;
-usingvalue_type=T;
-usingpointer=T*;
-usingreference=T&;
+// questo member type
+ using difference_type = std::ptrdiff_t;
+using value_type = T;
+using pointer = T*;
+using reference = T&;
 
-my_iterator()=default;
-my_iterator(constmy_iterator&i)=default;
-my_iterator&operator=(constmy_iterator&i)=default;
+my_iterator() = default;
+my_iterator(const my_iterator& i) = default;
+my_iterator& operator=(const my_iterator& i) = default;
 
-my_iterator(tree_node<T>*t):current(t){}
+my_iterator(tree_node<T>* t) : current(t) {}
 
-referenceoperator*(){returncurrent->data;}
+reference operator*() { return current->data; }
 
-pointeroperator->(){return&current->data;}
+pointer operator->() { return &current->data; }
 
-my_iterator&operator++()
+my_iterator& operator++()
 {
-current=get_next_node(current);
-return*this;
+
+current = get_next_node(current);
+return *this;
+
 }
 
-my_iteratoroperator++(int)
+my_iterator operator++(int)
 {
-my_iteratorr(*this);
-current=get_next_node();
-returnr;
+
+my_iterator r(*this);
+current = get_next_node();
+return r;
+
 }
 
-booloperator==(constmy_iterator&i)const{returncurrent==i.current;}
-booloperator!=(constmy_iterator&i)const{return!(*this==i);}
+bool operator==(const my_iterator& i) const { return current == i.current; }
+bool operator!=(const my_iterator& i) const { return !(*this == i); }
 
 };
 
 // interatore const
 // si noti come sono praticamente uguali a parte il fatto che gesticono un nodo const
-oppure no, con conseguente impatto in tutti i tipi di ritorno dei vari operatori
+
+// oppure no, con conseguente impatto in tutti i tipi di ritorno dei vari operatori
 // questa replicazione di codice sarebbe evitabile solamente tramite un complesso uso dei
-template, troppo complesso per questo corso
-// chi è interessato a sapere come evitare questa duplicazione di codice dovuta a const
+// template, troppo complesso per questo corso
+ // chi è interessato a sapere come evitare questa duplicazione di codice dovuta a const
+
 vs. non-const può approfondire qui:
 https://stackoverflow.com/questions/765148/how-to-remove-constness-of-const-iterator
-
-classmy_const_iterator
+ class my_const_iterator
 {
 private:
-consttree_node<T>*current;
+
+const tree_node<T>* current;
 
 public:
-usingiterator_category=std::forward_iterator_tag;
-usingdifference_type=std::ptrdiff_t;
-usingvalue_type=constT;
-usingpointer=constT*;
-usingreference=constT&;
 
-my_const_iterator()=default;
-my_const_iterator(constmy_const_iterator&i)=default;
-my_const_iterator&operator=(constmy_const_iterator&i)=default;
+using iterator_category = std::forward_iterator_tag;
+using difference_type = std::ptrdiff_t;
+using value_type = const T;
+using pointer = const T*;
+using reference = const T&;
+
+my_const_iterator() = default;
+my_const_iterator(const my_const_iterator& i) = default;
+my_const_iterator& operator=(const my_const_iterator& i) = default;
 
 // questo costruttore è molto interessante: permette di costruire un
-my_const_iterator dato un my_iterator: in altre parole possiamo convertire un
-iteratore non-const in uno const
+// my_const_iterator dato un my_iterator: in altre parole possiamo convertire un
+// iteratore non-const in uno const
+ // il motivo per cui è necessario è se chiamiamo begin() su un tree_node my_const_iterator(const my_iterator& i) : current(i.current) {}
 
-// il motivo per cui è necessario è se chiamiamo begin() su un tree_node
-non-const ma vogliamo un const_iterator perché lo leggiamo soltanto
-my_const_iterator(constmy_iterator&i):current(i.current){}
+// non-const ma vogliamo un const_iterator perché lo leggiamo soltanto
 
-my_const_iterator(consttree_node<T>*t):current(t){}
+my_const_iterator(const tree_node<T>* t) : current(t) {}
 
-referenceoperator*()const {returncurrent->data; }
-pointeroperator->()const{return&current->data; }
+reference operator*() const
+pointer operator->() const { return &current->data;
 
-my_const_iterator&operator++()
+{ return current->data;
+
+}
+
+}
+
+my_const_iterator& operator++()
 
 {
-current=get_next_node(current);
-return*this;
+
 }
 
-my_const_iteratoroperator++(int)
+current = get_next_node(current);
+return *this;
+
+my_const_iterator operator++(int)
 {
-my_const_iteratorr(*this);
-current=get_next_node();
-returnr;
+
+my_const_iterator r(*this);
+current = get_next_node();
+return r;
+
 }
 
-booloperator==(constmy_const_iterator&i)const{ returncurrent==
-i.current;}
-booloperator!=(constmy_const_iterator&i)const{ return!(*this==i);
+i.current; }
+
+bool operator==(const my_const_iterator& i) const { bool operator!=(const my_const_iterator& i) const { 
 }
+
+return current ==
+
+return !(*this == i);
 
 };
 
 // definiamo questi member type perché sono quelli che i Container STL solitamente
+
 definiscono
-usingconst_iterator=my_const_iterator; // rebinding della nested class
+ using const_iterator = my_const_iterator;
 my_const_iterator definita sopra
-usingiterator=my_iterator; // rebinding della nested
+ using iterator = my_iterator;
+
+// rebinding della nested class
+
+// rebinding della nested
+
 class my_iterator definita sopra
-usingvalue_type=T;
+ using value_type = T;
 
-const_iteratorbegin()const
+const_iterator begin() const
 {
-returnconst_iterator(this);
+
+return const_iterator(this);
+
 }
 
-const_iteratorend()const
+const_iterator end() const
 {
-returnconst_iterator(nullptr);
+
+return const_iterator(nullptr);
+
 }
 
-iteratorbegin()
+iterator begin()
 {
-returniterator(this);
+
+return iterator(this);
+
 }
 
-iteratorend()
+iterator end()
 {
-returniterator(nullptr);
+
+return iterator(nullptr);
+
 }
 
-#e n d i f
+endif
+
+#
 
 };
 
 // 2.c
 // pseudo-costruttori
 // invece di fare metodi statici facciamo funzioni templatizzate globali, così il template
+
 argument è inferito e diventano più comode da usare
 
-template<classT>
+template <class T>
 
-tree_node<T>*lr(constT&v,tree_node<T>*l,tree_node<T>*r)
+tree_node<T>* lr(const T& v, tree_node<T>* l, tree_node<T>* r)
 {
-returnnewtree_node<T>(v,l,r);
+
+return new tree_node<T>(v, l, r);
+
 }
 
-template<classT>
-tree_node<T>*l(constT&v,tree_node<T>*n)
+template <class T>
+tree_node<T>* l(const T& v, tree_node<T>* n)
 {
-returnnewtree_node<T>(v,n,nullptr);
+
+return new tree_node<T>(v, n, nullptr);
+
 }
 
-template<classT>
-tree_node<T>*r(constT&v,tree_node<T>*n)
+template <class T>
+tree_node<T>* r(const T& v, tree_node<T>* n)
 {
-returnnewtree_node<T>(v,nullptr,n);
+
+return new tree_node<T>(v, nullptr, n);
+
 }
 
-template<classT>
-tree_node<T>*v(constT&v)
+template <class T>
+tree_node<T>* v(const T& v)
 {
-returnnewtree_node<T>(v,nullptr,nullptr);
+
+return new tree_node<T>(v, nullptr, nullptr);
+
 }
 
 // 2.e
 
-template<classT>
-std::ostream&operator<<(std::ostream&os,consttree_node<T>&t)
+template <class T>
+std::ostream& operator<<(std::ostream& os, const tree_node<T>& t)
 {
-os<<t.data;
-if(t.left!=nullptr)os<<"("<<*t.left<<")";
-if(t.right!=nullptr)os<<"["<<*t.right<<"]";
-returnos;
+
+os << t.data;
+if (t.left != nullptr) os << "(" << *t.left << ")";
+if (t.right != nullptr) os << "[" << *t.right << "]";
+return os;
+
 }
 
-usingnamespacestd;
+using namespace std;
 
 // 2.d
 
-intmain()
+int main()
 {
-autot1=
-shared_ptr<tree_node<int>>( // usiamo gli shared_ptr per non
+
+auto t1 =
+
+shared_ptr<tree_node<int>>( 
 doverci ricordare di fare delete
-// con i pseudo-costruttori globali è comodissimo costruire un albero,
+
+// usiamo gli shared_ptr per non
+
+// con i pseudo-costruttori globali è comodissimo costruire un albero, lr(1,
+
 basta innestare le chiamate
-lr(1,
+
 lr(2,
+
+r(5,
+
 v(3),
 v(4)),
-r(5,
+
 lr(6,
+
 v(7),
 v(8)))));
 
-autot2=
+auto t2 =
+
 shared_ptr<tree_node<int>>(
+
 lr(1,
 
-r(5, // il sottoalbero
+r(5, 
 destro di t2 è uguale al sinistro di t1 e viceversa
+
+// il sottoalbero
+
 lr(6,
+
 v(7),
 v(8))),
+
 lr(2,
+
 v(3),
 v(4))));
 
 // test dell'operatore di stream (<<)
-cout<<"pretty printer: "<<endl
-<<"t1: "<<*t1<<endl // dereferenziamo per stampare perché il nostro
+cout << "pretty printer: " << endl
+
+<< "t1: " << *t1 << endl << "t2: " << *t2 << endl;
+
 operator<< non vuole un pointer ma un reference
-<<"t2: "<<*t2<<endl;
+
+// dereferenziamo per stampare perché il nostro
 
 // test dell'operatore di uguaglianza (==)
-cout<<"equality: "<<(*t1==*t2)<<", "<<(*t1->left==*t2->right)<<
-endl; // dereferenziamo gli operandi sinistro e destro del nostro operator==
+cout << "equality: " << (*t1 == *t2) << ", " << (*t1->left == *t2->right) << 
+// dereferenziamo gli operandi sinistro e destro del nostro operator==
+
+endl;
 perchè non accetta pointer ma reference
 
-
 // test dell'iteratore non-const
-cout<<"iterator: ";
-for(tree_node<int>::iteratorit=t1->begin();it!=t1->end();++it)
+cout << "iterator: ";
+for (tree_node<int>::iterator it = t1->begin(); it != t1->end(); ++it)
 {
-int&n=*it; // dereferenziando l'iteratore abbiamo accesso
+
+int& n = *it;
+
+// dereferenziando l'iteratore abbiamo accesso
+
 non-const al dato dentro il nodo
-n*=2; // il campo data in ogni nodo può quindi
+ n *= 2;
+
 essere modificato
-cout<<n<<"";
+ cout << n << " ";
+
+// il campo data in ogni nodo può quindi
+
 }
-cout<<endl<<"t1 modificato: "<<*t1<<endl; // ristampiamo t1 dopo le
+cout << endl << "t1 modificato: " << *t1 << endl;
+
+// ristampiamo t1 dopo le
+
 modifiche
 
 // test dell'iteratore const
-cout<<"const iterator: ";
-for(tree_node<int>::const_iteratorit=t1->begin();it!=t1->end();++it) //
-t1->begin() ritorna un iterator, che viene convertito in un const_iterator dal
-costruttore alla linea 142
+cout << "const iterator: ";
+for (tree_node<int>::const_iterator it = t1->begin(); it != t1->end(); ++it)
 
+//
+
+// t1->begin() ritorna un iterator, che viene convertito in un const_iterator dal
+// costruttore alla linea 142
 {
-constint&n=*it; // dereferenziando l'iteratore abbiamo accesso const
-al dato dentro il nodo, quindi non possiamo modificarlo ma solo leggerlo
-cout<<n<<"";
+
+// al dato dentro il nodo, quindi non possiamo modificarlo ma solo leggerlo
+
+// dereferenziando l'iteratore abbiamo accesso const
+
+const int& n = *it; cout << n << " ";
+
 }
-cout<<endl;
-
-
+cout << endl;
 
 }
 ```
@@ -4711,227 +5687,275 @@ gli operatori di incremento/decremento, l’**aritmetica dei puntatori** ed ovvi
 **Soluzione** *(spostata dalla sezione 4 del PDF originale)*
 
 ```cpp
-// Questo sorgente contiene le soluzioni dell 'esame scritto di PO2 del 1/7/2022 per ciò che
-riguarda il quesito 3, ovvero la domanda che coinvolge C++.
+// Questo sorgente contiene le soluzioni dell'esame scritto di PO2 del 1/7/2022 per ciò che
+// riguarda il quesito 3, ovvero la domanda che coinvolge C++.
+
 // I quesiti 1-2 riguardanti Java sono in un progetto IntelliJ a parte, non qui.
 // Il codice qui esposto è C++14 per qualche piccolo particolare, ma in gran parte è
-essenzialmente vanilla.
+// essenzialmente vanilla.
 
-#include<iostream>
+#include <iostream>
 
-#include<vector>
+#include <vector>
 
-template<classT>
-classsmart_ptr
+template <class T>
+class smart_ptr
 {
 private:
-T*pt;
-ptrdiff_toffset;
-boolis_array;
 
-usingcounter_t=unsignedshort;
+T* pt;
+ptrdiff_t offset;
+bool is_array;
 
-counter_t*cnt;
+using counter_t = unsigned short;
 
-voiddec()
+counter_t* cnt;
+
+void dec()
 {
-if(cnt!=nullptr&&--(*cnt)==0)
+
+if (cnt != nullptr && --(*cnt) == 0)
 {
-if(pt!=nullptr) // se non punta a nulla non c 'èn i e n t ed a
-liberare
+
+if (pt != nullptr)
+
+// se non punta a nulla non c'è niente da liberare
 {
-if(is_array)deletept;
-elsedelete[]pt;
+
+if (is_array) delete pt;
+else delete [] pt;
+
 }
-deletecnt;
-}
+delete cnt;
+
 }
 
-voidinc()
+}
+
+void inc()
 {
-if(cnt!=nullptr)++(*cnt);
+
+if (cnt != nullptr) ++(*cnt);
+
 }
 
 public:
-usingvalue_type=T;
 
-smart_ptr():pt(nullptr),offset(0),is_array(false),cnt(nullptr){}
+using value_type = T;
 
-explicitsmart_ptr(T*pt_,boolis_array_=false):pt(pt_),offset(0),
-is_array(is_array_),cnt(newcounter_t(1)){}
+smart_ptr() : pt(nullptr), offset(0), is_array(false), cnt(nullptr) {}
 
-smart_ptr(constsmart_ptr<T>&p):pt(p.pt),offset(p.offset),is_array(p.is_array),
+explicit smart_ptr(T* pt_, bool is_array_ = false) : pt(pt_), offset(0),
+    is_array(is_array_), cnt(new counter_t(1)) {}
+
+smart_ptr(const smart_ptr<T>& p) : pt(p.pt), offset(p.offset), is_array(p.is_array),
 cnt(p.cnt)
 {
+
 inc();
+
 }
 
 ~smart_ptr()
 {
+
 dec();
+
 }
 
-smart_ptr<T>&operator=(constsmart_ptr<T>&p)
+smart_ptr<T>& operator=(const smart_ptr<T>& p)
 {
-dec();
-pt=p.pt;
-cnt=p.cnt;
 
-offset=p.offset;
-is_array=p.is_array;
+dec();
+pt = p.pt;
+cnt = p.cnt;
+
+offset = p.offset;
+is_array = p.is_array;
 inc();
-return*this;
+return *this;
+
 }
 
+// sono implementati in funzione di questo
 // subscript
-// l'operatore di subscript è l 'unica implementazione reale; tutti gli altri operatori
-sono implementati in funzione di questo
-// questo approccio è poco error-prone perché concentra solamente qui il calcolo esatto
-dell'indirizzo usando l'offset
-// in altre parole, l 'operatore di subscript funge da API interna a basso livello; tutto
+// l'operatore di subscript è l'unica implementazione reale; tutti gli altri operatori // questo approccio è poco error-prone perché concentra solamente qui il calcolo esatto // in altre parole, l'operatore di subscript funge da API interna a basso livello; tutto const T& operator[](size_t i) const
+{
+
 il resto è costruito sopra di essa
-constT&operator[](size_ti)const
-{
-returnpt[offset+i];
+
+dell'indirizzo usando l'offset
+
+return pt[offset + i];
+
 }
-T&operator[](size_ti)
+T& operator[](size_t i)
 {
-// capita spesso che l 'implementazione const e l'implementazione non-const siano
-identiche
-// in questi casi è necessario duplicare il codice, che è una pratica inelegante
-ed error-prone
-// questo trucco sfrutta un giro di const cast per rimandare questa
-implementazione a quella const appena sopra, che è l 'unica che implementiamo
-davvero
 
-// ATTENZIONE: tutto questo NON è richiesto dal tema d 'esame, lo mostriamo
-solamente a scopo didattico per insegnare una tecnica avanzata di
-non-duplicazione del codice
+// capita spesso che l'implementazione const e l'implementazione non-const siano identiche
+ // in questi casi è necessario duplicare il codice, che è una pratica inelegante ed error-prone
+ // questo trucco sfrutta un giro di const cast per rimandare questa
+// implementazione a quella const appena sopra, che è l'unica che implementiamo
+// davvero
+ // ATTENZIONE: tutto questo NON è richiesto dal tema d'esame, lo mostriamo
+// // solamente a scopo didattico per insegnare una tecnica avanzata di
+// non-duplicazione del codice
+ return const_cast<T&>(const_cast<const smart_ptr<T>&>(*this).operator[](i));
 
-returnconst_cast<T&>(const_cast<constsmart_ptr<T>&>(*this).operator[](i));
 }
 
 // de-reference
-constT&operator*()const
+const T& operator*() const
 {
+
 // usa l'operatore di subscript
-returnpt[0];
+return pt[0];
+
 }
-T&operator*()
+T& operator*()
 {
-// stessa tecnica per non duplicare: chiamiamo la versione const di questo
-operatore definita qui sopra, che è l 'unica che implementiamo davvero
-returnconst_cast<T&>(const_cast<constsmart_ptr<T>&>(*this).operator*());
+
+// stessa tecnica per non duplicare: chiamiamo la versione const di questo operatore definita qui sopra
+ return const_cast<T&>(const_cast<const smart_ptr<T>&>(*this).operator*());
+
+// operatore definita qui sopra, che è l'unica che implementiamo davvero
+
 }
 
 // field access
-constT*operator->()const
+const T* operator->() const
 {
-// anche questa implementazione sfrutta altri operatori scritti sopra: in
-particolare usa de-reference che a sua volta usa il subscript, in questo modo
-non richiede manutenzione
 
-return&*(*this);
-// ^
-// si faccia attenzione a un particolare: solo l 'operatore * indicato dalla
-freccetta invoca l'overload definito da noi
-// il de-reference di this dentro le parentesi tonde e l 'operatore & più esterno
-invocano gli operatori nativi di C++, non i nostri overload
+// anche questa implementazione sfrutta altri operatori scritti sopra: in
+// particolare usa de-reference che a sua volta usa il subscript, in questo modo
+// non richiede manutenzione
+ return &*(*this);
+//
+// si faccia attenzione a un particolare: solo l'operatore * indicato dalla
+
+// freccetta invoca l'overload definito da noi
+ // il de-reference di this dentro le parentesi tonde e l'operatore & più esterno 
+// invocano gli operatori nativi di C++, non i nostri overload
 
 }
-T*operator->()
+T* operator->()
 {
-// altro uso della tecnica avanzata per non duplicare l 'implementazione non-const
-// cerchiamo di capirla: lo scopo è chiamare l 'implementazione const di questo
-operatore senza duplicare il codice
-// 1) trasformiamo *this (che in questo scope è di tipo smart_ptr<T>&) in un
-const smart_ptr<T>&
-// 2) ora che *this è castato a const, invochiamo l 'operatore o il metodo che ci
-interessa: la risoluzione dell'overload risolverà l'implementazione const,
-non farà una ricorsione!
 
-// 3) siccome stiamo invocando la versione const, il risultato è const: ma il
-nostro tipo di ritorno deve essere un T* non-const, pertanto bisogna
-const-castare per TOGLIERE il const
+// const smart_ptr<T>& - stesso trucco per non duplicare il codice
 
-returnconst_cast<T*>(const_cast<constsmart_ptr<T>&>(*this).operator->());
+// altro uso della tecnica avanzata per non duplicare l'implementazione non-const
+// cerchiamo di capirla: lo scopo è chiamare l'implementazione const di questo // 1) trasformiamo *this (che in questo scope è di tipo smart_ptr<T>&) in un // 2) ora che *this è castato a const, invochiamo l'operatore o il metodo che ci 
+// interessa: la risoluzione dell'overload risolverà l'implementazione const,
+// non farà una ricorsione!
+ // 3) siccome stiamo invocando la versione const, il risultato è const: ma il
+// nostro tipo di ritorno deve essere un T* non-const, pertanto bisogna const-castare per TOGLIERE il const
+ return const_cast<T*>(const_cast<const smart_ptr<T>&>(*this).operator->());
+
 }
 
 // plus
-smart_ptr<T>&operator+=(ptrdiff_toff)
+smart_ptr<T>& operator+=(ptrdiff_t off)
 {
-offset+=off;
-return*this;
+
+offset += off;
+return *this;
+
 }
-smart_ptr<T>operator+(ptrdiff_toff)const
+smart_ptr<T> operator+(ptrdiff_t off) const
 {
-// questa implementazione usa il copy-constructor e l 'operator+= definito qui
+
+// questa implementazione usa il copy-constructor e l'operator+= definito qui
+
 sopra
-returnsmart_ptr<T>(*this)+=off;
+ return smart_ptr<T>(*this) += off;
+
 }
 
 // minus
-smart_ptr<T>&operator-=(ptrdiff_toff)
+smart_ptr<T>& operator-=(ptrdiff_t off)
 {
-offset-=off; // analogo al +=
-return*this;
+
+offset -= off;
+return *this;
+
+// analogo al +=
+
 }
-smart_ptr<T>operator-(ptrdiff_toff)
+smart_ptr<T> operator-(ptrdiff_t off)
 {
-returnsmart_ptr<T>(*this)-=off;
+
+return smart_ptr<T>(*this) -= off;
+
 }
 
 // pre
-smart_ptr<T>&operator++()
+smart_ptr<T>& operator++()
 {
-// questa implementazione usa l 'operator+= e basta
-return*this+=1;
+
+// questa implementazione usa l'operator+= e basta
+return *this += 1;
+
 }
-smart_ptr<T>&operator--()
+smart_ptr<T>& operator--()
 {
-return*this-=1; // analogo al ++ ma usa il -=
+
+return *this -= 1;
+
+// analogo al ++ ma usa il -=
+
 }
 
 // post
-smart_ptr<T>operator++(int)
+smart_ptr<T> operator++(int)
 {
-smart_ptr<T>r(*this); // copia
 
-++(*this); // pre-incrementa this: usiamo il
-pre-incremento affinché questa implementazione dipenda totalmente
-dall'implementazione di operator++
+smart_ptr<T> r(*this);
 
-returnr; // ritorna la copia
+// copia
+
+// pre-incremento affinché questa implementazione dipenda totalmente
+// dall'implementazione di operator++
+
+// pre-incrementa this: usiamo il
+
+++(*this);  return r;
+
+// ritorna la copia
+
+// analogo a ++
+
 }
-smart_ptr<T>operator--(int)
+smart_ptr<T> operator--(int)
 {
-smart_ptr<T>r(*this);
---(*this); // analogo a ++
-returnr;
+
+smart_ptr<T> r(*this);
+--(*this);
+return r;
+
 }
 
 };
 
-usingstd::string;
+using std::string;
 
-intmain()
+int main()
 {
-int*a=newint[5];
-smart_ptr<int>a1(a,true),a2;
-a2=a1+10;
-a1-=3;
-a1=++a1-*a2--+a1[3];
 
-smart_ptr<double>b(newdouble[10],true);
-for(unsignedinti=0;i<10;++i)
+int* a = new int[5];
+smart_ptr<int> a1(a, true), a2;
+a2 = a1 + 10;
+a1 -= 3;
+a1 = ++a1 - *a2-- + a1[3];
+
+smart_ptr<double> b(new double[10], true);
+for (unsigned int i = 0; i < 10; ++i)
+
 b++;
 
-string*sp=newstring("ciao");
-smart_ptr<string>s1(sp),s2;
-s2=s1;
-size_ti=s2->find('a',0);
-
-
+string* sp = new string("ciao");
+smart_ptr<string> s1(sp), s2;
+s2 = s1;
+size_t i = s2->find('a', 0);
 
 }
 ```
