@@ -7,14 +7,61 @@ Ogni soluzione e' stata spostata sotto il rispettivo quesito, con una breve spie
 
 ## Indice
 
-1. [Sezione 1 - Tests](#sezione-1--tests)
+1. [Sezione 1 – Tests](#sezione-1--tests)
    - [1.1 Design Patterns](#11-design-patterns)
+     - [Domanda 1 — Esame 20/06/2018](#domanda-1--esame-20062018) — **Singleton**: istanza unica, metodo statico `get()`
+     - [Domanda 2 — Esame 20/06/2018](#domanda-2--esame-20062018) — **Factory**: costruttori e dynamic dispatching
    - [1.2 Riuso di codice e Type system di Java](#12-riuso-di-codice-e-type-system-di-java)
+     - [Domanda 1 — Esame 20/06/2018](#domanda-1--esame-20062018-1) — Ereditarietà multipla in Java, interfacce
+     - [Domanda 2 — Esame 24/05/2018](#domanda-2--esame-24052018) — Polimorfismo subtype vs generics, riuso del codice
+     - [Domanda 3 — Esame 24/05/2018](#domanda-3--esame-24052018) — Relazioni di subtyping, transitività
+     - [Domanda 4 — Esame 24/05/2018](#domanda-4--esame-24052018) — Ereditarietà vs polimorfismo subtype, dynamic dispatching
+     - [Domanda 5 — Esame 24/05/2018](#domanda-5--esame-24052018) — Overloading: risoluzione per tipo e numero di parametri
+     - [Domanda 6 — Esame 30/05/2019](#domanda-6--esame-30052019) — Override e co-varianza del tipo di ritorno
+     - [Domanda 7 — Esame 30/05/2019](#domanda-7--esame-30052019) — Wildcards PECS (`? super`, `? extends`), firma `map()`
+     - [Domanda 8 — Esame 30/05/2019](#domanda-8--esame-30052019) — Overloading valido e method reference `Rpg::normalizeAttack`
+     - [Domanda 9 — Esame 31/01/2020](#domanda-9--esame-31012020) — Co-varianza tipo di ritorno in interfaccia (`Polyhedron`)
+     - [Domanda 10 — Esame 04/09/2018](#domanda-10--esame-04092018) — Overloading impossibile con solo tipo di ritorno diverso
    - [1.3.1 Equals](#131-equals)
+     - [Domanda 1 — Esame](#domanda-1--esame) — Valutazione di espressioni `equals`/`equalsTo`, `null`, `NullPointerException`
    - [1.3.2 Compare](#132-compare)
+     - [Domanda 1 — Esame 20/06/2018](#domanda-1--esame-20062018-2) — Type erasure, `Comparable<T>`, sort con `Elf extends Comparable<Humanoid>`
+     - [Domanda 2 — Esame](#domanda-2--esame) — `Collections.max`, `Comparator<Person>`, lower bound wildcard
    - [1.3.3 Programmazione ibrida funzionale](#133-programmazione-ibrida-funzionale)
-2. [Sezione 2 - Esercizi](#sezione-2--esercizi-di-progettazione-e-implementazione)
-3. [Sezione 3 - Domande aperte](#sezione-3--domande-aperte)
+     - [Domanda 1 — Esame 31/01/2020](#domanda-1--esame-31012020) — Lambda `(x)->x.volume()` e instance method reference `Solid::volume`
+2. [Sezione 2 – Esercizi](#sezione-2--esercizi-di-progettazione-e-implementazione)
+   - [2.1 Java](#21-java)
+     - [2.1.1 Confronto di Collection](#211-confronto-di-collection) — `compareMany()`, confronto three-way, generics con vincolo `Comparable`
+     - [2.1.2 Thread Pool](#212-thread-pool) — interfaccia `Pool<T,R>`, `BlockingQueue`, `acquire`/`release`, auto-release con `finalize()`
+     - [2.1.3 Piano cartesiano](#213-piano-cartesiano) — `Point`, `Line`, `Polygon`, `Triangle`, `Rectangle`, `Square`, `max()` con `Comparator`
+     - [2.1.4 Funzioni di ordine superiore](#214-funzioni-di-ordine-superiore) — `mapIterator`, `forEach`, `Pair`, `applyFuns`, `asyncMapIterator`, thread e `Supplier`
+     - [2.1.5 Fattoriale con thread](#215-fattoriale-con-thread) — `FactorialThread`, `parallelFactorial()`, `map()` HOF, thread concorrenti
+     - [2.1.6 Iteratori asincroni](#216-iteratori-asincroni) — `asyncIterator`, classe `Future` come `Supplier<B>`, thread separati per elemento
+     - [2.1.7 Funzioni](#217-funzioni) — `FunSeq<X,Y>`, `Pair`, iteratore lazy su funzione matematica, parabola, lambda
+     - [2.1.8 Alberi binari di ricerca](#218-alberi-binari-di-ricerca) — `BST<T>`, `insertRec`, DFS in-order, `min()`/`max()`, `Comparator`
+     - [2.1.9 Alberi binari](#219-alberi-binari) — `TreeNode<T>`, DFS pre-ordine, `equals`, iteratore, pretty printer con `toString()`
+     - [2.1.10 SkippableArrayList](#2110-skippablearraylist) — `ArrayList`, interfacce `Predicate`/`Either`, iteratore con predicato, `onSuccess`/`onFailure`
+     - [2.1.11 Figure geometriche](#2111-figure-geometriche) — `fold`, `sumBy`, `compareBy`, `Surface`, `Polygon`, `Solid`, `Polyhedron`, `Sphere`, `Cylinder`, `Cube`
+     - [2.1.12 Artisti](#2112-artisti) — `Equatable<T>`, `Person<P>`, `Artist`, `Hair`, `equals`/`equalsTo`, `Collections.max`
+     - [2.1.13 Iteratori](#2113-iteratori) — `BiFunction`, `Pair`, `Triple`, `evalIterator`, wrapper di iteratori su coppie
+     - [2.1.14 Sequenza di Fibonacci](#2114-sequenza-di-fibonacci) — `FiboSequence`, iteratore con caching `HashMap`, for-each de-zuccherato, cache statica
+     - [2.1.15 Classe Random](#2115-classe-random) — Singleton wrapper di `Random`, `RandomIterator`, PRNG
+     - [2.1.16 FancyArrayList](#2116-fancyarraylist) — `ArrayList`, iteratore con step e trasformazione, `backwardIterator`, classe innestata `FancyIterator`
+     - [2.1.17 Minimo e massimo in una lista](#2117-minimo-e-massimo-in-una-lista) — `Pair<E,E>`, `findMinAndMax`, singola traversata, `Comparator`/`Comparable`
+     - [2.1.18 Hanna Barbera](#2118-hanna-barbera) — rifattorizzazione con `AbstractAnimal`, `Animal`, `Food`, peso dinamico
+   - [2.2 C++](#22-c)
+     - [2.2.1 Pair](#221-pair) — template `pair<A,B>`, copy constructor templatizzato, operatori `++`/`+=`/`==`
+     - [2.2.2 Matrici](#222-matrici) — `matrix<T>`, `iterator`/`const_iterator`, `operator()`, `vector<T>` flat storage
+     - [2.2.3 Sommatoria](#223-sommatoria) — template `sum`, vincoli impliciti su Container STL, `value_type`, `const_iterator`
+     - [2.2.4 Map](#224-map) — `map()` su iteratori e `vector`, `std::function<>`, lambda, C++03 vs C++11
+     - [2.2.5 Funzioni](#225-funzioni) — `fun_seq<X,Y>`, iterator interno, `std::pair<X,Y>`, lambda su parabola
+     - [2.2.6 Curve](#226-curve) — classe `curve`, `derivative()`, `primitive()`, `integral()`, iteratore su punti `pair<real,real>`
+     - [2.2.7 Alberi binari](#227-alberi-binari) — `tree_node<T>`, macro `EASY_ITERATOR`, `my_iterator`, `my_const_iterator`, DFS pre-ordine
+     - [2.2.8 Smart Pointer](#228-smart-pointer) — `smart_ptr<T>`, reference counting, RAII, de-reference, aritmetica puntatori
+3. [Sezione 3 – Domande aperte](#sezione-3--domande-aperte)
+   - [Domanda 1](#domanda-1) — Incapsulamento: setter vs campi pubblici, esempio con validazione
+   - [Domanda 2](#domanda-2) — Ereditarietà: sovrascrittura di metodo (override), condizioni e esempio pratico
+   - [Domanda 3](#domanda-3) — Espressioni Lambda: `ActionListener`, classe anonima vs espressione lambda
 
 ---
 
@@ -5168,22 +5215,16 @@ right = nullptr;
 tree_node(const T& v, tree_node<T>* l, tree_node<T>* r) : data(v), left(l), right(r)
 {
 
-#
-
-#
-
-#
-
-ifdef EASY_ITERATOR
+#ifdef EASY_ITERATOR
 
 prepopulate();
 
-else
+#else
 
 if (left != nullptr) left->parent = this;
 if (right != nullptr) right->parent = this;
 
-endif
+#endif
 
 }
 
@@ -5204,12 +5245,9 @@ using value_type = T;
 
 l'appello del 13/9/22
 
-#
-
-ifdef EASY_ITERATOR
+#ifdef EASY_ITERATOR
 
 using const_iterator = typename vector<T>::const_iterator;
-using iterator = typename vector<T>::iterator;
 
 private:
 
@@ -5285,9 +5323,7 @@ return children.end();
 // implementazione ottimizzata degli iteratori
 //
 
-#
-
-else
+#else
 
 private:
 
@@ -5496,9 +5532,7 @@ return iterator(nullptr);
 
 }
 
-endif
-
-#
+#endif
 
 };
 
