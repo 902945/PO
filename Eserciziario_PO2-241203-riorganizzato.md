@@ -750,14 +750,14 @@ super(List.of(p1,p2,p3));
 publicdoublearea(){
 Pointp1=points.get(0),p2=points.get(1);
 // versione facile con la base orizzontale (sufficiente per la valutazione
-dell'esame)
+// dell'esame)
 if(p1.x==p2.x){
 doublebase=newLine(p1,p2).length(),h=newLine(newPoint(p2.x,p1.y),
 p2).length();
 returnbase*h/2.;
 }
 // versione generale con la formula di Erone (non necessaria per la valutazione
-dell'esame)
+// dell'esame)
 else{
 Pointp3=points.get(2);
 doublep=perimeter()/2., // semiperimetro
@@ -821,11 +821,11 @@ return(int)(a.area()-b.area());
 }
 });
 // 3.b: il metodo max() ritorna sq2 perché la sottrazione nel confronto è invertita,
-quindi la ricerca del massimo in realtà restituisce il più piccolo anziché il più
-grande;
+// quindi la ricerca del massimo in realtà restituisce il più piccolo anziché il più
+// grande;
 
 // ed il quadrato con area minore è sq2, perché 0.01^2 = 0.0001 mentre 0.1^2 = 0.01,
-quindi sq2 è di fatto il più piccolo.
+// quindi sq2 è di fatto il più piccolo.
 
 // 3.c: l'area di r (cioè di sq2) è 0.01^2 = 0.0001 = 10^-4
 }
@@ -1603,7 +1603,7 @@ una implementazione che escluda il più possibile stati di invalidità grazie ad
 
 ```java
 // Questo sorgente contiene le soluzioni dell 'esame scritto di PO2 del 13/9/2022 per ciò che
-riguarda il quesito 1,
+// riguarda il quesito 1,
 // ovvero l'esercizio in Java.
 // Il quesito 2 riguardante C++ è in una Solution per Visual Studio a parte.
 
@@ -1682,7 +1682,7 @@ if(right!=null)right.parent=this;
 }
 
 // i seguenti pseudo-costruttori aiutano a costruire alberi in modo più succinto e
-controllato rispetto
+// controllato rispetto
 // all'innestamento dei costruttori
 
 // solo ramo sinistro
@@ -1724,7 +1724,7 @@ returnfalse;
 privatestaticbooleanareEqual(@NullableObjecta,@NullableObjectb){
 returna==b||(a!=null&&a.equals(b));
 //return Objects.equals(a, b); // alternativamente si può usare questo metodo
-del JDK
+// del JDK
 }
 
 // 1.e
@@ -1742,12 +1742,12 @@ String.format("[%s]",right):"");
 @Override
 publicIterator<T>iterator(){
 returniterator_easy();// stub ad una delle due implementazione; cambiare lo stub
-per testare l'altra
+// per testare l'altra
 }
 
 
 // questo è l'implementazione facile, suggerita pubblicamente dal docente in classe
-duranto l'appello del 13/9/22
+// duranto l'appello del 13/9/22
 privateIterator<T>iterator_easy(){
 Collection<T>r=newArrayList<>();
 dfs(r);
@@ -1851,7 +1851,7 @@ volta normalmente;
 ```java
 
 // Questo sorgente contiene le soluzioni dell 'esame scritto di PO2 del 1/7/2022 per ciò che
-riguarda i quesiti 1-2, ovvero le domande che coinvolgono Java.
+// riguarda i quesiti 1-2, ovvero le domande che coinvolgono Java.
 // Il quesito 3 riguardante C++ è in un progetto Visual Studio a parte, non qui.
 // Il codice qui esposto è Java 8+.
 
@@ -2142,7 +2142,7 @@ importjava.util.function.BiFunction;
 importjava.util.function.Function;
 
 // Questo sorgente contiene le soluzioni dell 'esame scritto di PO2 del 3/6/2022 per ciò che
-riguarda i quesiti 1-5, ovvero le domande che coinvolgono Java.
+// riguarda i quesiti 1-5, ovvero le domande che coinvolgono Java.
 // Il quesito 6 riguardante C++ è in una Solution per Visual Studio a parte, non qui.
 
 publicclassAppello_3_6_22{
@@ -2331,12 +2331,12 @@ publicstaticvoidmain(String[]args){
 {
 intfacet_cnt=1;
 // questo foreach non compila perché Cube è sottotipo di Iterable<Rectangle>, non di
-Iterable<Square>
+// Iterable<Square>
 // si badi che NON è possibile co-variare il tipo di ritorno del metodo iterator() di
-Cube in modo che si specializzi in Iterator<Square>
+// Cube in modo che si specializzi in Iterator<Square>
 
 // perché è sound co-variare il tipo più esterno di un tipo parametrico, ma non il
-type argument
+// type argument
 // for (Square sq : new Cube(10.)) {
 for(Rectanglesq:newCube(10.)){// così invece compilerebbe
 intside_cnt=1;
@@ -2646,7 +2646,7 @@ List<Boolean>bs=Arrays.asList(
 alice.equals(null), // false
 alice.equals(alice), // true
 //null.equals(david), // alcuni compilatori rifiutano null.metodo(), altri
-lo accettano ma a runtime viene lanciato NullPointerException
+// lo accettano ma a runtime viene lanciato NullPointerException
 alice.equals(david), // false
 alice.equalsTo(morgan), // false
 morgan.equals(morgan), // true
@@ -2856,9 +2856,9 @@ returnr;
 }
 
 // si lanci questo main e si osservi quanto velocemente la macchina produce 100 numeri di
-fibonacci:
+// fibonacci:
 // se non ci fosse la cache sarebbe drammaticamente più lento a causa delle continue
-ricorsioni
+// ricorsioni
 publicstaticvoidmain(String[]args){
 for(intn:newFiboSequence(100)){
 System.out.println(n);
@@ -2882,9 +2882,9 @@ publicstaticclassGlobalFiboSequenceimplementsIterable<Integer>{
 privatefinalintmax;
 privatefinalstaticMap<Integer,Integer>cache=newHashMap<>();// è tutto uguale a
 // FiboSequence
-eccetto per
+// eccetto per
 //la cache che è
-statica
+// statica
 
 publicGlobalFiboSequence(intmax){
 
@@ -2914,9 +2914,9 @@ if(x!=null)returnx;
 else{
 intr=fib(n-1)+fib(n-2);
 cache.put(n,r); // si commenti questo statement per disabilitare
-la cache
+// la cache
 // e vedere la differenza enorme di tempi di
-calcolo
+// calcolo
 returnr;
 }
 }
@@ -3611,10 +3611,10 @@ cout<<*it;// de-reference const
 
 ```cpp
 // Questo sorgente contiene le soluzioni dell 'esame scritto di PO2 del 3/6/2022 per ciò che
-riguarda il quesito 6, ovvero la domanda che coinvolge C++.
+// riguarda il quesito 6, ovvero la domanda che coinvolge C++.
 // I quesiti 1-5 riguardanti Java sono in un progetto IntelliJ a parte, non qui.
 // Il codice C++ qui esposto è standard C++ vanilla (a.k.a. C++03), sebbene il progetto VS sia
-configurato con il compilatore di default C++14
+// configurato con il compilatore di default C++14
 
 #include<iostream>
 #include<vector>
@@ -3724,10 +3724,10 @@ avere un certo **member type** e quest’ultimo deve supportare il tal metodo, o
 
 ```cpp
 // Questo sorgente contiene le soluzioni dell 'esame scritto di PO2 del 5/9/2023 per ciò che
-riguarda il quesito 2, ovvero la domanda che coinvolge C++.
+// riguarda il quesito 2, ovvero la domanda che coinvolge C++.
 // I quesiti 1-5 riguardanti Java sono in un sorgente Java a parte, non qui.
 // Il codice C++ qui esposto è standard C++ vanilla (a.k.a. C++03), sebbene il progetto VS sia
-configurato con il compilatore di default C++14
+// configurato con il compilatore di default C++14
 
 #include<iostream>
 #include<vector>
@@ -3806,7 +3806,7 @@ iii. Come sarebbe stato possibile invocare le **map()** compatibili con **C++03*
 
 ```cpp
 // Scritto PO2 10 9 24.cpp : This file contains the 'main'function. Program execution begins and
-ends there.
+// ends there.
 //
 
 #include<iostream>
@@ -3850,11 +3850,11 @@ returnr;
 
 // 2.c.ii
 // no, non possono coesistere, perché sarebbero overload ambigui. Infatti ho dovuto metterli
-in un sotto-namespace a parte per far compilare questo sorgente.
+// in un sotto-namespace a parte per far compilare questo sorgente.
 
 // 2.c.iii
 // bisogna usare i function object, cioè oggetti per cui è definito l 'operatore di
-applicazione operator()
+// applicazione operator()
 // esempio:
 classmyfunction{
 public:
@@ -4274,11 +4274,11 @@ del type system, riusando il codice laddove possibile.
 ```cpp
 
 // Questo sorgente contiene le soluzioni dell 'esame scritto di PO2 del 1/7/2022 per ciò che
-riguarda il quesito 2, ovvero l 'esercizio di C++.
+// riguarda il quesito 2, ovvero l 'esercizio di C++.
 // Il quesito 1 riguardante Java è in un progetto IntelliJ a parte, non qui.
 // Il codice qui esposto è C++14.
 // ATTENZIONE: il codice qui fornito è ricco di dettagli e complessità, allo scopo di fornire
-materiale di studio. La versione richiesta all 'esame è molto più semplice.
+// materiale di studio. La versione richiesta all 'esame è molto più semplice.
 
 #include<iostream>
 #include<iterator>
@@ -4348,7 +4348,7 @@ usingvalue_type=T;
 
 
 // implementazione facile degli iteratori, suggerita pubblicamente dal docente durante
-l'appello del 13/9/22
+// l'appello del 13/9/22
 //
 
 #i f d e f E A S Y _ I T E R A T O R
@@ -4358,22 +4358,22 @@ usingiterator=typenamevector<T>::iterator;
 
 private:
 // per motivi di semplicità ogni nodo ha un campo di tipo vector che viene popolato al
-volo per essere iterator
+// volo per essere iterator
 // si faccia attenzione ad un particolare: per poter ritornare begin() ed end() dello
-stesso vector, bisogna conservarlo come membro del nodo
+// stesso vector, bisogna conservarlo come membro del nodo
 vector<T>children;
 
 voiddfs(vector<T>&v)
 {
 // perché non popoliamo direttamente il campo children? il motivo è molto
-sottile: ogni nodo ha un suo campo children, ma noi non vogliamo che ogni
-nodo popoli il proprio vector; noi vogliamo
+// sottile: ogni nodo ha un suo campo children, ma noi non vogliamo che ogni
+// nodo popoli il proprio vector; noi vogliamo
 
 // che quando decidiamo di popolare il campo di children di un certo nodo,
-allora viene popolato il vector di QUEL nodo
+// allora viene popolato il vector di QUEL nodo
 // ogni nodo quindi ha un suo campo children che viene popolato con i SUOI
-sottorami: tutto ciò è uno spreco di spazio, certo, però permette di fare
-iteratori a partire da QUALUNQUE nodo
+// sottorami: tutto ciò è uno spreco di spazio, certo, però permette di fare
+// iteratori a partire da QUALUNQUE nodo
 
 // in maniera semplice e immutabile
 v.push_back(data);
@@ -4485,12 +4485,12 @@ booloperator!=(constmy_iterator&i)const{return!(*this==i);}
 
 // interatore const
 // si noti come sono praticamente uguali a parte il fatto che gesticono un nodo const
-oppure no, con conseguente impatto in tutti i tipi di ritorno dei vari operatori
+// oppure no, con conseguente impatto in tutti i tipi di ritorno dei vari operatori
 // questa replicazione di codice sarebbe evitabile solamente tramite un complesso uso dei
-template, troppo complesso per questo corso
+// template, troppo complesso per questo corso
 // chi è interessato a sapere come evitare questa duplicazione di codice dovuta a const
-vs. non-const può approfondire qui:
-https://stackoverflow.com/questions/765148/how-to-remove-constness-of-const-iterator
+// vs. non-const può approfondire qui:
+// https://stackoverflow.com/questions/765148/how-to-remove-constness-of-const-iterator
 
 classmy_const_iterator
 {
@@ -4509,11 +4509,11 @@ my_const_iterator(constmy_const_iterator&i)=default;
 my_const_iterator&operator=(constmy_const_iterator&i)=default;
 
 // questo costruttore è molto interessante: permette di costruire un
-my_const_iterator dato un my_iterator: in altre parole possiamo convertire un
-iteratore non-const in uno const
+// my_const_iterator dato un my_iterator: in altre parole possiamo convertire un
+// iteratore non-const in uno const
 
 // il motivo per cui è necessario è se chiamiamo begin() su un tree_node
-non-const ma vogliamo un const_iterator perché lo leggiamo soltanto
+// non-const ma vogliamo un const_iterator perché lo leggiamo soltanto
 my_const_iterator(constmy_iterator&i):current(i.current){}
 
 my_const_iterator(consttree_node<T>*t):current(t){}
@@ -4543,11 +4543,11 @@ booloperator!=(constmy_const_iterator&i)const{ return!(*this==i);
 };
 
 // definiamo questi member type perché sono quelli che i Container STL solitamente
-definiscono
+// definiscono
 usingconst_iterator=my_const_iterator; // rebinding della nested class
-my_const_iterator definita sopra
+// my_const_iterator definita sopra
 usingiterator=my_iterator; // rebinding della nested
-class my_iterator definita sopra
+// class my_iterator definita sopra
 usingvalue_type=T;
 
 const_iteratorbegin()const
@@ -4577,7 +4577,7 @@ returniterator(nullptr);
 // 2.c
 // pseudo-costruttori
 // invece di fare metodi statici facciamo funzioni templatizzate globali, così il template
-argument è inferito e diventano più comode da usare
+// argument è inferito e diventano più comode da usare
 
 template<classT>
 
@@ -4623,9 +4623,9 @@ intmain()
 {
 autot1=
 shared_ptr<tree_node<int>>( // usiamo gli shared_ptr per non
-doverci ricordare di fare delete
+// doverci ricordare di fare delete
 // con i pseudo-costruttori globali è comodissimo costruire un albero,
-basta innestare le chiamate
+// basta innestare le chiamate
 lr(1,
 lr(2,
 v(3),
@@ -4640,7 +4640,7 @@ shared_ptr<tree_node<int>>(
 lr(1,
 
 r(5, // il sottoalbero
-destro di t2 è uguale al sinistro di t1 e viceversa
+// destro di t2 è uguale al sinistro di t1 e viceversa
 lr(6,
 v(7),
 v(8))),
@@ -4651,13 +4651,13 @@ v(4))));
 // test dell'operatore di stream (<<)
 cout<<"pretty printer: "<<endl
 <<"t1: "<<*t1<<endl // dereferenziamo per stampare perché il nostro
-operator<< non vuole un pointer ma un reference
+// operator<< non vuole un pointer ma un reference
 <<"t2: "<<*t2<<endl;
 
 // test dell'operatore di uguaglianza (==)
 cout<<"equality: "<<(*t1==*t2)<<", "<<(*t1->left==*t2->right)<<
 endl; // dereferenziamo gli operandi sinistro e destro del nostro operator==
-perchè non accetta pointer ma reference
+// perchè non accetta pointer ma reference
 
 
 // test dell'iteratore non-const
@@ -4665,23 +4665,23 @@ cout<<"iterator: ";
 for(tree_node<int>::iteratorit=t1->begin();it!=t1->end();++it)
 {
 int&n=*it; // dereferenziando l'iteratore abbiamo accesso
-non-const al dato dentro il nodo
+// non-const al dato dentro il nodo
 n*=2; // il campo data in ogni nodo può quindi
-essere modificato
+// essere modificato
 cout<<n<<"";
 }
 cout<<endl<<"t1 modificato: "<<*t1<<endl; // ristampiamo t1 dopo le
-modifiche
+// modifiche
 
 // test dell'iteratore const
 cout<<"const iterator: ";
 for(tree_node<int>::const_iteratorit=t1->begin();it!=t1->end();++it) //
-t1->begin() ritorna un iterator, che viene convertito in un const_iterator dal
-costruttore alla linea 142
+// t1->begin() ritorna un iterator, che viene convertito in un const_iterator dal
+// costruttore alla linea 142
 
 {
 constint&n=*it; // dereferenziando l'iteratore abbiamo accesso const
-al dato dentro il nodo, quindi non possiamo modificarlo ma solo leggerlo
+// al dato dentro il nodo, quindi non possiamo modificarlo ma solo leggerlo
 cout<<n<<"";
 }
 cout<<endl;
@@ -4712,10 +4712,10 @@ gli operatori di incremento/decremento, l’**aritmetica dei puntatori** ed ovvi
 
 ```cpp
 // Questo sorgente contiene le soluzioni dell 'esame scritto di PO2 del 1/7/2022 per ciò che
-riguarda il quesito 3, ovvero la domanda che coinvolge C++.
+// riguarda il quesito 3, ovvero la domanda che coinvolge C++.
 // I quesiti 1-2 riguardanti Java sono in un progetto IntelliJ a parte, non qui.
 // Il codice qui esposto è C++14 per qualche piccolo particolare, ma in gran parte è
-essenzialmente vanilla.
+// essenzialmente vanilla.
 
 #include<iostream>
 
@@ -4785,11 +4785,11 @@ return*this;
 
 // subscript
 // l'operatore di subscript è l 'unica implementazione reale; tutti gli altri operatori
-sono implementati in funzione di questo
+// sono implementati in funzione di questo
 // questo approccio è poco error-prone perché concentra solamente qui il calcolo esatto
-dell'indirizzo usando l'offset
+// dell'indirizzo usando l'offset
 // in altre parole, l 'operatore di subscript funge da API interna a basso livello; tutto
-il resto è costruito sopra di essa
+// il resto è costruito sopra di essa
 constT&operator[](size_ti)const
 {
 returnpt[offset+i];
@@ -4797,16 +4797,16 @@ returnpt[offset+i];
 T&operator[](size_ti)
 {
 // capita spesso che l 'implementazione const e l'implementazione non-const siano
-identiche
+// identiche
 // in questi casi è necessario duplicare il codice, che è una pratica inelegante
-ed error-prone
+// ed error-prone
 // questo trucco sfrutta un giro di const cast per rimandare questa
-implementazione a quella const appena sopra, che è l 'unica che implementiamo
-davvero
+// implementazione a quella const appena sopra, che è l 'unica che implementiamo
+// davvero
 
 // ATTENZIONE: tutto questo NON è richiesto dal tema d 'esame, lo mostriamo
-solamente a scopo didattico per insegnare una tecnica avanzata di
-non-duplicazione del codice
+// solamente a scopo didattico per insegnare una tecnica avanzata di
+// non-duplicazione del codice
 
 returnconst_cast<T&>(const_cast<constsmart_ptr<T>&>(*this).operator[](i));
 }
@@ -4820,7 +4820,7 @@ returnpt[0];
 T&operator*()
 {
 // stessa tecnica per non duplicare: chiamiamo la versione const di questo
-operatore definita qui sopra, che è l 'unica che implementiamo davvero
+// operatore definita qui sopra, che è l 'unica che implementiamo davvero
 returnconst_cast<T&>(const_cast<constsmart_ptr<T>&>(*this).operator*());
 }
 
@@ -4828,31 +4828,31 @@ returnconst_cast<T&>(const_cast<constsmart_ptr<T>&>(*this).operator*());
 constT*operator->()const
 {
 // anche questa implementazione sfrutta altri operatori scritti sopra: in
-particolare usa de-reference che a sua volta usa il subscript, in questo modo
-non richiede manutenzione
+// particolare usa de-reference che a sua volta usa il subscript, in questo modo
+// non richiede manutenzione
 
 return&*(*this);
 // ^
 // si faccia attenzione a un particolare: solo l 'operatore * indicato dalla
-freccetta invoca l'overload definito da noi
+// freccetta invoca l'overload definito da noi
 // il de-reference di this dentro le parentesi tonde e l 'operatore & più esterno
-invocano gli operatori nativi di C++, non i nostri overload
+// invocano gli operatori nativi di C++, non i nostri overload
 
 }
 T*operator->()
 {
 // altro uso della tecnica avanzata per non duplicare l 'implementazione non-const
 // cerchiamo di capirla: lo scopo è chiamare l 'implementazione const di questo
-operatore senza duplicare il codice
+// operatore senza duplicare il codice
 // 1) trasformiamo *this (che in questo scope è di tipo smart_ptr<T>&) in un
-const smart_ptr<T>&
+// const smart_ptr<T>&
 // 2) ora che *this è castato a const, invochiamo l 'operatore o il metodo che ci
-interessa: la risoluzione dell'overload risolverà l'implementazione const,
-non farà una ricorsione!
+// interessa: la risoluzione dell'overload risolverà l'implementazione const,
+// non farà una ricorsione!
 
 // 3) siccome stiamo invocando la versione const, il risultato è const: ma il
-nostro tipo di ritorno deve essere un T* non-const, pertanto bisogna
-const-castare per TOGLIERE il const
+// nostro tipo di ritorno deve essere un T* non-const, pertanto bisogna
+// const-castare per TOGLIERE il const
 
 returnconst_cast<T*>(const_cast<constsmart_ptr<T>&>(*this).operator->());
 }
@@ -4866,7 +4866,7 @@ return*this;
 smart_ptr<T>operator+(ptrdiff_toff)const
 {
 // questa implementazione usa il copy-constructor e l 'operator+= definito qui
-sopra
+// sopra
 returnsmart_ptr<T>(*this)+=off;
 }
 
@@ -4898,8 +4898,8 @@ smart_ptr<T>operator++(int)
 smart_ptr<T>r(*this); // copia
 
 ++(*this); // pre-incrementa this: usiamo il
-pre-incremento affinché questa implementazione dipenda totalmente
-dall'implementazione di operator++
+// pre-incremento affinché questa implementazione dipenda totalmente
+// dall'implementazione di operator++
 
 returnr; // ritorna la copia
 }
