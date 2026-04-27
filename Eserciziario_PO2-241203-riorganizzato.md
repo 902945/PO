@@ -722,11 +722,7 @@ public Iterator<Line> lineIterator() {
 return new Iterator<>() {
 
 private final Iterator<Point> it = points.iterator();
-private Point last = it.next();
-
-// ci sono sempre almeno 3 punti, non può
-
-fallire questa next()
+private Point last = it.next(); // ci sono sempre almeno 3 punti, non può fallire questa next()
 
 @Override
 public boolean hasNext() {
@@ -790,8 +786,7 @@ return base * h / 2.;
 
 }
 // versione generale con la formula di Erone (non necessaria per la valutazione
-
-dell'esame)
+// dell'esame)
 
 else {
 
@@ -857,10 +852,8 @@ super(p1, new Point(p1.x + side, p1.y + side));
 static <T> T max(Collection<T> l, Comparator<? super T> cmp) {
 
 assert l.size() > 1;
-T max = l.iterator().next();
+T max = l.iterator().next(); // prendo il primo elemento
 for (T x : l) {
-
-// prendo il primo elemento
 
 if (cmp.compare(x, max) > 0) max = x;
 
@@ -886,7 +879,6 @@ return (int) (a.area() - b.area());
 
 });
 // 3.b: il metodo max() ritorna sq2 perché la sottrazione nel confronto è invertita,
-
 // quindi la ricerca del massimo in realtà restituisce il più piccolo anziché il più
 // grande;
 //
