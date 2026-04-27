@@ -2150,12 +2150,8 @@ public static class SkippableArrayList<E> extends ArrayList<E> {
 
 public Iterator<E> iterator(Predicate<E> p, Either<E> f) {
 
-final Iterator<E> it = super.iterator();
+final Iterator<E> it = super.iterator(); // può anche essere un campo privato della anonymous class
 return new Iterator<E>() {
-
-// della anonymous class
-
-// può anche essere un campo privato
 
 @Override
 public boolean hasNext() {
