@@ -2773,20 +2773,11 @@ return r.volume();
 }));
 
 Collections.sort(polys, (x, y) -> Double.compare(sumBy(x, Square::perimiter),
-
-// non compila
-
-}
+        sumBy(y, Rectangle::perimiter)));    // non compila
 
 }
 
-sumBy(y, Rectangle::perimiter)));
-
-//
-
-//
-
-//
+}
 
 }
 ```
