@@ -598,10 +598,10 @@ perimetro del poligono iterando sui segmenti che lo compongono.
 (a) Si implementi una sottoclasse di **Polygon** di nome **Triangle** che rappresenta triangoli qualunque.
 
 ```java
-publicclassTriangleextendsPolygon{
-publicTriangle(Pointp1,Pointp2,Pointp3){/* da implementare */ }
-@Override
-publicdoublearea(){/* da implementare */ }
+public class Triangle extends Polygon {
+    public Triangle(Point p1, Point p2, Point p3) { /* da implementare */ }
+    @Override
+    public double area() { /* da implementare */ }
 }
 ```
 
@@ -615,10 +615,10 @@ costrutto **assert**.
 (c) Si implementi una sottoclasse di **Polygon** di nome **Rectangle** che rappresenta rettangoli.
 
 ```java
-publicclassRectangleextendsPolygon{
-publicRectangle(Pointp1,Pointp3){/* da implementare */ }
-@Override
-publicdoublearea(){/* da implementare */ }
+public class Rectangle extends Polygon {
+    public Rectangle(Point p1, Point p3) { /* da implementare */ }
+    @Override
+    public double area() { /* da implementare */ }
 }
 ```
 
@@ -629,8 +629,8 @@ area()in modo che calcoli l’area del rettangolo.
 (d) Si implementi una sottoclasse di **Rectangle** di nome **Square** che rappresenta quadrati.
 
 ```java
-publicstaticclassSquareextendsRectangle{
-publicSquare(Pointp1,doubleside){/* da implementare */ }
+public static class Square extends Rectangle {
+    public Square(Point p1, double side) { /* da implementare */ }
 }
 ```
 
@@ -663,171 +663,238 @@ gli elementi della collection di input.
 **Soluzione** *(spostata dalla sezione 4 del PDF originale)*
 
 ```java
-importjava.util.*;
+import java.util.*;
 
-publicclassEs{
+public class Es {
 
 // 1.a
-publicstaticclassPoint{
-publicfinaldoublex,y;
+public static class Point {
 
-publicPoint(doublex,doubley){
-this.x=x;
-this.y=y;
+public final double x, y;
+
+public Point(double x, double y) {
+
+this.x = x;
+this.y = y;
+
 }
 
 }
 
 // 1.b
-publicstaticclassLine{
-privatefinalPointp1,p2;
+public static class Line {
 
-publicLine(Pointp1,Pointp2){
-this.p1=p1;
-this.p2=p2;
+private final Point p1, p2;
+
+public Line(Point p1, Point p2) {
+
+this.p1 = p1;
+this.p2 = p2;
+
 }
 
-publicdoublelength(){
-returnMath.sqrt(Math.pow(p1.x-p2.x,2.)+Math.pow(p1.y-p2.y,2.));
+public double length() {
+
+return Math.sqrt(Math.pow(p1.x - p2.x, 2.) + Math.pow(p1.y - p2.y, 2.));
+
 }
+
 }
 
 // 1.c
-publicabstractstaticclassPolygon{
-protectedfinalList<Point>points;
+public abstract static class Polygon {
 
-protectedPolygon(List<Point>points){
-assertpoints.size()>=3;// 1.c.i: RISPOSTA: il motivo per cui è necessario questo
-assert è che non è possibile vincolare la lunghezza di una lista con il type
-system: i tipi non esprimono valori numerici statici
+protected final List<Point> points;
 
-this.points=points;
+protected Polygon(List<Point> points) {
+
+assert points.size() >= 3; // 1.c.i: RISPOSTA: il motivo per cui è necessario questo
+// assert è che non è possibile vincolare la lunghezza di una lista con il type
+// system: i tipi non esprimono valori numerici statici
+
+this.points = points;
+
 }
 
 // 1.c.ii
-publicIterator<Line>lineIterator(){
-returnnewIterator<>(){
-privatefinalIterator<Point>it=points.iterator();
-privatePointlast=it.next(); // ci sono sempre almeno 3 punti, non può
+public Iterator<Line> lineIterator() {
+
+return new Iterator<>() {
+
+private final Iterator<Point> it = points.iterator();
+private Point last = it.next();
+
+// ci sono sempre almeno 3 punti, non può
+
 fallire questa next()
 
 @Override
-publicbooleanhasNext(){
-returnit.hasNext();
+public boolean hasNext() {
+
+return it.hasNext();
+
 }
 
 @Override
-publicLinenext(){
-Pointp=it.next();
-Liner=newLine(last,p);
-last=p;
-returnr;
+public Line next() {
+
+Point p = it.next();
+Line r = new Line(last, p);
+last = p;
+return r;
+
 }
+
 };
+
 }
 
 // 1.c.iii
-publicdoubleperimeter(){
-Iterator<Line>lineIt=lineIterator();
-doubler=0.;
-while(lineIt.hasNext()){
-r+=lineIt.next().length();
+public double perimeter() {
+
+Iterator<Line> lineIt = lineIterator();
+double r = 0.;
+while (lineIt.hasNext()) {
+
+r += lineIt.next().length();
+
 }
-returnr;
+return r;
 
 }
 
-publicabstractdoublearea();
+public abstract double area();
+
 }
 
 // 2.a
-publicstaticclassTriangleextendsPolygon{
-publicTriangle(Pointp1,Pointp2,Pointp3){
-super(List.of(p1,p2,p3));
+public static class Triangle extends Polygon {
+
+public Triangle(Point p1, Point p2, Point p3) {
+
+super(List.of(p1, p2, p3));
+
 }
 
 @Override
-publicdoublearea(){
-Pointp1=points.get(0),p2=points.get(1);
+public double area() {
+
+Point p1 = points.get(0), p2 = points.get(1);
 // versione facile con la base orizzontale (sufficiente per la valutazione
 // dell'esame)
-if(p1.x==p2.x){
-doublebase=newLine(p1,p2).length(),h=newLine(newPoint(p2.x,p1.y),
+if (p1.x == p2.x) {
+
+double base = new Line(p1, p2).length(), h = new Line(new Point(p2.x, p1.y),
 p2).length();
-returnbase*h/2.;
+return base * h / 2.;
+
 }
 // versione generale con la formula di Erone (non necessaria per la valutazione
-// dell'esame)
-else{
-Pointp3=points.get(2);
-doublep=perimeter()/2., // semiperimetro
-a=newLine(p1,p2).length(),
-b=newLine(p2,p3).length(),
-c=newLine(p3,p1).length();
-returnMath.sqrt(p*(p-a)*(p-b)*(p-c));
+
+dell'esame)
+
+else {
+
+Point p3 = points.get(2);
+double p = perimeter() / 2.,
+
+// semiperimetro
+
+a = new Line(p1, p2).length(),
+b = new Line(p2, p3).length(),
+c = new Line(p3, p1).length();
+
+return Math.sqrt(p * (p - a) * (p - b) * (p - c));
+
 }
+
 }
 
 }
 
 // 2.b
-publicstaticclassRightTriangleextendsTriangle{
-publicRightTriangle(Pointp1,doubleb,doubleh){
-super(p1,newPoint(p1.x+b,p1.y),newPoint(p1.x,p1.y+h));
+public static class RightTriangle extends Triangle {
+
+public RightTriangle(Point p1, double b, double h) {
+
+super(p1, new Point(p1.x + b, p1.y), new Point(p1.x, p1.y + h));
+
 }
+
 }
 
 // 2.c
-publicstaticclassRectangleextendsPolygon{
-publicRectangle(Pointp1,Pointp3){
-super(List.of(p1,newPoint(p1.x,p3.y),p3,newPoint(p3.x,p1.y)));
+public static class Rectangle extends Polygon {
+public Rectangle(Point p1, Point p3) {
+
+super(List.of(p1, new Point(p1.x, p3.y), p3, new Point(p3.x, p1.y)));
+
 }
 
 @Override
-publicdoublearea(){
-Pointp1=points.get(0),p2=points.get(1),p4=points.get(3);
-Lineb=newLine(p1,p4),h=newLine(p1,p2);
-returnb.length()*h.length();
+public double area() {
+
+Point p1 = points.get(0), p2 = points.get(1), p4 = points.get(3);
+Line b = new Line(p1, p4), h = new Line(p1, p2);
+return b.length() * h.length();
+
 }
+
 }
 
 // 2.d
 
-publicstaticclassSquareextendsRectangle{
-publicSquare(Pointp1,doubleside){
-super(p1,newPoint(p1.x+side,p1.y+side));
+public static class Square extends Rectangle {
+public Square(Point p1, double side) {
+
+super(p1, new Point(p1.x + side, p1.y + side));
+
 }
 
 }
 
 // 3.a
-static<T>Tmax(Collection<T>l,Comparator<?superT>cmp){
-assertl.size()>1;
-Tmax=l.iterator().next(); // prendo il primo elemento
-for(Tx:l){
-if(cmp.compare(x,max)>0)max=x;
+static <T> T max(Collection<T> l, Comparator<? super T> cmp) {
+
+assert l.size() > 1;
+T max = l.iterator().next();
+for (T x : l) {
+
+// prendo il primo elemento
+
+if (cmp.compare(x, max) > 0) max = x;
+
 }
-returnmax;
+return max;
+
 }
 
-publicstaticvoidmain(String[]args){
-Squaresq1=newSquare(newPoint(10.,-4.),0.1),
-sq2=newSquare(newPoint(1.,20.),0.01);
-Collection<Square>squares=List.of(sq1,sq2);
-Rectangler=max(squares,newComparator<Polygon>(){
+public static void main(String[] args) {
+
+Square sq1 = new Square(new Point(10., -4.), 0.1),
+
+sq2 = new Square(new Point(1., 20.), 0.01);
+
+Collection<Square> squares = List.of(sq1, sq2);
+Rectangle r = max(squares, new Comparator<Polygon>() {
+
 @Override
-publicintcompare(Polygona,Polygonb){
-return(int)(a.area()-b.area());
+public int compare(Polygon a, Polygon b) {
+return (int) (a.area() - b.area());
+
 }
+
 });
 // 3.b: il metodo max() ritorna sq2 perché la sottrazione nel confronto è invertita,
+
 // quindi la ricerca del massimo in realtà restituisce il più piccolo anziché il più
 // grande;
-
+//
 // ed il quadrato con area minore è sq2, perché 0.01^2 = 0.0001 mentre 0.1^2 = 0.01,
 // quindi sq2 è di fatto il più piccolo.
 
 // 3.c: l'area di r (cioè di sq2) è 0.01^2 = 0.0001 = 10^-4
+
 }
 
 }
@@ -909,93 +976,131 @@ computazioni dei thread.
 **Soluzione** *(spostata dalla sezione 4 del PDF originale)*
 
 ```java
-importjava.util.ArrayList;
-importjava.util.Iterator;
-importjava.util.List;
-importjava.util.function.Consumer;
-importjava.util.function.Function;
-importjava.util.function.Supplier;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
-publicclassEs1{
+public class Es1 {
 
-publicstatic<A,B>Iterator<B>mapIterator(Iterator<A>it,Function<A,B>f){
-returnnewIterator<>(){
+public static <A, B> Iterator<B> mapIterator(Iterator<A> it, Function<A, B> f) {
+
+return new Iterator<>() {
+
 @Override
-publicbooleanhasNext(){
-returnit.hasNext();
+public boolean hasNext() {
+
+return it.hasNext();
+
 }
 
 @Override
-publicBnext(){
+public B next() {
 
-returnf.apply(it.next());
+return f.apply(it.next());
+
 }
+
 };
+
 }
 
-publicstatic<T>voidforEach(Iterable<T>it,Consumer<T>f){
-for(Tx:it)
+public static <T> void forEach(Iterable<T> it, Consumer<T> f) {
+
+for (T x : it)
+
 f.accept(x);
+
 }
 
-publicstaticclassPair<X,Y>{
-publicfinalXfst;
-publicfinalYsnd;
-publicPair(Xx,Yy){
-fst=x;
-snd=y;
-}
+public static class Pair<X, Y> {
+
+public final X fst;
+public final Y snd;
+public Pair(X x, Y y) {
+
+fst = x;
+snd = y;
+
 }
 
-publicstaticvoidmain1(String[]args){
-List<Pair<Function<String,Integer>,String>>l=newArrayList<>();
-Iterator<Integer>it=mapIterator(l.iterator(),(p)->p.fst.apply(p.snd));
 }
 
-publicstatic<A,B>Iterator<B>applyFuns(Iterable<Pair<Function<A,B>,A>>l){
-returnmapIterator(l.iterator(),(p)->p.fst.apply(p.snd));
+public static void main1(String[] args) {
+
+List<Pair<Function<String, Integer>, String>> l = new ArrayList<>();
+Iterator<Integer> it = mapIterator(l.iterator(), (p) -> p.fst.apply(p.snd));
+
 }
 
-publicstaticvoidmain2(String[]args){
-List<Pair<Consumer<Integer>,Integer>>l=newArrayList<>();
-forEach(l,(p)->p.fst.accept(p.snd));
+public static <A, B> Iterator<B> applyFuns(Iterable<Pair<Function<A, B>, A>> l) {
+
+return mapIterator(l.iterator(), (p) -> p.fst.apply(p.snd));
+
 }
 
-publicstatic<A>voidacceptFuns(Iterable<Pair<Consumer<A>,A>>l){
-forEach(l,(p)->p.fst.accept(p.snd));
+public static void main2(String[] args) {
+
+List<Pair<Consumer<Integer>, Integer>> l = new ArrayList<>();
+forEach(l, (p) -> p.fst.accept(p.snd));
+
 }
 
-publicstatic<A,B>Iterator<Supplier<B>>asyncMapIterator(Iterator<A>it,Function<A,B>
-f){
-returnnewIterator<>(){
+public static <A> void acceptFuns(Iterable<Pair<Consumer<A>, A>> l) {
+
+forEach(l, (p) -> p.fst.accept(p.snd));
+
+}
+
+public static <A, B> Iterator<Supplier<B>> asyncMapIterator(Iterator<A> it, Function<A, B>
+
+f) {
+return new Iterator<>() {
+
 @Override
-publicbooleanhasNext(){
-returnit.hasNext();
+public boolean hasNext() {
+
+return it.hasNext();
+
 }
 
 @Override
-publicSupplier<B>next(){
-finalAx=it.next();
-finalB[]r=(B[])newObject[1];
-Threadt=newThread(()->{r[0]=f.apply(x);});
+public Supplier<B> next() {
+
+final A x = it.next();
+final B[] r = (B[]) new Object[1];
+Thread t = new Thread(() -> { r[0] = f.apply(x); });
 t.start();
-return()->{
-try{
+return () -> {
+try {
+
 t.join();
-}catch(InterruptedExceptione){
-thrownewRuntimeException(e);
+
+} catch (InterruptedException e) {
+throw new RuntimeException(e);
+
 }
 
-returnr[0];
+return r[0];
+
 };
-}
-};
+
 }
 
-publicstatic<T>voidasyncForEach(Iterable<T>it,Consumer<T>f){
-for(Tx:it)
-newThread(()->f.accept(x)).start();
+};
+
 }
+
+public static <T> void asyncForEach(Iterable<T> it, Consumer<T> f) {
+
+for (T x : it)
+
+new Thread(() -> f.accept(x)).start();
+
+}
+
 }
 ```
 
@@ -1049,79 +1154,106 @@ ii. Si reimplementi **parallelFactorial()** tramite una singola invocazione dell
 **Soluzione** *(spostata dalla sezione 4 del PDF originale)*
 
 ```java
-importjava.util.ArrayList;
-importjava.util.Collection;
-importjava.util.List;
-importjava.util.function.Function;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.function.Function;
 
-publicclassEs1{
+public class Es1 {
 
 // 1.a
-publicstaticclassFactorialThreadextendsThread{
-privatefinalintn;
-privatelongres;
+public static class FactorialThread extends Thread {
 
-publicFactorialThread(intn){
-this.n=n;
+private final int n;
+private long res;
+
+public FactorialThread(int n) {
+
+this.n = n;
+
 }
 
 @Override
-publicvoidrun(){
-res=fact(n);
+public void run() {
+
+res = fact(n);
+
 }
 
-publiclonggetResult(){
-try{
+public long getResult() {
+
+try {
+
 join();
-}catch(InterruptedExceptione){
-thrownewRuntimeException(e);
+
+} catch (InterruptedException e) {
+throw new RuntimeException(e);
+
 }
-returnres;
+return res;
+
 }
 
-publicintgetN(){
-returnn;
+public int getN() {
+
+return n;
+
 }
 
-privatestaticlongfact(intn){
-if(n<=1)return1;
-returnn*fact(n-1);
+private static long fact(int n) {
+
+if (n <= 1) return 1;
+return n * fact(n - 1);
+
 }
 
 }
 
 // 1.b + 1.c
-publicstaticList<FactorialThread>parallelFactorial(Iterable<Integer>c){
-List<FactorialThread>r=newArrayList<>();
+public static List<FactorialThread> parallelFactorial(Iterable<Integer> c) {
 
-for(intn:c){
-FactorialThreadt=newFactorialThread(n);
+List<FactorialThread> r = new ArrayList<>();
+
+for (int n : c) {
+
+FactorialThread t = new FactorialThread(n);
 t.start();
 r.add(t);
+
 }
-returnr;
+return r;
+
 }
 
 // 1.d
-publicstaticvoidmain(String[]args){
-for(FactorialThreadt:parallelFactorial(List.of(0,1,2,3,11,12,23,35))) //
-chiamare anche parallelFactorial2() per provarla
-System.out.printf("fact(%d) = %d\n",t.getN(),t.getResult());
+public static void main(String[] args) {
+
+for (FactorialThread t : parallelFactorial(List.of(0, 1, 2, 3, 11, 12, 23, 35))) // chiamare anche parallelFactorial2() per provarla
+System.out.printf("fact(%d) = %d\n", t.getN(), t.getResult());
+
 }
 
 // 1.e.i
-publicstatic<A,B>List<B>map(Iterable<A>i,Function<A,B>f){
-List<B>r=newArrayList<>();
-for(Aa:i)
+public static <A, B> List<B> map(Iterable<A> i, Function<A, B> f) {
+
+List<B> r = new ArrayList<>();
+for (A a : i)
+
 r.add(f.apply(a));
-returnr;
+
+return r;
+
 }
 
 // 1.e.ii
-publicstaticCollection<FactorialThread>parallelFactorial2(Collection<Integer>c){
-returnmap(c,(n)->{FactorialThreadt=newFactorialThread(n);t.start();returnt;
+public static Collection<FactorialThread> parallelFactorial2(Collection<Integer> c) {
+
+return map(c, (n) -> { FactorialThread t = new FactorialThread(n); t.start(); return t;
+
 });
+
 }
+
 }
 ```
 
@@ -1169,65 +1301,88 @@ all’esercizio precedente per scorrere l’argomento iterabile e ordinare in ma
 **Soluzione** *(spostata dalla sezione 4 del PDF originale)*
 
 ```java
-importorg.jetbrains.annotations.NotNull;
-importorg.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-importjava.util.Collections;
-importjava.util.Iterator;
-importjava.util.List;
-importjava.util.function.Function;
-importjava.util.function.Supplier;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
-publicclassMain{
+public class Main {
 
 // 1.a
-publicstatic<A,B>Iterator<Supplier<B>>asyncIterator(Iterator<A>it,Function<A,B>f){
-returnnewIterator<>(){
+public static <A, B> Iterator<Supplier<B>> asyncIterator(Iterator<A> it, Function<A, B> f) {
+
+return new Iterator<>() {
+
 @Override
-publicbooleanhasNext(){
-returnit.hasNext();
+public boolean hasNext() {
+
+return it.hasNext();
+
 }
 
-privateclassFutureimplementsSupplier<B>{
+private class Future implements Supplier<B> {
+
 @Nullable
-privateBr;
+private B r;
 @NotNull
-privatefinalThreadt;
+private final Thread t;
 
-publicFuture(Supplier<B>f){
+public Future(Supplier<B> f) {
 
-t=newThread(()->{r=f.get();});
+t = new Thread(() -> { r = f.get(); });
 t.start();
+
 }
 
 @Override
 @NotNull
-publicBget(){
-try{
+public B get() {
+
+try {
+
 t.join();
-}catch(InterruptedExceptione){
-thrownewRuntimeException(e);
+
+} catch (InterruptedException e) {
+throw new RuntimeException(e);
+
 }
-returnr;
+return r;
+
 }
+
 }
 
 @Override
-publicSupplier<B>next(){
-Aa=it.next();
-returnnewFuture(()->f.apply(a));
+public Supplier<B> next() {
+
+A a = it.next();
+return new Future(() -> f.apply(a));
+
 }
+
 };
+
 }
 
 // 1.b
-static<TextendsComparable<?superT>>voidsortLists(Iterable<List<T>>c){
-Iterator<Supplier<List<T>>>it=asyncIterator(c.iterator(),(l)->{
-Collections.sort(l);returnl;});
-while(it.hasNext()){
-Supplier<List<T>>f=it.next();
-System.out.println(f.get()); // questo non è davvero necessario, ma
+static <T extends Comparable<? super T>> void sortLists(Iterable<List<T>> c) {
+Iterator<Supplier<List<T>>> it = asyncIterator(c.iterator(), (l) -> {
+
+Collections.sort(l); return l; });
+
+while (it.hasNext()) {
+
+Supplier<List<T>> f = it.next();
+System.out.println(f.get());
+
+// questo non è davvero necessario, ma
+
 }
+
 }
 
 }
@@ -1251,20 +1406,20 @@ Gli iteratori asincroni separano la produzione (thread interno) dal consumo (thr
 funzione **X→Y** in un determinato intervallo del dominio **X**.
 
 ```java
-publicclassFunSeq<XextendsNumber&Comparable<?superX>,YextendsNumber>
-implementsIterable<Pair<X,Y>>{
+public class FunSeq<X extends Number & Comparable<? super X>, Y extends Number>
+        implements Iterable<Pair<X, Y>> {
 
-privatefinalXa,b;
-privatefinalFunction<?superX,?extendsY>f;
-privatefinalFunction<X,X>inc;
+    private final X a, b;
+    private final Function<? super X, ? extends Y> f;
+    private final Function<X, X> inc;
 
-publicFunSeq(Xa,Xb,Function<?superX,?extendsY>f,Function<X,X>inc){
-this.a=a;
-this.b=b;
-this.f=f;
-this.inc=inc;
-}
-/* da finire di implementare */
+    public FunSeq(X a, X b, Function<? super X, ? extends Y> f, Function<X, X> inc) {
+        this.a = a;
+        this.b = b;
+        this.f = f;
+        this.inc = inc;
+    }
+    /* da finire di implementare */
 }
 ```
 
@@ -1287,84 +1442,107 @@ R↔Z, ovvero con ordinate di tipo **int**.
 **Soluzione** *(spostata dalla sezione 4 del PDF originale)*
 
 ```java
-importjava.util.Iterator;
-importjava.util.function.Function;
+import java.util.Iterator;
+import java.util.function.Function;
 
-publicclassEs1{
+public class Es1 {
 
 // 1.a
-publicstaticclassPair<A,B>{
-publicfinalAfst;
-publicfinalBsnd;
+public static class Pair<A, B> {
 
-publicPair(Aa,Bb){
-fst=a;
-snd=b;
+public final A fst;
+public final B snd;
+
+public Pair(A a, B b) {
+
+fst = a;
+snd = b;
+
 }
+
 }
 
-publicstaticclassFunSeq<XextendsNumber&Comparable<?superX>,YextendsNumber>
-implementsIterable<Pair<X,Y>>{
+public static class FunSeq<X extends Number & Comparable<? super X>, Y extends Number>
 
-privatefinalXa,b;
+implements Iterable<Pair<X, Y>> {
 
-privatefinalFunction<?superX,?extendsY>f;
-privatefinalFunction<X,X>inc;
+private final X a, b;
 
-publicFunSeq(Xa,Xb,Function<?superX,?extendsY>f,Function<X,X>inc){
-this.a=a;
-this.b=b;
-this.f=f;
-this.inc=inc;
+private final Function<? super X, ? extends Y> f;
+private final Function<X, X> inc;
+
+public FunSeq(X a, X b, Function<? super X, ? extends Y> f, Function<X, X> inc) {
+
+this.a = a;
+this.b = b;
+this.f = f;
+this.inc = inc;
+
 }
 
 // 1.b
 @Override
-publicIterator<Pair<X,Y>>iterator(){
-returnnewIterator<>(){
-privateXx=a;
+public Iterator<Pair<X, Y>> iterator() {
+
+return new Iterator<>() {
+private X x = a;
 @Override
-publicbooleanhasNext(){
-returnx.compareTo(b)<=0;
+public boolean hasNext() {
+
+return x.compareTo(b) <= 0;
+
 }
 
 @Override
-publicPair<X,Y>next(){
-Pair<X,Y>r=newPair<>(x,f.apply(x));
-x=inc.apply(x);
-returnr;
+public Pair<X, Y> next() {
+
+Pair<X, Y> r = new Pair<>(x, f.apply(x));
+x = inc.apply(x);
+return r;
+
 }
+
 };
+
 }
+
 }
 
 // 1.c
-publicstaticvoidtest1(){
-for(Pair<Double,Double>p:newFunSeq<>(-2.,2.,(x)->x*x-2*x+1,(x)->x+
-0.1)){
-finaldoublex=p.fst,y=p.snd;
-System.out.printf("f(%g) = %g\n",x,y);
+public static void test1() {
+
+for (Pair<Double, Double> p : new FunSeq<>(-2., 2., (x) -> x * x - 2 * x + 1, (x) -> x +
+
+0.1)) {
+final double x = p.fst, y = p.snd;
+System.out.printf("f(%g) = %g\n", x, y);
+
 }
+
 }
 
 // 1.d
-publicstaticvoidtest2(){
-for(Pair<Double,Integer>p:newFunSeq<>(-2.,2.,(x)->(int)(x*x-2*x+1),
-(x)->x+0.1)){
-finaldoublex=p.fst;
-finalinty=p.snd;
-System.out.printf("f(%g) = %d\n",x,y);
-}
+public static void test2() {
+
+for (Pair<Double, Integer> p : new FunSeq<>(-2., 2., (x) -> (int) (x * x - 2 * x + 1),
+
+(x) -> x + 0.1)) {
+final double x = p.fst;
+final int y = p.snd;
+System.out.printf("f(%g) = %d\n", x, y);
+
 }
 
+}
 
-publicstaticvoidmain(String[]args){
+public static void main(String[] args) {
+
 test1();
 test2();
-}
+
 }
 
-
+}
 ```
 
 **Spiegazione rapida del ragionamento**
