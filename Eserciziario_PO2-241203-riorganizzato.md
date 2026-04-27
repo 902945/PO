@@ -1568,38 +1568,38 @@ così che l’albero sia sempre in uno stato valido.
 Segue l’implementazione da completare della classe **BST**.
 
 ```java
-publicclassBST<T>implementsIterable<T>{
-protectedfinalComparator<?superT>cmp;
-protectedNoderoot;
+public class BST<T> implements Iterable<T> {
+    protected final Comparator<? super T> cmp;
+    protected Node root;
 
-protectedclassNode{
-protectedfinalTdata;
-protectedNodeleft,right;
+    protected class Node {
+        protected final T data;
+        protected Node left, right;
 
-protectedNode(Tdata,Nodeleft,Noderight){
-this.data=data;
-this.left=left;
-this.right=right;
-}
-}
+        protected Node(T data, Node left, Node right) {
+            this.data = data;
+            this.left = left;
+            this.right = right;
+        }
+    }
 
-publicBST(Comparator<?superT>cmp){
-this.cmp=cmp;
-}
+    public BST(Comparator<? super T> cmp) {
+        this.cmp = cmp;
+    }
 
-publicvoidinsert(Tx){
-root=insertRec(root,x);
-}
+    public void insert(T x) {
+        root = insertRec(root, x);
+    }
 
-protectedNodeinsertRec(Noden,Tx){/* da implementare */ }
+    protected Node insertRec(Node n, T x) { /* da implementare */ }
 
-protectedvoiddfsInOrder(Noden,Collection<T>out){/* da implementare */ }
+    protected void dfsInOrder(Node n, Collection<T> out) { /* da implementare */ }
 
-@Override
-publicIterator<T>iterator(){/* da implementare */ }
+    @Override
+    public Iterator<T> iterator() { /* da implementare */ }
 
-publicTmin(){/* da implementare */ }
-publicTmax(){/* da implementare */ }
+    public T min() { /* da implementare */ }
+    public T max() { /* da implementare */ }
 }
 ```
 
@@ -1611,124 +1611,163 @@ del nodo **n**.
 **Soluzione** *(spostata dalla sezione 4 del PDF originale)*
 
 ```java
-importorg.jetbrains.annotations.NotNull;
-importorg.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-importjava.util.*;
-importjava.util.function.Function;
-importjava.util.function.Supplier;
+import java.util.*;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
-publicclassEs1{
+public class Es1 {
 
 // NOTA: la classe è statica solamente perché è nested per praticità
-publicstaticclassBST<T>implementsIterable<T>{
-@NotNull
-protectedfinalComparator<?superT>cmp;
-@Nullable
-protectedNoderoot;
+public static class BST<T> implements Iterable<T> {
 
-publicBST(@NotNullComparator<?superT>cmp){
-this.cmp=cmp;
+@NotNull
+protected final Comparator<? super T> cmp;
+@Nullable
+protected Node root;
+
+public BST(@NotNull Comparator<? super T> cmp) {
+
+this.cmp = cmp;
+
 }
 
-publicvoidinsert(@NotNullTx){
-root=insertRec(root,x);
+public void insert(@NotNull T x) {
+root = insertRec(root, x);
+
 }
 
 // 1.a
 @NotNull
-protectedNodeinsertRec(@NullableNoden,@NotNullTx){
-if(n==null)
-returnnewNode(x);
-intr=cmp.compare(x,n.data);
-if(r<0)
-n.left=insertRec(n.left,x);
-elseif(r>0)
-n.right=insertRec(n.right,x);
-returnn;
+protected Node insertRec(@Nullable Node n, @NotNull T x) {
+
+if (n == null)
+
+return new Node(x);
+
+int r = cmp.compare(x, n.data);
+if (r < 0)
+
+n.left = insertRec(n.left, x);
+
+else if (r > 0)
+
+n.right = insertRec(n.right, x);
+
+return n;
+
 }
 
 // 1.b.i
-protectedvoiddfsInOrder(@NullableNoden,@NotNullCollection<T>out){
-if(n!=null){
-dfsInOrder(n.left,out);
+protected void dfsInOrder(@Nullable Node n, @NotNull Collection<T> out) {
+
+if (n != null) {
+
+dfsInOrder(n.left, out);
 out.add(n.data);
-dfsInOrder(n.right,out);
+dfsInOrder(n.right, out);
+
 }
+
 }
 
 // 1.b.ii
 @NotNull
 @Override
-publicIterator<T>iterator(){
-Collection<T>c=newArrayList<>();
-dfsInOrder(root,c);
-returnc.iterator();
+public Iterator<T> iterator() {
+
+Collection<T> c = new ArrayList<>();
+dfsInOrder(root, c);
+return c.iterator();
+
 }
 
 // 1.c
 
 @Nullable
-publicTmin(){
-if(root==null)returnnull;
-Noden=root;
-while(n.left!=null)n=n.left;
-returnn.data;
+public T min() {
+
+if (root == null) return null;
+Node n = root;
+while(n.left != null) n = n.left;
+return n.data;
+
 }
 
 @Nullable
-publicTmax(){
-if(root==null)returnnull;
-Noden=root;
-while(n.right!=null)n=n.right;
-returnn.data;
+public T max() {
+
+if (root == null) return null;
+Node n = root;
+while(n.right != null) n = n.right;
+return n.data;
+
 }
 
+protected class Node {
 
-protectedclassNode{
 @NotNull
-privatefinalTdata;
+private final T data;
 @Nullable
-protectedNodeleft,right;
+protected Node left, right;
 
-protectedNode(@NotNullTdata,@NullableNodeleft,@NullableNoderight){
-this.data=data;
-this.left=left;
-this.right=right;
+protected Node(@NotNull T data, @Nullable Node left, @Nullable Node right) {
+
+this.data = data;
+this.left = left;
+this.right = right;
+
 }
 
-protectedNode(@NotNullTdata){
-this(data,null,null);
+protected Node(@NotNull T data) {
+
+this(data, null, null);
+
 }
+
 }
 
 @Override
 @NotNull
-publicStringtoString(){
-StringBuildersb=newStringBuilder();
-for(Tx:this){
+public String toString() {
+
+StringBuilder sb = new StringBuilder();
+for (T x : this) {
+
 sb.append(x);
-sb.append("");
+sb.append(" ");
+
 }
-returnsb.toString();
+return sb.toString();
+
 }
+
 }
 
 // 1.d
-publicstaticclassBST2<TextendsComparable<?superT>>extendsBST<T>{
-publicBST2(){
+public static class BST2<T extends Comparable<? super T>> extends BST<T> {
+
+public BST2() {
+
 super(Comparable::compareTo);
-}
+
 }
 
-publicstaticvoidmain(String[]args){
-BST<Integer>t=newBST2<>();
-Randomrnd=newRandom();
-for(inti=0;i<20;++i)
+}
+
+public static void main(String[] args) {
+
+BST<Integer> t = new BST2<>();
+Random rnd = new Random();
+for (int i = 0; i < 20; ++i)
 
 t.insert(rnd.nextInt(100));
+
 System.out.println(t);
-System.out.printf("min = %d\nmax = %d\n" ,t.min(),t.max());
+System.out.printf("min = %d\nmax = %d\n", t.min(), t.max());
+
 }
 
 }
@@ -1772,201 +1811,264 @@ una implementazione che escluda il più possibile stati di invalidità grazie ad
 **Soluzione** *(spostata dalla sezione 4 del PDF originale)*
 
 ```java
-// Questo sorgente contiene le soluzioni dell 'esame scritto di PO2 del 13/9/2022 per ciò che
+// Questo sorgente contiene le soluzioni dell'esame scritto di PO2 del 13/9/2022 per ciò che
 // riguarda il quesito 1,
 // ovvero l'esercizio in Java.
 // Il quesito 2 riguardante C++ è in una Solution per Visual Studio a parte.
 
-importorg.jetbrains.annotations.NotNull;
-importorg.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-importjava.util.ArrayList;
-importjava.util.Collection;
-importjava.util.Iterator;
-importjava.util.concurrent.BlockingQueue;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.concurrent.BlockingQueue;
 
-publicclassEs1{
+public class Es1 {
 
 // 1.d
 
-publicstaticvoidmain(String[]args){
-TreeNode<Integer>t1=
+public static void main(String[] args) {
+
+TreeNode<Integer> t1 =
 TreeNode.lr(1,
+
 TreeNode.lr(2,
+
 TreeNode.v(3),
 TreeNode.v(4)),
+
 TreeNode.r(5,
+
 TreeNode.lr(6,
+
 TreeNode.v(7),
 TreeNode.v(8))));
 
-TreeNode<Integer>t2=
+TreeNode<Integer> t2 =
 TreeNode.lr(1,
+
 TreeNode.r(5,
+
 TreeNode.lr(6,
+
 TreeNode.v(7),
 TreeNode.v(8))),
+
 TreeNode.lr(2,
+
 TreeNode.v(3),
 TreeNode.v(4)));
 
-
 // test pretty printer
 System.out.println("pretty printer:");
-System.out.println("t1: "+t1);
-System.out.println("t2: "+t2);
+System.out.println("t1: " + t1);
+System.out.println("t2: " + t2);
 
 // test equality
 System.out.print("equality: ");
-System.out.println(t1.equals(t2)+", "+(t1.left!=null?t1.left.equals(t2.right):
-""));
+System.out.println(t1.equals(t2) + ", " + (t1.left != null ? t1.left.equals(t2.right) :
 
+""));
 
 // test iterator
 System.out.print("iterator: ");
-for(Integern:t1){
-System.out.printf("%d ",n);
+for (Integer n : t1) {
+
+System.out.printf("%d ", n);
+
 }
 System.out.println();
 
 }
 
-publicstaticclassTreeNode<T>implementsIterable<T>{
+public static class TreeNode<T> implements Iterable<T> {
 
 @NotNull
-privatefinalTdata;
+private final T data;
 @Nullable
-privatefinalTreeNode<T>left,right;
+private final TreeNode<T> left, right;
 @Nullable
-privateTreeNode<T>parent=null;
+private TreeNode<T> parent = null;
 
 // 1.c
 
-publicTreeNode(@NotNullTdata,@NullableTreeNode<T>left,@NullableTreeNode<T>
-right){
-this.data=data;
-this.left=left;
-this.right=right;
-if(left!=null)left.parent=this;
-if(right!=null)right.parent=this;
+public TreeNode(@NotNull T data, @Nullable TreeNode<T> left, @Nullable TreeNode<T>
+
+right) {
+this.data = data;
+this.left = left;
+this.right = right;
+if (left != null) left.parent = this;
+if (right != null) right.parent = this;
+
 }
 
 // i seguenti pseudo-costruttori aiutano a costruire alberi in modo più succinto e
+
 // controllato rispetto
+
 // all'innestamento dei costruttori
 
 // solo ramo sinistro
-publicstatic<T>TreeNode<T>l(@NotNullTdata,@NotNullTreeNode<T>left){
-returnnewTreeNode<>(data,left,null);
+public static <T> TreeNode<T> l(@NotNull T data, @NotNull TreeNode<T> left) {
+
+return new TreeNode<>(data, left, null);
+
 }
 
 // solo ramo destro
-publicstatic<T>TreeNode<T>r(@NotNullTdata,@NotNullTreeNode<T>right){
-returnnewTreeNode<>(data,null,right);
+public static <T> TreeNode<T> r(@NotNull T data, @NotNull TreeNode<T> right) {
+
+return new TreeNode<>(data, null, right);
+
 }
 
 // ramo sinistro e destro
-publicstatic<T>TreeNode<T>lr(@NotNullTdata,@NotNullTreeNode<T>left,@NotNull
-TreeNode<T>right){
-returnnewTreeNode<>(data,left,right);
+public static <T> TreeNode<T> lr(@NotNull T data, @NotNull TreeNode<T> left, @NotNull
+
+TreeNode<T> right) {
+return new TreeNode<>(data, left, right);
+
 }
 
 // foglia
-publicstatic<T>TreeNode<T>v(@NotNullTdata){
-returnnewTreeNode<>(data,null,null);
+public static <T> TreeNode<T> v(@NotNull T data) {
+
+return new TreeNode<>(data, null, null);
+
 }
 
 // 1.b
 
 @Override
 
-publicbooleanequals(@NullableObjecto){
-if(oinstanceofTreeNode){
-BlockingQueue<Integer>b;
+public boolean equals(@Nullable Object o) {
 
-TreeNode<T>t=(TreeNode<T>)o;
-returnareEqual(data,t.data)&&areEqual(left,t.left)&&areEqual(right,
+if (o instanceof TreeNode) {
+
+BlockingQueue<Integer> b;
+
+TreeNode<T> t = (TreeNode<T>) o;
+return areEqual(data, t.data) && areEqual(left, t.left) && areEqual(right,
+
 t.right);
+
 }
-returnfalse;
+return false;
+
 }
 
-privatestaticbooleanareEqual(@NullableObjecta,@NullableObjectb){
-returna==b||(a!=null&&a.equals(b));
-//return Objects.equals(a, b); // alternativamente si può usare questo metodo
+private static boolean areEqual(@Nullable Object a, @Nullable Object b) {
+
+return a == b || (a != null && a.equals(b));
+//return Objects.equals(a, b);
+
 // del JDK
+
+// alternativamente si può usare questo metodo
+
 }
 
 // 1.e
 
 @Override
 @NotNull
-publicStringtoString(){
-returnString.format("%s%s%s",data,left!=null?String.format("(%s)",left):
-"",right!=null?
-String.format("[%s]",right):"");
+public String toString() {
+
+return String.format("%s%s%s", data, left != null ? String.format("(%s)", left) :
+
+"", right != null ?
+String.format("[%s]", right) : "");
+
 }
 
 // 1.a
 
 @Override
-publicIterator<T>iterator(){
-returniterator_easy();// stub ad una delle due implementazione; cambiare lo stub
-// per testare l'altra
-}
+public Iterator<T> iterator() {
 
+return iterator_easy(); // stub ad una delle due implementazione; cambiare lo stub
+
+// per testare l'altra
+
+}
 
 // questo è l'implementazione facile, suggerita pubblicamente dal docente in classe
+
 // duranto l'appello del 13/9/22
-privateIterator<T>iterator_easy(){
-Collection<T>r=newArrayList<>();
+private Iterator<T> iterator_easy() {
+
+Collection<T> r = new ArrayList<>();
 dfs(r);
-returnr.iterator();
+return r.iterator();
+
 }
 
-privatevoiddfs(Collection<T>c){
+private void dfs(Collection<T> c) {
+
 c.add(data);
-if(left!=null)left.dfs(c);
-if(right!=null)right.dfs(c);
+if (left != null) left.dfs(c);
+if (right != null) right.dfs(c);
+
 }
 
-// questo è l'implementazione ottimizzata, che attraversa l 'albero senza liste d'appoggio
-privateIterator<T>iterator_opt(){
-returnnewIterator<>(){
+// questo è l'implementazione ottimizzata, che attraversa l'albero senza liste d'appoggio
+private Iterator<T> iterator_opt() {
+
+return new Iterator<>() {
+
 @Nullable
-privateTreeNode<T>current=TreeNode.this;
+private TreeNode<T> current = TreeNode.this;
 
 @Override
 
-publicbooleanhasNext(){
-returncurrent!=null;
+public boolean hasNext() {
+
+return current != null;
+
 }
 
 @Nullable
-privatestatic<T>TreeNode<T>getNextNode(@NotNullTreeNode<T>n){
-if(n.left!=null)
-returnn.left;
-elseif(n.right!=null)
-returnn.right;
-else{
-while(n.parent!=null){
-finalTreeNode<T>last=n;
-n=n.parent;
-if(n.right!=null&&n.right!=last)
-returnn.right;
+private static <T> TreeNode<T> getNextNode(@NotNull TreeNode<T> n) {
+
+if (n.left != null)
+
+return n.left;
+
+else if (n.right != null)
+
+return n.right;
+
+else {
+
+while (n.parent != null) {
+
+final TreeNode<T> last = n;
+n = n.parent;
+if (n.right != null && n.right != last)
+
+return n.right;
+
 }
-returnnull;
+return null;
+
 }
+
 }
 
 @Override
 @NotNull
-publicTnext(){
-Tr=current.data;
-current=getNextNode(current);
-returnr;
+public T next() {
+
+T r = current.data;
+current = getNextNode(current);
+return r;
+
 }
+
 };
+
 }
 
 }
@@ -2019,57 +2121,83 @@ volta normalmente;
 **Soluzione** *(spostata dalla sezione 4 del PDF originale)*
 
 ```java
+// Questo sorgente contiene le soluzioni dell'esame scritto di PO2 del 1/7/2022 per ciò che
 
-// Questo sorgente contiene le soluzioni dell 'esame scritto di PO2 del 1/7/2022 per ciò che
 // riguarda i quesiti 1-2, ovvero le domande che coinvolgono Java.
+
 // Il quesito 3 riguardante C++ è in un progetto Visual Studio a parte, non qui.
 // Il codice qui esposto è Java 8+.
 
-importjava.util.ArrayList;
-importjava.util.Iterator;
-importjava.util.function.Function;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.function.Function;
 
-publicclassEs1{
+public class Es1 {
 
 // 1.a
-publicinterfacePredicate<T>extendsFunction<T,Boolean>{}
+public interface Predicate<T> extends Function<T, Boolean> {}
 
 // 1.b
-publicinterfaceEither<T>{
-TonSuccess(Tx);
-voidonFailure(Tx)throwsException;
-}
+public interface Either<T> {
 
+T onSuccess(T x);
+void onFailure(T x) throws Exception;
+
+}
 
 // 1.c
-publicstaticclassSkippableArrayList<E>extendsArrayList<E>{
-publicIterator<E>iterator(Predicate<E>p,Either<E>f){
-finalIterator<E>it=super.iterator(); // può anche essere un campo privato
-della anonymous class
-returnnewIterator<E>(){
+public static class SkippableArrayList<E> extends ArrayList<E> {
+
+public Iterator<E> iterator(Predicate<E> p, Either<E> f) {
+
+final Iterator<E> it = super.iterator();
+return new Iterator<E>() {
+
+// della anonymous class
+
+// può anche essere un campo privato
+
 @Override
-publicbooleanhasNext(){
-returnit.hasNext();
+public boolean hasNext() {
+
+return it.hasNext();
+
 }
 
 @Override
-publicEnext(){
-Ex=it.next();
-if(p.apply(x))
-returnf.onSuccess(x);
-else{
-try{
+public E next() {
+
+E x = it.next();
+if (p.apply(x))
+
+return f.onSuccess(x);
+
+else {
+
+try {
+
 f.onFailure(x);
+
 }
-catch(Exceptione){
-e.printStackTrace(); // si può anche non fare niente dentro il
-catch, è indifferente
+catch (Exception e) {
+
+e.printStackTrace();
+
+// si può anche non fare niente dentro il
+
+// catch, è indifferente
+
 }
-returnx;
+return x;
+
 }
+
 }
+
 };
+
 }
+
 }
 
 }
@@ -2097,11 +2225,12 @@ di trasformazione sull’insiemeω.
 riusabili. Sia data la funzione di ordine superiore foldimplementata tramite un metodo statico pubblico:
 
 ```java
-publicstatic<T,State>Statefold(Iterable<T>i,finalStatest0,BiFunction<State,T,State>f){
-Statest=st0;
-for(finalTe:i)
-st=f.apply(st,e);
-returnst;
+public static <T, State> State fold(Iterable<T> i, final State st0, BiFunction<State, T,
+State> f) {
+    State st = st0;
+    for (final T e : i)
+        st = f.apply(st, e);
+    return st;
 }
 ```
 
@@ -2109,7 +2238,7 @@ returnst;
 firma:
 
 ```java
-publicstatic<T>doublesumBy(Iterable<T>i,Function<T,Double>f);
+public static <T> double sumBy(Iterable<T> i, Function<T, Double> f);
 ```
 
 Essa calcola la sommatoria di tutti gli elementi di **i** trasformandoli in **double** tramite **f**. La utilizzeremo ad
@@ -2119,7 +2248,7 @@ laterale totale di un solido sommando l’area di tutte le superfici piane di cu
 volume. Si implementi il metodo statico **compareBy()** avente la seguente firma:
 
 ```java
-publicstatic<T>intcompareBy(Ts1,Ts2,Function<T,Double>f);
+public static <T> int compareBy(T s1, T s2, Function<T, Double> f);
 ```
 
 Esso confronta **s1** e **s2** convertendoli prima in **double** tramite **f**, riducendo pertanto il confronto al confronto
@@ -2133,12 +2262,12 @@ del metodofold()di cui sopra?
 circonferenze.
 
 ```java
-publicclassEdgeimplementsComparable<Edge>{
-privatefinaldoublelen;
-publicEdge(doublelen){this.len=len;}
-publicdoublelength(){returnlen;}
-@Override
-publicintcompareTo(Edges){/* DA IMPLEMENTARE */ }
+public class Edge implements Comparable<Edge> {
+    private final double len;
+    public Edge(double len) { this.len = len; }
+    public double length() { return len; }
+    @Override
+    public int compareTo(Edge s) { /* DA IMPLEMENTARE */ }
 }
 }
 ```
@@ -2210,22 +2339,22 @@ Il costruttore di **Square** deve prendere un solo parametro di tipo **double**:
 poliedri aventi facce rettangolari.
 
 ```java
-publicclassParallelepipedimplementsPolyhedron<Rectangle>{
-protectedfinaldoublewidth,height,depth;
-publicParallelepiped(doublewidth,doubleheight,doubledepth){
-this.width=width;
-this.height=height;
-this.depth=depth;
-}
-@Override
-publicdoublevolume(){/* DA IMPLEMENTARE */ }
-@Override
-publicIterator<Rectangle>iterator(){
-Rectangler1=newRectangle(width,height),
-r2=newRectangle(width,depth),
-r3=newRectangle(height,depth);
-returnList.of(r1,r2,r3,r1,r2,r3).iterator();
-}
+public class Parallelepiped implements Polyhedron<Rectangle> {
+    protected final double width, height, depth;
+    public Parallelepiped(double width, double height, double depth) {
+        this.width = width;
+        this.height = height;
+        this.depth = depth;
+    }
+    @Override
+    public double volume() { /* DA IMPLEMENTARE */ }
+    @Override
+    public Iterator<Rectangle> iterator() {
+        Rectangle r1 = new Rectangle(width, height),
+            r2 = new Rectangle(width, depth),
+            r3 = new Rectangle(height, depth);
+        return List.of(r1, r2, r3, r1, r2, r3).iterator();
+    }
 }
 ```
 
@@ -2307,245 +2436,358 @@ sumBy(y,Rectangle::perimiter)))
 **Soluzione** *(spostata dalla sezione 4 del PDF originale)*
 
 ```java
-importjava.util.*;
-importjava.util.function.BiFunction;
-importjava.util.function.Function;
+import java.util.*;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
-// Questo sorgente contiene le soluzioni dell 'esame scritto di PO2 del 3/6/2022 per ciò che
+// Questo sorgente contiene le soluzioni dell'esame scritto di PO2 del 3/6/2022 per ciò che
 // riguarda i quesiti 1-5, ovvero le domande che coinvolgono Java.
 // Il quesito 6 riguardante C++ è in una Solution per Visual Studio a parte, non qui.
 
-publicclassAppello_3_6_22{
 
-publicstatic<T,State>Statefold(Iterable<T>i,finalStatest0,BiFunction<State,T,
-State>f){
-Statest=st0;
-for(finalTe:i){
-st=f.apply(st,e);
+public class Appello_3_6_22 {
+
+public static <T, State> State fold(Iterable<T> i, final State st0, BiFunction<State, T,
+
+State> f) {
+State st = st0;
+for (final T e : i) {
+
+st = f.apply(st, e);
+
 }
-returnst;
+return st;
+
 }
 
 // 1.a
-publicstatic<T>doublesumBy(Iterable<T>i,Function<T,Double>f){
-returnfold(i,0.,(r,x)->r+f.apply(x));
-}
+public static <T> double sumBy(Iterable<T> i, Function<T, Double> f) {
 
+return fold(i, 0., (r, x) -> r + f.apply(x));
+
+}
 
 // 1.b
-publicstatic<T>intcompareBy(Ts1,Ts2,Function<T,Double>f){
-returnDouble.compare(f.apply(s1),f.apply(s2));
+public static <T> int compareBy(T s1, T s2, Function<T, Double> f) {
+
+return Double.compare(f.apply(s1), f.apply(s2));
+
 }
 
-publicstaticclassEdgeimplementsComparable<Edge>{
-privatefinaldoublelen;
+public static class Edge implements Comparable<Edge> {
 
-publicEdge(doublelen){
-this.len=len;
+private final double len;
+
+public Edge(double len) {
+
+this.len = len;
+
 }
 
-publicdoublelength(){
-returnlen;
+public double length() {
+
+return len;
+
 }
 
 // 2.a
 @Override
-publicintcompareTo(Edges){
-returncompareBy(this,s,Edge::length);
-}
+public int compareTo(Edge s) {
+
+return compareBy(this, s, Edge::length);
+
 }
 
-publicinterfaceSurfaceextendsComparable<Surface>{
-doublearea();
+}
 
-doubleperimiter();
+public interface Surface extends Comparable<Surface> {
+
+double area();
+
+double perimiter();
 
 // 2.b
 @Override
-defaultintcompareTo(Surfaces){
-returncompareBy(this,s,Surface::area);
-}
+default int compareTo(Surface s) {
+
+return compareBy(this, s, Surface::area);
+
 }
 
-publicinterfacePolygonextendsSurface,Iterable<Edge>{
+}
+
+public interface Polygon extends Surface, Iterable<Edge> {
+
 // 2.c
 @Override
-defaultdoubleperimiter(){
-returnsumBy(this,Edge::length);
-}
+default double perimiter() {
+
+return sumBy(this, Edge::length);
+
 }
 
-publicinterfaceSolidextendsComparable<Solid>{
-doubleouterArea();
+}
 
-doublevolume();
+public interface Solid extends Comparable<Solid> {
+
+double outerArea();
+
+double volume();
 
 // 2.d
-defaultintcompareTo(Solids){
-returncompareBy(this,s,Solid::volume);
-}
+default int compareTo(Solid s) {
+
+return compareBy(this, s, Solid::volume);
+
 }
 
-publicinterfacePolyhedron<PextendsPolygon>extendsSolid,Iterable<P>{
+}
+
+public interface Polyhedron<P extends Polygon> extends Solid, Iterable<P> {
+
 // 2.e
 
 @Override
-defaultdoubleouterArea(){
-returnsumBy(this,P::area);
+default double outerArea() {
+
+return sumBy(this, P::area);
+
 }
+
 }
 
 // 3.a
-publicstaticclassSphereimplementsSolid{
-privatefinaldoubleradius;
+public static class Sphere implements Solid {
 
-publicSphere(doubleradius){
-this.radius=radius;
+private final double radius;
+
+public Sphere(double radius) {
+this.radius = radius;
+
 }
 
 @Override
-publicdoubleouterArea(){
-return4.*Math.PI*radius*radius;
+public double outerArea() {
+
+return 4. * Math.PI * radius * radius;
+
 }
 
 @Override
-publicdoublevolume(){
-return4./3.*Math.PI*radius*radius*radius;
+public double volume() {
+
+return 4. / 3. * Math.PI * radius * radius * radius;
+
 }
+
 }
 
 // 3.b
-publicstaticclassCilinderimplementsSolid{
-privatefinaldoubleradius,height;
+public static class Cilinder implements Solid {
 
-publicCilinder(doubleradius,doubleheight){
-this.radius=radius;
-this.height=height;
+private final double radius, height;
+
+public Cilinder(double radius, double height) {
+
+this.radius = radius;
+this.height = height;
+
 }
 
 @Override
-publicdoubleouterArea(){
-doubleb=Math.PI*radius*radius,l=2.*Math.PI*radius*height; // hanno
-capito solo laterale
-return2.*b+l;
+public double outerArea() {
+
+double b = Math.PI * radius * radius, l = 2. * Math.PI * radius * height;
+
+// hanno // hanno capito solo laterale
+
+
+return 2. * b + l;
+
 }
 
 @Override
-publicdoublevolume(){
-returnMath.PI*radius*radius*height;
+public double volume() {
+
+return Math.PI * radius * radius * height;
+
 }
+
 }
 
 // 3.c
-publicstaticclassRectangleimplementsPolygon{
-privatefinaldoublewidth,height;
+public static class Rectangle implements Polygon {
 
-publicRectangle(doublewidth,doubleheight){
-this.width=width;
-this.height=height;
+private final double width, height;
+
+public Rectangle(double width, double height) {
+
+this.width = width;
+this.height = height;
+
 }
 
 @Override
 
-publicdoublearea(){
-returnwidth*height;
+public double area() {
+
+return width * height;
+
 }
 
 @Override
-publicIterator<Edge>iterator(){
-Edgew=newEdge(width),h=newEdge(height);
-returnList.of(w,h,w,h).iterator();
+public Iterator<Edge> iterator() {
+
+Edge w = new Edge(width), h = new Edge(height);
+return List.of(w, h, w, h).iterator();
+
 }
+
 }
 
 // 3.d
-publicstaticclassSquareextendsRectangle{
-publicSquare(doubleside){
-super(side,side);
-}
+public static class Square extends Rectangle {
+
+public Square(double side) {
+
+super(side, side);
+
 }
 
-publicstaticclassParallelepipedimplementsPolyhedron<Rectangle>{
-protecteddoublewidth,height,depth;
+}
 
-publicParallelepiped(doublewidth,doubleheight,doubledepth){
-this.width=width;
-this.height=height;
-this.depth=depth;
+public static class Parallelepiped implements Polyhedron<Rectangle> {
+
+protected double width, height, depth;
+
+public Parallelepiped(double width, double height, double depth) {
+
+this.width = width;
+this.height = height;
+this.depth = depth;
+
 }
 
 // 4.a
 @Override
-publicdoublevolume(){
-returnwidth*height*depth;
+public double volume() {
+
+return width * height * depth;
+
 }
 
 @Override
-publicIterator<Rectangle>iterator(){
-Rectangler1=newRectangle(width,height),r2=newRectangle(width,depth),r3=
-newRectangle(height,depth);
-returnList.of(r1,r2,r3,r1,r2,r3).iterator();
+public Iterator<Rectangle> iterator() {
+
+Rectangle r1 = new Rectangle(width, height), r2 = new Rectangle(width, depth), r3 =
+
+new Rectangle(height, depth);
+
+return List.of(r1, r2, r3, r1, r2, r3).iterator();
+
 }
+
 }
 
 // 4.b
-publicstaticclassCubeextendsParallelepiped{
-publicCube(doubleside){
-super(side,side,side);
-}
+public static class Cube extends Parallelepiped {
+
+public Cube(double side) {
+
+super(side, side, side);
+
 }
 
+}
 
-publicstaticvoidmain(String[]args){
+public static void main(String[] args) {
+
 // 4.d
 {
-intfacet_cnt=1;
+
+int facet_cnt = 1;
 // questo foreach non compila perché Cube è sottotipo di Iterable<Rectangle>, non di
+
 // Iterable<Square>
+
 // si badi che NON è possibile co-variare il tipo di ritorno del metodo iterator() di
+
 // Cube in modo che si specializzi in Iterator<Square>
 
-// perché è sound co-variare il tipo più esterno di un tipo parametrico, ma non il
 // type argument
+
+// perché è sound co-variare il tipo più esterno di un tipo parametrico, ma non il
 // for (Square sq : new Cube(10.)) {
-for(Rectanglesq:newCube(10.)){// così invece compilerebbe
-intside_cnt=1;
-for(Edgee:sq){
-System.out.printf("side #%d/%d = %f\n",side_cnt++,facet_cnt,e.length());
+for (Rectangle sq : new Cube(10.)) {
+
+// così invece compilerebbe
+
+int side_cnt = 1;
+for (Edge e : sq) {
+
+System.out.printf("side #%d/%d = %f\n", side_cnt++, facet_cnt, e.length());
+
 }
 ++facet_cnt;
+
 }
+
 }
 
 // 5
 {
-Cubec1=newCube(1.),c2=newCube(2.);
-Parallelepipedp1=newParallelepiped(1.,2.,3.),p2=newParallelepiped(2.,3.,
-4.);
-List<Polyhedron<?extendsRectangle>>polys=newArrayList<>(List.of(c1,c2,p1,
-p2));
+
+Cube c1 = new Cube(1.), c2 = new Cube(2.);
+Parallelepiped p1 = new Parallelepiped(1., 2., 3.), p2 = new Parallelepiped(2., 3., 4.);
+List<Polyhedron<? extends Rectangle>> polys = new ArrayList<>(List.of(c1, c2, p1, p2));
+
+
 
 // per testare rapidamente i risultati di queste sort, si usi debugger
 Collections.sort(polys);
+
 // c1
-Collections.sort(polys,(x,y)->compareBy(x,y,Polyhedron::outerArea));
+
+Collections.sort(polys, (x, y) -> compareBy(x, y, Polyhedron::outerArea));
+
 // c1
-Collections.sort(polys,(x,y)->compareBy(x,y,(p)->p.outerArea()));
+
+Collections.sort(polys, (x, y) -> compareBy(x, y, (p) -> p.outerArea()));
+
 // c1
-// Collections.sort(polys, (x, y) -> compareBy(x, y, (r) -> r.perimiter()));
+
+Collections.sort(polys, (x, y) -> compareBy(x, y, (r) -> r.perimiter()));
+
 // non compila
-Collections.sort(polys,(x,y)->compareBy(x,y,newFunction<>(){
+
+Collections.sort(polys, (x, y) -> compareBy(x, y, new Function<>() {
+
 // c1
 @Override
-publicDoubleapply(Polyhedron<?extendsRectangle>r){
-returnr.volume();
+public Double apply(Polyhedron<? extends Rectangle> r) {
+
+return r.volume();
+
 }
+
 }));
-// Collections.sort(polys, (x, y) -> Double.compare(sumBy(x, Square::perimiter),
+
+Collections.sort(polys, (x, y) -> Double.compare(sumBy(x, Square::perimiter),
+
 // non compila
-// sumBy(y, Rectangle::perimiter)));
+
 }
+
 }
+
+sumBy(y, Rectangle::perimiter)));
+
+//
+
+//
+
+//
+
 }
 ```
 
