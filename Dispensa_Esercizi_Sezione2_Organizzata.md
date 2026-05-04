@@ -288,7 +288,7 @@ private X x = a;
 @Override
 public boolean hasNext() {
 
-return x.compareTo(b) <= 0;
+return x.compareTo(b) < 0;
 
 }
 
