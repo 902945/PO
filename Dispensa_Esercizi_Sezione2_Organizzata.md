@@ -589,8 +589,8 @@ pertanto implementare l’interfaccia parametrica del JDK **java.util.Iterable<T
 deve compilare e stampare i primi 100 numeri di Fibonacci:
 
 ```java
-for(intn:newFiboSequence(100)){
-System.out.println(n);
+for (int n : new FiboSequence(100)) {
+    System.out.println(n);
 }
 ```
 
