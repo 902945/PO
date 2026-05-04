@@ -310,7 +310,7 @@ return r;
 // 1.c
 public static void test1() {
 
-for (Pair<Double, Double> p : new FunSeq<>(-2., 2., (x) -> x * x - 2 * x + 1, (x) -> x +
+for (Pair<Double, Double> p : new FunSeq<>(-2., 2., (x) -> x * x + 2 * x - 1, (x) -> x +
 
 0.1)) {
 final double x = p.fst, y = p.snd;
@@ -323,7 +323,7 @@ System.out.printf("f(%g) = %g\n", x, y);
 // 1.d
 public static void test2() {
 
-for (Pair<Double, Integer> p : new FunSeq<>(-2., 2., (x) -> (int) (x * x - 2 * x + 1),
+for (Pair<Double, Integer> p : new FunSeq<>(-2., 2., (x) -> (int) (x * x + 2 * x - 1),
 
 (x) -> x + 0.1)) {
 final double x = p.fst;
@@ -2093,21 +2093,14 @@ m3(3, 1) = 11.23;
 for (typename matrix<double>::iterator it = m1.begin(); it != m1.end(); ++it) {
 
 typename matrix<double>::value_type& x = *it;
-x = m2(0,
-
-2);
-operatore di accesso come right-value
+x = m2(0, 2); // operatore di accesso come right-value
 
 // de-reference non-const
 
-//
-
 }
 
-matrix<string> ms(5, 4, "ciao"); // 5*4 inizializzata col la stringa passata come terzo
-
-argomento
- for (typename matrix<string>::const_iterator it = ms.begin(); it != ms.end(); ++it)
+matrix<string> ms(5, 4, "ciao"); // 5*4 inizializzata col la stringa passata come terzo argomento
+for (typename matrix<string>::const_iterator it = ms.begin(); it != ms.end(); ++it)
 
 cout << *it;
 
@@ -5374,7 +5367,7 @@ return r;
 // 1.c
 public static void test1() {
 
-for (Pair<Double, Double> p : new FunSeq<>(-2., 2., (x) -> x * x - 2 * x + 1, (x) -> x +
+for (Pair<Double, Double> p : new FunSeq<>(-2., 2., (x) -> x * x + 2 * x - 1, (x) -> x +
 
 0.1)) {
 final double x = p.fst, y = p.snd;
@@ -5387,7 +5380,7 @@ System.out.printf("f(%g) = %g\n", x, y);
 // 1.d
 public static void test2() {
 
-for (Pair<Double, Integer> p : new FunSeq<>(-2., 2., (x) -> (int) (x * x - 2 * x + 1),
+for (Pair<Double, Integer> p : new FunSeq<>(-2., 2., (x) -> (int) (x * x + 2 * x - 1),
 
 (x) -> x + 0.1)) {
 final double x = p.fst;
@@ -6186,6 +6179,7 @@ però i pattern, gli stili e le convenzioni di C++ e di STL. Alcuni suggerimenti
 Si scriva anche uno snippet analogo a quello del punto c (Es. 2.1.7 Java).
 
 > ¹¹ Non è necessaria nessuna revisione recente del linguaggio, l’esercizio è esprimibile in **C++ vanilla**, detto **C++03**.
+> **Nota**: La soluzione riportata sotto utilizza sintassi C++20 modules (`export module`, `import`). Per una soluzione C++03 conforme, sostituire con `#include <iostream>`, `#include <functional>`, `#include <utility>` e considerare l'uso di functors o template parameters invece di `std::function` (disponibile solo da C++11).
 
 **Soluzione** *(spostata dalla sezione 4 del PDF originale)*
 
