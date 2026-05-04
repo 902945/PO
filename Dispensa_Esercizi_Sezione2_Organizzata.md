@@ -742,13 +742,11 @@ else {
 
 int r = fib(n - 1) + fib(n - 2);
 cache.put(n, r);
-la cache
 
 // si commenti questo statement per disabilitare
-
+// la cache
 // e vedere la differenza enorme di tempi di
-
-calcolo
+// calcolo
 
 return r;
 
