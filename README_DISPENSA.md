@@ -20,7 +20,7 @@ Trasformare una raccolta lineare di esercizi in una risorsa di studio strutturat
 - ✅ Blueprint solution per ogni macro-gruppo
 - ✅ Indice completo per navigazione rapida
 - ✅ Keywords per ricerca efficace
-- ✅ 7,568 righe - 176KB di contenuto
+- ✅ Contenuto completo e dettagliato
 
 ### `PROMPT_CONTINUAZIONE_AGENTE.md`
 Istruzioni dettagliate per continuare o estendere questo lavoro, include:
