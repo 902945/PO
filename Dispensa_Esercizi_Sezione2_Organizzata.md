@@ -7207,8 +7207,8 @@ if (pt != nullptr)
 // se non punta a nulla non c'è niente da liberare
 {
 
-if (is_array) delete pt;
-else delete [] pt;
+if (is_array) delete [] pt;
+else delete pt;
 
 }
 delete cnt;
