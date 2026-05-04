@@ -3932,18 +3932,16 @@ gli opportuni costruttori, tra cui quello per **copia**, e l’**operatore di as
 **Soluzione** *(spostata dalla sezione 4 del PDF originale)*
 
 ```cpp
-export module pairs;
+// Versione con inclusioni tradizionali (nessun supporto ai C++20 modules richiesto)
+#include <string>
+#include <functional>
 
-import <string>;
-import <functional>;
-
-export
 template <class A, typename B>
 class pair
 {
 
-template <class C, typename D> friend class pair; 
-constructor templatizzato
+template <class C, typename D> friend class pair;
+// costruttore templatizzato
 
 // necessario per il copy
 
